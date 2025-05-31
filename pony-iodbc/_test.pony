@@ -18,4 +18,5 @@ class iso _TestOptions is UnitTest
 
   fun apply(h: TestHelper) ? =>
     let iodbc: ODBC = ODBC("mysqlitedb")?
+    iodbc.datasources()
     h.assert_true(true)
