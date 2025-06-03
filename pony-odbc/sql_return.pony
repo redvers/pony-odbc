@@ -12,10 +12,6 @@ primitive SQLSuccess
   fun apply(): I16 => 0
   fun string(): String val => "SQLSuccess"
 
-primitive SQLSuccessWithInfo
-  fun apply(): I16 => 1
-  fun string(): String val => "SQLSuccessWithInfo"
-
 primitive SQLStillExecuting
   fun apply(): I16 => 2
   fun string(): String val => "SQLStillExecuting"

@@ -26,7 +26,7 @@ class HandleDBC
   fun ref commit(): SQLReturn  =>
     match @SQLEndTran(2, hdbc, SQLCommit())
     | 0 => return SQLSuccess
-    | 1 => return SQLSuccessWithInfo
+    | 1 => return SQLSuccessWithInfo(this)
     | 2 => return SQLStillExecuting
     | -1 => return SQLError(this)
     | -2 => return SQLInvalidHandle
@@ -39,8 +39,8 @@ class HandleDBC
   fun ref get_commit_mode(): SQLReturn =>
     var r: I16 = 9
     match @SQLGetConnectAttr(hdbc, 102, addressof r, -6, Pointer[I32])
-    | 0 => Debug.out("ssss: " + r.string()) ; return SQLSuccess
-    | 1 => return SQLSuccessWithInfo
+    | 0 => return SQLSuccess
+    | 1 => return SQLSuccessWithInfo(this)
     | 2 => return SQLStillExecuting
     | -1 => return SQLError(this)
     | -2 => return SQLInvalidHandle

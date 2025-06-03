@@ -22,7 +22,7 @@ class HandleSTMT
   fun ref exec_direct(str: String val): SQLReturn =>
     match @SQLExecDirect(hstmt, str.cstring(), str.size().i32())
     | 0 => return SQLSuccess
-    | 1 => return SQLSuccessWithInfo
+    | 1 => return SQLSuccessWithInfo(this)
     | 2 => return SQLStillExecuting
     | -1 => return SQLError(this)
     | -2 => return SQLInvalidHandle
@@ -34,7 +34,7 @@ class HandleSTMT
   fun ref prepare(str: String val): SQLReturn =>
     match @SQLPrepare(hstmt, str.cstring(), str.size().i32())
     | 0 => return SQLSuccess
-    | 1 => return SQLSuccessWithInfo
+    | 1 => return SQLSuccessWithInfo(this)
     | 2 => return SQLStillExecuting
     | -1 => return SQLError(this)
     | -2 => return SQLInvalidHandle
@@ -46,7 +46,7 @@ class HandleSTMT
   fun ref execute(): SQLReturn =>
     match @SQLExecute(hstmt)
     | 0 => return SQLSuccess
-    | 1 => return SQLSuccessWithInfo
+    | 1 => return SQLSuccessWithInfo(this)
     | 2 => return SQLStillExecuting
     | -1 => return SQLError(this)
     | -2 => return SQLInvalidHandle

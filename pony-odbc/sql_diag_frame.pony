@@ -25,7 +25,7 @@ class SQLDiagFrame
           addressof textlen)
 
     msgbuff.recalc()
-    Debug.out(msgbuff)
-    if (s != 0) then error end
 
+    if (s != 0) then error end
+    Debug.out(msgbuff)
 
