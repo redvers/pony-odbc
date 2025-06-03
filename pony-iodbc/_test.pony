@@ -10,13 +10,38 @@ actor Main is TestList
     PonyTest(env, this)
 
   fun tag tests(test: PonyTest) =>
-    test(_TestOptions)
+    test(_TestSQLite)
 
 
-class iso _TestOptions is UnitTest
-  fun name(): String val => "_TestOptions"
+class iso _TestSQLite is UnitTest
+  fun name(): String val => "_TestSQLite"
 
   fun apply(h: TestHelper) ? =>
-    let iodbc: ODBC = ODBC("mysqlitedb")?
-    iodbc.datasources()
+    var henv: HandleENV = HandleENV.create()?
+                          .>set_odbc3()?
+
+    var hdbc: HandleDBC = HandleDBC.create(henv)?
+                          .>set_application_name("_TestSQLite")?
+                          .>connect("mysqlitedb")?
+                          .>get_commit_mode()
+
+    var stmt: HandleSTMT = HandleSTMT.create(hdbc)?
+
+    Debug.out(stmt.prepare("drop table if exists version").string())
+    Debug.out(stmt.execute().string())
+//    Debug.out("commit: " + hdbc.commit().string())
+
+    stmt = HandleSTMT.create(hdbc)?
+    Debug.out(stmt.prepare("create table version (a text, b integer)").string())
+    Debug.out(stmt.execute().string())
+
+
+
+
+
+
+
+//    var stmt: HandleSTMT
+
+//    iodbc.datasources()
     h.assert_true(true)
