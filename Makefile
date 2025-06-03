@@ -2,7 +2,7 @@ config ?= debug
 static ?= false
 linker ?=
 
-PACKAGE := pony-iodbc
+PACKAGE := pony-odbc
 GET_DEPENDENCIES_WITH := corral fetch
 CLEAN_DEPENDENCIES_WITH := corral clean
 PONYC ?= ponyc
@@ -12,7 +12,7 @@ BUILD_DIR ?= build/$(config)
 SRC_DIR ?= $(PACKAGE)
 EXAMPLES_DIR := examples
 STRESS_TESTS_DIR := stress-tests
-tests_binary := $(BUILD_DIR)/pony-iodbc
+tests_binary := $(BUILD_DIR)/pony-odbc
 docs_dir := build/$(PACKAGE)-docs
 
 ifdef config

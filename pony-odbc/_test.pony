@@ -1,6 +1,7 @@
 use "debug"
 use "pony_test"
-use "lib:iodbc"
+//use "lib:iodbc"
+use "lib:odbc"
 
 actor Main is TestList
   let env: Env
@@ -34,11 +35,6 @@ class iso _TestSQLite is UnitTest
     stmt = HandleSTMT.create(hdbc)?
     Debug.out(stmt.prepare("create table version (a text, b integer)").string())
     Debug.out(stmt.execute().string())
-
-
-
-
-
 
 
 //    var stmt: HandleSTMT
