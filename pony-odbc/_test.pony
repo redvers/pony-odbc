@@ -11,62 +11,145 @@ actor Main is TestList
     PonyTest(env, this)
 
   fun tag tests(test: PonyTest) =>
-//    test(_TestSQLite)
-    test(_TestMySQL)
+    test(_TestPostgreSQL)
 
 
-class iso _TestSQLite is UnitTest
-  fun name(): String val => "_TestSQLite"
 
-  fun apply(h: TestHelper) ? =>
-    var henv: HandleENV = HandleENV.create()?
-                          .>set_odbc3()?
-
-    var hdbc: HandleDBC = HandleDBC.create(henv)?
-                          .>set_application_name("_TestSQLite")?
-                          .>connect("mysqlitedb")?
-                          .>get_commit_mode()
-
-    var stmt: HandleSTMT = HandleSTMT.create(hdbc)?
-
-    Debug.out(stmt.prepare("drop table if exists version").string())
-    Debug.out(stmt.execute().string())
-//    Debug.out("commit: " + hdbc.commit().string())
-
-    stmt = HandleSTMT.create(hdbc)?
-    Debug.out(stmt.prepare("create table version (a text, b integer)").string())
-    Debug.out(stmt.execute().string())
-
-
-//    var stmt: HandleSTMT
-
-//    iodbc.datasources()
-    h.assert_true(true)
-
-class iso _TestMySQL is UnitTest
-  fun name(): String val => "_TestMySQL"
+class iso _TestPostgreSQL is UnitTest
+  fun name(): String val => "_TestPostgreSQL"
 
   fun apply(h: TestHelper) ? =>
     var henv: HandleENV = HandleENV.create()?
                           .>set_odbc3()?
 
     var hdbc: HandleDBC = HandleDBC.create(henv)?
-                          .>set_application_name("_TestSQLite")?
+                          .>set_application_name("_TestPostgreSQL")?
                           .>connect("psqlred")?
                           .>get_commit_mode()
 
     var stmt: HandleSTMT = HandleSTMT.create(hdbc)?
 
-    Debug.out(stmt.prepare("drop table if exists version").string())
-    Debug.out(stmt.execute().string())
-//    Debug.out("commit: " + hdbc.commit().string())
+    h.assert_is[SQLReturn](SQLSuccess, stmt.prepare("drop table if exists numerictable"))
+    match stmt.execute()
+    | let x: SQLSuccess => h.assert_true(true)
+    | let x: SQLSuccessWithInfo => h.assert_true(true)
+    else
+      h.fail()
+    end
 
     stmt = HandleSTMT.create(hdbc)?
-    Debug.out(stmt.prepare("create table version (a text, b integer)").string())
-    Debug.out(stmt.execute().string())
+    h.assert_is[SQLReturn](SQLSuccess, stmt.prepare(PostgreSQL.numerictable()))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.execute())
 
+    stmt = HandleSTMT.create(hdbc)?
+    h.assert_is[SQLReturn](SQLSuccess, stmt.prepare(PostgreSQL.numerictable_alter()))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.execute())
 
-//    var stmt: HandleSTMT
+    stmt = HandleSTMT.create(hdbc)?
+    h.assert_is[SQLReturn](SQLSuccess, stmt.prepare(PostgreSQL.numerictable_insert_direct()))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.execute())
 
-//    iodbc.datasources()
+    stmt = HandleSTMT.create(hdbc)?
+    h.assert_is[SQLReturn](SQLSuccess, stmt.prepare(PostgreSQL.numerictable_select_star()))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.execute())
+    h.assert_is[SQLReturn](SQLSuccess, stmt.num_result_cols())
+//    h.assert_eq[I16](10, stmt.numresultcols)
+    h.assert_eq[I16](10, stmt.numresultcols)
+
+    /* Check the names of the columns are correct */
+    h.assert_eq[String box]("id", SQLColumn(stmt, 1)?.columnname)
+    h.assert_eq[String box]("integerfield", SQLColumn(stmt, 2)?.columnname)
+    h.assert_eq[String box]("smallintegerfield", SQLColumn(stmt, 3)?.columnname)
+    h.assert_eq[String box]("bigintegerfield", SQLColumn(stmt, 4)?.columnname)
+    h.assert_eq[String box]("decimalfield", SQLColumn(stmt, 5)?.columnname)
+    h.assert_eq[String box]("serialfield", SQLColumn(stmt, 6)?.columnname)
+    h.assert_eq[String box]("smallserialfield", SQLColumn(stmt, 7)?.columnname)
+    h.assert_eq[String box]("bigserialfield", SQLColumn(stmt, 8)?.columnname)
+    h.assert_eq[String box]("bigint", SQLColumn(stmt, 9)?.columnname)
+    h.assert_eq[String box]("singleprecisionfield", SQLColumn(stmt, 10)?.columnname)
+
     h.assert_true(true)
+
+    /* The binding of the columns */
+    var id: BoxedI64 = BoxedI64
+    var integerfield: BoxedI32 = BoxedI32
+    var smallintegerfield: BoxedI16 = BoxedI16
+    var bigintegerfield: BoxedI64 = BoxedI64
+    var decimalfield: BoxedF32 = BoxedF32
+    var serialfield: BoxedI32 = BoxedI32
+    var smallserialfield: BoxedI16 = BoxedI16
+    var bigserialfield: BoxedI64 = BoxedI64
+    var bigint: BoxedI64 = BoxedI64
+    var singleprecisionfield: BoxedF32 = BoxedF32
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i64(1,  id))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i32(2,  integerfield))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(3,  smallintegerfield))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i64(4,  bigintegerfield))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_f32(5,  decimalfield))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i32(6,  serialfield))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(7,  smallserialfield))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i64(8,  bigserialfield))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i64(9,  bigint))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_f32(10, singleprecisionfield))
+
+    /* Fetch the data */
+    h.assert_is[SQLReturn](SQLSuccess, stmt.fetch())
+    h.assert_eq[I64](1, id.value)
+    h.assert_eq[I32](10, integerfield.value)
+    h.assert_eq[I16](20, smallintegerfield.value)
+    h.assert_eq[I64](30, bigintegerfield.value)
+    h.assert_eq[F32](40, decimalfield.value)
+    h.assert_eq[I32](1, serialfield.value)
+    h.assert_eq[I16](1, smallserialfield.value)
+    h.assert_eq[I64](1, bigserialfield.value)
+    h.assert_eq[I64](50, bigint.value)
+    h.assert_eq[F32](60.9, singleprecisionfield.value)
+
+    h.assert_is[SQLReturn](SQLSuccess, stmt.fetch())
+    h.assert_eq[I64](2, id.value)
+    h.assert_eq[I32](-10, integerfield.value)
+    h.assert_eq[I16](-20, smallintegerfield.value)
+    h.assert_eq[I64](-30, bigintegerfield.value)
+    h.assert_eq[F32](-40, decimalfield.value)
+    h.assert_eq[I32](2, serialfield.value)
+    h.assert_eq[I16](2, smallserialfield.value)
+    h.assert_eq[I64](2, bigserialfield.value)
+    h.assert_eq[I64](-50, bigint.value)
+    h.assert_eq[F32](-60.9, singleprecisionfield.value)
+
+    h.assert_is[SQLReturn](SQLNoData, stmt.fetch())
+
+
+
+primitive PostgreSQL
+  fun numerictable(): String val =>
+    """
+    CREATE TABLE numerictable (
+      id BIGSERIAL,
+      integerfield INTEGER,
+      smallintegerfield SMALLINT,
+      bigintegerfield BIGINT,
+      decimalfield DECIMAL,
+      serialfield SERIAL,
+      smallserialfield SMALLSERIAL,
+      bigserialfield BIGSERIAL,
+      bigint BIGINT,
+      singleprecisionfield FLOAT
+   );
+   """
+
+  fun numerictable_alter(): String val =>
+    """
+    ALTER TABLE numerictable ADD CONSTRAINT numerictable_pkey PRIMARY KEY (id);
+    """
+  fun numerictable_insert_direct(): String val =>
+    """
+    insert into numerictable (integerfield, smallintegerfield, bigintegerfield, decimalfield, bigint, singleprecisionfield) values (10,20,30,40,50,60.9);
+    insert into numerictable (integerfield, smallintegerfield, bigintegerfield, decimalfield, bigint, singleprecisionfield) values (-10,-20,-30,-40,-50,-60.9);
+    """
+
+  fun numerictable_select_star(): String val =>
+    """
+    select * from numerictable;
+    """
+
