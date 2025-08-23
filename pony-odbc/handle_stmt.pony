@@ -26,6 +26,12 @@ class HandleSTMT
     hdbc = dbc
     if (@SQLAllocHandle(3, hdbc.hdbc, addressof hstmt) != SQLSuccess()) then error end
 
+  new create_type_info(dbc: HandleDBC, sqltypeinfo: SQLTypeInfo, type_id: I16) ? =>
+    hdbc = dbc
+    if (@SQLAllocHandle(3, hdbc.hdbc, addressof hstmt) != SQLSuccess()) then error end
+    @SQLGetTypeInfo(hstmt, type_id)
+
+
   fun ref fetch(): SQLReturn =>
     match @SQLFetch(hstmt)
     | 0 => return SQLSuccess
@@ -43,6 +49,18 @@ class HandleSTMT
      * bool, int2, int4, int8, float4, float8, date, time, abstime
      * datetime, timestamp, char, varchar, text
      */
+  fun ref bind_col_string(colnum: U16, target: String ref): SQLReturn =>
+    var boxedsize: BoxedI64 = BoxedI64
+    match @SQLBindCol(hstmt, colnum, SQLChar(), target.cpointer(), I64(4096), boxedsize)
+    | 0 =>return SQLSuccess
+    | 1 => return SQLSuccessWithInfo(this)
+    | 2 => return SQLStillExecuting
+    | -1 => return SQLError(this)
+    | -2 => return SQLInvalidHandle
+    | 99 => return SQLNeedData
+    | 100 => return SQLNoData
+    end
+    SQLError(this)
 
   fun ref bind_col_f32(colnum: U16, target: BoxedF32 tag): SQLReturn =>
     var boxedsize: BoxedI64 = BoxedI64
@@ -56,11 +74,6 @@ class HandleSTMT
     | 100 => return SQLNoData
     end
     SQLError(this)
-
-
-
-
-
 
 
   fun ref bind_col_i16(colnum: U16, target: BoxedI16 tag): SQLReturn =>
@@ -92,6 +105,19 @@ class HandleSTMT
   fun ref bind_col_i64(colnum: U16, target: BoxedI64 tag): SQLReturn =>
     var boxedsize: BoxedI64 = BoxedI64
     match @SQLBindCol(hstmt, colnum, SQLBigInt()+SQLSignedOffset(), target, I64(8), boxedsize)
+    | 0 => return SQLSuccess
+    | 1 => return SQLSuccessWithInfo(this)
+    | 2 => return SQLStillExecuting
+    | -1 => return SQLError(this)
+    | -2 => return SQLInvalidHandle
+    | 99 => return SQLNeedData
+    | 100 => return SQLNoData
+    end
+    SQLError(this)
+
+  fun ref bind_col_i128(colnum: U16, target: BoxedI128 tag): SQLReturn =>
+    var boxedsize: BoxedI64 = BoxedI64
+    match @SQLBindCol(hstmt, colnum, SQLNumeric(), target, I64(16), boxedsize)
     | 0 => return SQLSuccess
     | 1 => return SQLSuccessWithInfo(this)
     | 2 => return SQLStillExecuting

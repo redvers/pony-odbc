@@ -1,3 +1,40 @@
+use @SQLGetTypeInfo[I16](StatementHandle: Pointer[None] tag, DataType: I16)
+
+class SQLTypeInfo
+  var typename: String ref
+  var data_type: BoxedI16 = BoxedI16
+  var column_size: BoxedI32 = BoxedI32
+  var literal_prefix: String ref
+  var literal_suffix: String ref
+  var create_params: String ref
+  var nullable: BoxedI16 = BoxedI16
+  var case_sensitive: BoxedI16 = BoxedI16
+  var searchable: BoxedI16 = BoxedI16
+  var unsigned_attribute: BoxedI16 = BoxedI16
+  var fixed_prec_scale: BoxedI16 = BoxedI16
+  var auto_unique_value: BoxedI16 = BoxedI16
+  var local_type_name: String ref
+  var minimum_scale: BoxedI16 = BoxedI16
+  var maximum_scale: BoxedI16 = BoxedI16
+  var sql_data_type: BoxedI16 = BoxedI16
+  var sql_datetime_sub: BoxedI16 = BoxedI16
+  var num_prec_radix: BoxedI32 = BoxedI32
+  var interval_precision: BoxedI16 = BoxedI16
+
+  new create() =>
+    let a: Array[U8] iso = Array[U8].init(0, 4096)
+    let b: Array[U8] iso = Array[U8].init(0, 4096)
+    let c: Array[U8] iso = Array[U8].init(0, 4096)
+    let d: Array[U8] iso = Array[U8].init(0, 4096)
+    let e: Array[U8] iso = Array[U8].init(0, 4096)
+    typename = String.from_iso_array(consume a)
+    literal_prefix = String.from_iso_array(consume b)
+    literal_suffix = String.from_iso_array(consume c)
+    create_params = String.from_iso_array(consume d)
+    local_type_name = String.from_iso_array(consume e)
+
+
+
 trait SQLPrimitiveType
   fun resolve(id: I16): SQLPrimitiveType val =>
     match id
@@ -71,6 +108,9 @@ struct BoxedI32
 
 struct BoxedI64
   var value: I64 = 0
+
+struct BoxedI128
+  var value: I128 = 0
 
 struct BoxedF32
   var value: F32 = 0

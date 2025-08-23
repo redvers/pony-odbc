@@ -27,7 +27,72 @@ class iso _TestPostgreSQL is UnitTest
                           .>connect("psqlred")?
                           .>get_commit_mode()
 
-    var stmt: HandleSTMT = HandleSTMT.create(hdbc)?
+    var sqltypeinfo: SQLTypeInfo = SQLTypeInfo
+    var stmt: HandleSTMT = HandleSTMT.create_type_info(hdbc, sqltypeinfo, -5)?
+
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_string(1,  sqltypeinfo.typename)) /* varchar */
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(2,  sqltypeinfo.data_type))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i32(3,  sqltypeinfo.column_size))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_string(4,  sqltypeinfo.literal_prefix))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_string(5,  sqltypeinfo.literal_suffix))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_string(6,  sqltypeinfo.create_params))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(7,  sqltypeinfo.nullable))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(8,  sqltypeinfo.case_sensitive))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(9,  sqltypeinfo.searchable))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(10,  sqltypeinfo.unsigned_attribute))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(11,  sqltypeinfo.fixed_prec_scale))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(12,  sqltypeinfo.auto_unique_value))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_string(13,  sqltypeinfo.local_type_name))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(14,  sqltypeinfo.minimum_scale))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(15,  sqltypeinfo.maximum_scale))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(16,  sqltypeinfo.sql_data_type))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(17,  sqltypeinfo.sql_datetime_sub))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i32(18,  sqltypeinfo.num_prec_radix))
+    h.assert_is[SQLReturn](SQLSuccess, stmt.bind_col_i16(19,  sqltypeinfo.interval_precision))
+    let res: SQLReturn = stmt.fetch()
+    match res
+    | let x: SQLSuccess => Debug.out("Response: SQLSuccess")
+    | let x: SQLSuccessWithInfo =>
+          Debug.out("SQLSuccessWithInfo: " + x.records.size().string() + " record(s)")
+          for (i, str) in x.records.values() do
+            Debug.out(i.string() + ": " + str.msgbuff)
+          end
+    | let x: SQLStillExecuting => h.fail("Response: SQLStillExecuting")
+    | let x: SQLError => h.fail("Response: SQLError")
+    | let x: SQLInvalidHandle => h.fail("Response: SQLInvalidHandle")
+    | let x: SQLNeedData => h.fail("Response: SQLNeedData")
+    | let x: SQLNoData => h.fail("Response: SQLNoData")
+    end
+//    h.assert_eq[I16](10, stmt.numresultcols)
+    sqltypeinfo.typename.recalc()
+    sqltypeinfo.literal_prefix.recalc()
+    sqltypeinfo.literal_suffix.recalc()
+    sqltypeinfo.create_params.recalc()
+    sqltypeinfo.local_type_name.recalc()
+
+    Debug.out("typename: " +           sqltypeinfo.typename)
+    Debug.out("typename size: " +      sqltypeinfo.typename.size().string())
+    Debug.out("data_type: " +          sqltypeinfo.data_type.value.string())
+    Debug.out("column_size: " +        sqltypeinfo.column_size.value.string())
+    Debug.out("literal_prefix: " +     sqltypeinfo.literal_prefix)
+    Debug.out("literal_suffix: " +     sqltypeinfo.literal_suffix)
+    Debug.out("create_params: " +      sqltypeinfo.create_params)
+    Debug.out("nullable: " +           sqltypeinfo.nullable.value.string())
+    Debug.out("case_sensitive: " +     sqltypeinfo.case_sensitive.value.string())
+    Debug.out("searchable: " +         sqltypeinfo.searchable.value.string())
+    Debug.out("unsigned_attribute: " + sqltypeinfo.unsigned_attribute.value.string())
+    Debug.out("fixed_prec_scale: " +   sqltypeinfo.fixed_prec_scale.value.string())
+    Debug.out("auto_unique_value: " +  sqltypeinfo.auto_unique_value.value.string())
+    Debug.out("local_type_name: " +    sqltypeinfo.local_type_name)
+    Debug.out("minimum_scale: " +      sqltypeinfo.minimum_scale.value.string())
+    Debug.out("maximum_scale: " +      sqltypeinfo.maximum_scale.value.string())
+    Debug.out("sql_data_type: " +      sqltypeinfo.sql_data_type.value.string())
+    Debug.out("sql_datetime_sub: " +   sqltypeinfo.sql_datetime_sub.value.string())
+    Debug.out("num_prec_radix: " +     sqltypeinfo.num_prec_radix.value.string())
+    Debug.out("interval_precision: " + sqltypeinfo.interval_precision.value.string())
+    Debug.out("\n")
+
+    stmt = HandleSTMT.create(hdbc)?
 
     h.assert_is[SQLReturn](SQLSuccess, stmt.prepare("drop table if exists numerictable"))
     match stmt.execute()
