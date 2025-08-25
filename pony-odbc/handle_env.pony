@@ -16,3 +16,9 @@ class HandleENV
   fun set_odbc3() ? =>
     if (@SQLSetEnvAttr(henv, SQLAttrOdbcVersion(), SQLAttrOvOdbc3(), SQLIsInteger()) != SQLSuccess()) then error end
 
+  fun dispose() =>
+    @SQLFreeHandle(1, henv)
+
+  fun _final() =>
+    @SQLFreeHandle(1, henv)
+

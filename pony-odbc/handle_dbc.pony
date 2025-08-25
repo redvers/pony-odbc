@@ -49,3 +49,9 @@ class HandleDBC
     end
     SQLError(this)
 
+  fun dispose() =>
+    @SQLFreeHandle(2, hdbc)
+
+  fun _final() =>
+    @SQLFreeHandle(2, hdbc)
+

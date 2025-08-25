@@ -14,8 +14,6 @@ class HandleSTMT
   var hstmt: Pointer[None] = Pointer[None]
   var numresultcols: I16 = 0
 
-
-
   fun ht(): I16 => 3
   fun ref h(): Pointer[None] => hstmt
 
@@ -175,6 +173,9 @@ class HandleSTMT
     | 100 => return SQLNoData
     end
     SQLError(this)
+
+  fun dispose() =>
+    @SQLFreeHandle(3, hstmt)
 
   fun _final() =>
     @SQLFreeHandle(3, hstmt)

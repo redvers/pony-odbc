@@ -63,7 +63,6 @@ class iso _TestPostgreSQL is UnitTest
     | let x: SQLNeedData => h.fail("Response: SQLNeedData")
     | let x: SQLNoData => h.fail("Response: SQLNoData")
     end
-//    h.assert_eq[I16](10, stmt.numresultcols)
     sqltypeinfo.typename.recalc()
     sqltypeinfo.literal_prefix.recalc()
     sqltypeinfo.literal_suffix.recalc()
@@ -92,6 +91,10 @@ class iso _TestPostgreSQL is UnitTest
     Debug.out("interval_precision: " + sqltypeinfo.interval_precision.value.string())
     Debug.out("\n")
 
+    stmt.dispose()
+    h.assert_is[SQLReturn](SQLInvalidHandle, stmt.num_result_cols())
+
+
     stmt = HandleSTMT.create(hdbc)?
 
     h.assert_is[SQLReturn](SQLSuccess, stmt.prepare("drop table if exists numerictable"))
@@ -118,7 +121,6 @@ class iso _TestPostgreSQL is UnitTest
     h.assert_is[SQLReturn](SQLSuccess, stmt.prepare(PostgreSQL.numerictable_select_star()))
     h.assert_is[SQLReturn](SQLSuccess, stmt.execute())
     h.assert_is[SQLReturn](SQLSuccess, stmt.num_result_cols())
-//    h.assert_eq[I16](10, stmt.numresultcols)
     h.assert_eq[I16](10, stmt.numresultcols)
 
     /* Check the names of the columns are correct */
@@ -218,3 +220,7 @@ primitive PostgreSQL
     select * from numerictable;
     """
 
+  fun numerictable_select_prepare(): String val =>
+    """
+    select * from numerictable where id = ?;
+    """
