@@ -16,3 +16,23 @@ class SQLSuccessWithInfo
       end
     end
 
+  new create_penv(htype: ODBCHandleEnv tag) =>
+    for num in Range[I16](1,1024) do
+      try
+        records.push((num, SQLDiagFrame.create_penv(htype, num)?))
+      else
+        break
+      end
+    end
+
+  new create_pdbc(htype: ODBCHandleDbc tag) =>
+    for num in Range[I16](1,1024) do
+      try
+        records.push((num, SQLDiagFrame.create_pdbc(htype, num)?))
+      else
+        break
+      end
+    end
+
+
+

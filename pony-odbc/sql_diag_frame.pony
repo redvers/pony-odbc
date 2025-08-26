@@ -11,6 +11,20 @@ class SQLDiagFrame
   var msgbuff: String ref = ".".mul(4096)
   var textlen: I16 = 0
 
+  fun recstring(): String val =>
+    "[" +
+    match handle_type
+    | 1 => "ENV"
+    | 2 => "DBC"
+    | 3 => "STM"
+    else
+      "Unknown:" + handle_type.string()
+    end
+    + "]["
+    + sqlstate
+    + "]: "
+    + msgbuff
+
   new create(htype: ODBCHandle, num: I16)? =>
     if (false) then error end
 
@@ -27,5 +41,39 @@ class SQLDiagFrame
     msgbuff.recalc()
 
     if (s != 0) then error end
-    Debug.out(msgbuff)
+//    Debug.out(msgbuff)
+
+  new create_penv(htype: ODBCHandleEnv tag, num: I16)? =>
+    let s: I16 = @SQLGetDiagRec(
+          1,
+          NullablePointer[ODBCHandleEnv tag](htype),
+          num,
+          sqlstate.cstring(),
+          addressof nativeerrptr,
+          msgbuff.cstring(),
+          msgbuff.size().i16(),
+          addressof textlen)
+
+    handle_type = 1
+    msgbuff.recalc()
+
+    if (s != 0) then error end
+//    Debug.out(msgbuff)
+
+  new create_pdbc(htype: ODBCHandleDbc tag, num: I16)? =>
+    let s: I16 = @SQLGetDiagRec(
+          2,
+          NullablePointer[ODBCHandleDbc tag](htype),
+          num,
+          sqlstate.cstring(),
+          addressof nativeerrptr,
+          msgbuff.cstring(),
+          msgbuff.size().i16(),
+          addressof textlen)
+
+    handle_type = 2
+    msgbuff.recalc()
+
+    if (s != 0) then error end
+//    Debug.out(msgbuff)
 

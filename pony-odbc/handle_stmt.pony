@@ -47,9 +47,8 @@ class HandleSTMT
      * bool, int2, int4, int8, float4, float8, date, time, abstime
      * datetime, timestamp, char, varchar, text
      */
-  fun ref bind_col_string(colnum: U16, target: String ref): SQLReturn =>
-    var boxedsize: BoxedI64 = BoxedI64
-    match @SQLBindCol(hstmt, colnum, SQLChar(), target.cpointer(), I64(4096), boxedsize)
+  fun ref bind_col_string(colnum: U16, target: CBoxedArray): SQLReturn =>
+    match @SQLBindCol(hstmt, colnum, SQLChar(), target.buffer, target.buffersize, addressof target.writtensize)
     | 0 =>return SQLSuccess
     | 1 => return SQLSuccessWithInfo(this)
     | 2 => return SQLStillExecuting
@@ -60,8 +59,8 @@ class HandleSTMT
     end
     SQLError(this)
 
-  fun ref bind_col_f32(colnum: U16, target: BoxedF32 tag): SQLReturn =>
-    var boxedsize: BoxedI64 = BoxedI64
+  fun ref bind_col_f32(colnum: U16, target: CBoxedF32 tag): SQLReturn =>
+    var boxedsize: SQLCSBigInt = SQLCSBigInt
     match @SQLBindCol(hstmt, colnum, SQLReal(), target, I64(4), boxedsize)
     | 0 => return SQLSuccess
     | 1 => return SQLSuccessWithInfo(this)
@@ -74,8 +73,8 @@ class HandleSTMT
     SQLError(this)
 
 
-  fun ref bind_col_i16(colnum: U16, target: BoxedI16 tag): SQLReturn =>
-    var boxedsize: BoxedI64 = BoxedI64
+  fun ref bind_col_i16(colnum: U16, target: CBoxedI16 tag): SQLReturn =>
+    var boxedsize: SQLCSBigInt = SQLCSBigInt
     match @SQLBindCol(hstmt, colnum, SQLSmallInt()+SQLSignedOffset(), target, I64(2), boxedsize)
     | 0 => return SQLSuccess
     | 1 => return SQLSuccessWithInfo(this)
@@ -87,8 +86,8 @@ class HandleSTMT
     end
     SQLError(this)
 
-  fun ref bind_col_i32(colnum: U16, target: BoxedI32 tag): SQLReturn =>
-    var boxedsize: BoxedI64 = BoxedI64
+  fun ref bind_col_i32(colnum: U16, target: CBoxedI32 tag): SQLReturn =>
+    var boxedsize: SQLCSBigInt = SQLCSBigInt
     match @SQLBindCol(hstmt, colnum, SQLInteger()+SQLSignedOffset(), target, I64(4), boxedsize)
     | 0 => return SQLSuccess
     | 1 => return SQLSuccessWithInfo(this)
@@ -100,8 +99,8 @@ class HandleSTMT
     end
     SQLError(this)
 
-  fun ref bind_col_i64(colnum: U16, target: BoxedI64 tag): SQLReturn =>
-    var boxedsize: BoxedI64 = BoxedI64
+  fun ref bind_col_i64(colnum: U16, target: CBoxedI64 tag): SQLReturn =>
+    var boxedsize: SQLCSBigInt = SQLCSBigInt
     match @SQLBindCol(hstmt, colnum, SQLBigInt()+SQLSignedOffset(), target, I64(8), boxedsize)
     | 0 => return SQLSuccess
     | 1 => return SQLSuccessWithInfo(this)
@@ -113,6 +112,7 @@ class HandleSTMT
     end
     SQLError(this)
 
+    /*
   fun ref bind_col_i128(colnum: U16, target: BoxedI128 tag): SQLReturn =>
     var boxedsize: BoxedI64 = BoxedI64
     match @SQLBindCol(hstmt, colnum, SQLNumeric(), target, I64(16), boxedsize)
@@ -125,6 +125,7 @@ class HandleSTMT
     | 100 => return SQLNoData
     end
     SQLError(this)
+    */
 
   fun ref num_result_cols(): SQLReturn =>
     match @SQLNumResultCols(hstmt, addressof numresultcols)
