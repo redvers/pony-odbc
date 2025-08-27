@@ -39,3 +39,13 @@ class SQLError
         break
       end
     end
+
+  new create_pstmt(htype: ODBCHandleStmt tag) =>
+    for num in Range[I16](1,1024) do
+      try
+        records.push((num, SQLDiagFrame.create_pstmt(htype, num)?))
+      else
+        break
+      end
+    end
+

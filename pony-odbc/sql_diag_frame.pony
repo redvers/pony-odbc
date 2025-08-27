@@ -75,5 +75,21 @@ class SQLDiagFrame
     msgbuff.recalc()
 
     if (s != 0) then error end
+
+  new create_pstmt(htype: ODBCHandleStmt tag, num: I16)? =>
+    let s: I16 = @SQLGetDiagRec(
+          3,
+          NullablePointer[ODBCHandleStmt tag](htype),
+          num,
+          sqlstate.cstring(),
+          addressof nativeerrptr,
+          msgbuff.cstring(),
+          msgbuff.size().i16(),
+          addressof textlen)
+
+    handle_type = 3
+    msgbuff.recalc()
+
+    if (s != 0) then error end
 //    Debug.out(msgbuff)
 

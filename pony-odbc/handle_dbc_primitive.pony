@@ -3,6 +3,8 @@ struct ODBCHandleDbc
     ODBCHandleDbcs.set_application_name(this, s)
   fun connect(dsn: String val): SQLReturn val =>
     ODBCHandleDbcs.connect(this, dsn)
+  fun dispose() =>
+    @SQLFreeHandle(2, NullablePointer[ODBCHandleDbc tag](this))
 
 
 primitive ODBCHandleDbcs
@@ -35,5 +37,32 @@ primitive ODBCHandleDbcs
     else
       PonyDriverError
     end
+
+  fun prepare(hdbc: ODBCHandleDbc tag, sql: String val): (SQLReturn val, ODBCHandleStmt tag) =>
+    (var rv: SQLReturn val, var stmt: ODBCHandleStmt) = ODBCHandleStmts.alloc(hdbc)
+    match rv
+    | let x: SQLSuccess val => go_prepare(stmt, sql)
+    | let x: SQLSuccessWithInfo val => go_prepare(stmt, sql)
+    | let x: SQLError val => return (x, stmt)
+    | let x: SQLInvalidHandle val => return (x, stmt)
+    else
+      return (rv, stmt)
+    end
+
+  fun go_prepare(hstmt: ODBCHandleStmt tag, sql: String val): (SQLReturn val, ODBCHandleStmt tag) =>
+    var rv: SQLReturn val = ODBCHandleStmts.prepare(hstmt, sql)
+    (rv, hstmt)
+
+
+
+
+
+
+
+
+//    match @SQLPrepare(NullablePointer[ODBCHandleStmt tag](stmt), sql.cstring(), sql.size().i32())
+
+
+
 
 

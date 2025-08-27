@@ -1,6 +1,8 @@
 struct ODBCHandleEnv
   fun set_odbc2(): SQLReturn => ODBCHandleEnvs.set_odbc2(this)
   fun set_odbc3(): SQLReturn => ODBCHandleEnvs.set_odbc3(this)
+  fun dispose() =>
+    @SQLFreeHandle(1, NullablePointer[ODBCHandleEnv tag](this))
 
 primitive ODBCHandleEnvs
   fun alloc(): (SQLReturn, ODBCHandleEnv) =>
