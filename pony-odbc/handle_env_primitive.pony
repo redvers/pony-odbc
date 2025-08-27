@@ -1,16 +1,22 @@
 struct ODBCHandleEnv
   fun set_odbc2(): SQLReturn => ODBCHandleEnvs.set_odbc2(this)
-  fun set_odbc3(): SQLReturn => ODBCHandleEnvs.set_odbc3(this)
+  fun set_odbc3(inputstatus: SQLReturn val): SQLReturn val =>
+    match inputstatus
+    | let x: SQLSuccess => return ODBCHandleEnvs.set_odbc3(this)
+    else
+      return inputstatus
+    end
+
   fun dispose() =>
     @SQLFreeHandle(1, NullablePointer[ODBCHandleEnv tag](this))
 
 primitive ODBCHandleEnvs
-  fun alloc(): (SQLReturn, ODBCHandleEnv) =>
+  fun alloc(): (SQLReturn val, ODBCHandleEnv) =>
     var rv: ODBCHandleEnv = ODBCHandleEnv
     match @SQLAllocHandle(1, Pointer[None], addressof rv)
     | 0 => return (SQLSuccess, rv)
-    | 1 => return (SQLSuccessWithInfo.create_penv(rv), rv)
-    | -1 => return (SQLError.create_penv(rv), rv)
+    | 1 => return (recover val SQLSuccessWithInfo.create_penv(rv) end, rv)
+    | -1 => return (recover val SQLError.create_penv(rv) end, rv)
     | -2 => return (SQLInvalidHandle, rv)
     else
       (PonyDriverError, rv)
@@ -26,11 +32,11 @@ primitive ODBCHandleEnvs
       PonyDriverError
     end
 
-  fun set_odbc3(h: ODBCHandleEnv tag): SQLReturn =>
+  fun set_odbc3(h: ODBCHandleEnv tag): SQLReturn val =>
     match @SQLSetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), SQLAttrOdbcVersion(), SQLAttrOvOdbc3(), SQLIsInteger())
     | 0 => return SQLSuccess
-    | 1 => return SQLSuccessWithInfo.create_penv(h)
-    | -1 => return SQLError.create_penv(h)
+    | 1 => return recover val SQLSuccessWithInfo.create_penv(h) end
+    | -1 => return recover val SQLError.create_penv(h) end
     | -2 => return SQLInvalidHandle
     else
       PonyDriverError
