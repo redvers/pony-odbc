@@ -38,19 +38,19 @@ primitive ODBCHandleDbcs
       PonyDriverError
     end
 
-  fun prepare(hdbc: ODBCHandleDbc tag, sql: String val): (SQLReturn val, ODBCHandleStmt tag) =>
-    (var rv: SQLReturn val, var stmt: ODBCHandleStmt) = ODBCHandleStmts.alloc(hdbc)
+  fun prepare(hdbc: ODBCHandleDbc tag, sql: String val, prev: SQLReturn val): (SQLReturn val, ODBCHandleStmt tag) =>
+    (var rv: SQLReturn val, var stmt: ODBCHandleStmt val) = ODBCHandleStmts.alloc(hdbc)
     match rv
-    | let x: SQLSuccess val => go_prepare(stmt, sql)
-    | let x: SQLSuccessWithInfo val => go_prepare(stmt, sql)
+    | let x: SQLSuccess val => _prepare(stmt, sql, x)
+    | let x: SQLSuccessWithInfo val => _prepare(stmt, sql, x)
     | let x: SQLError val => return (x, stmt)
     | let x: SQLInvalidHandle val => return (x, stmt)
     else
       return (rv, stmt)
     end
 
-  fun go_prepare(hstmt: ODBCHandleStmt tag, sql: String val): (SQLReturn val, ODBCHandleStmt tag) =>
-    var rv: SQLReturn val = ODBCHandleStmts.prepare(hstmt, sql)
+  fun _prepare(hstmt: ODBCHandleStmt tag, sql: String val, prev: SQLReturn val): (SQLReturn val, ODBCHandleStmt tag) =>
+    var rv: SQLReturn val = ODBCHandleStmts.prepare(hstmt, sql, prev)
     (rv, hstmt)
 
 
