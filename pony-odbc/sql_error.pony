@@ -13,6 +13,7 @@ class SQLError
     end
     consume rv
 
+    /*
   new create(htype: ODBCHandle) =>
     for num in Range[I16](1,1024) do
       try
@@ -21,6 +22,7 @@ class SQLError
         break
       end
     end
+    */
 
   new create_penv(htype: ODBCHandleEnv tag) => None
     for num in Range[I16](1,1024) do

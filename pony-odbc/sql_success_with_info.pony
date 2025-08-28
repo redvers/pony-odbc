@@ -7,6 +7,7 @@ class SQLSuccessWithInfo
   fun string(): String val => "SQLSuccessWithInfo"
   fun apply(): I16 => 1
 
+    /*
   new create(htype: ODBCHandle) =>
     for num in Range[I16](1,1024) do
       try
@@ -15,6 +16,7 @@ class SQLSuccessWithInfo
         break
       end
     end
+    */
 
   new create_penv(htype: ODBCHandleEnv tag) =>
     for num in Range[I16](1,1024) do

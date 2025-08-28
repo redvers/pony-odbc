@@ -25,6 +25,7 @@ class SQLDiagFrame
     + "]: "
     + msgbuff
 
+    /*
   new create(htype: ODBCHandle, num: I16)? =>
     if (false) then error end
 
@@ -42,6 +43,7 @@ class SQLDiagFrame
 
     if (s != 0) then error end
 //    Debug.out(msgbuff)
+    */
 
   new create_penv(htype: ODBCHandleEnv tag, num: I16)? =>
     let s: I16 = @SQLGetDiagRec(

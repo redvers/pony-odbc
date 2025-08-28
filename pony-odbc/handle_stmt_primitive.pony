@@ -1,3 +1,12 @@
+use @SQLBindParam[I16](StatementHandle: Pointer[None] tag, ParameterNumber: U16, ValueType: I16, ParameterType: I16, LengthPrecision: U64, ParameterScale: I16, ParameterValue: Pointer[None] tag, StrLenorInd: Pointer[I64] tag)
+use @SQLExecDirect[I16](StatementHandle: Pointer[None] tag, StatementText: Pointer[U8] tag, TextLength: I32)
+use @SQLPrepare[I16](StatementHandle: Pointer[None] tag, StatementText: Pointer[U8] tag, TextLength: I32)
+use @SQLExecute[I16](StatementHandle: Pointer[None] tag)
+use @SQLNumResultCols[I16](StatementHandle: Pointer[None] tag, ColumnCount: Pointer[I16] tag)
+use @SQLBindCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, ...) // TargetValue: Pointer[None] tag, BufferLength: I64, StrLenorInd: BoxedI64)
+use @SQLFetch[I16](StatementHandle: Pointer[None] tag)
+
+
 use "debug"
 
 struct ODBCHandleStmt

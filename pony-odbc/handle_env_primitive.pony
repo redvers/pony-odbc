@@ -1,3 +1,7 @@
+use @SQLSetEnvAttr[I16](henv: Pointer[None] tag, attr: I32, v: I32, sl: I32)
+use @SQLGetEnvAttr[I16](EnvironmentHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength: Pointer[I32] tag)
+
+
 struct ODBCHandleEnv
   fun set_odbc2(): SQLReturn => ODBCHandleEnvs.set_odbc2(this)
   fun set_odbc3(inputstatus: SQLReturn val): SQLReturn val =>

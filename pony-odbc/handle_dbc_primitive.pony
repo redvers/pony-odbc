@@ -1,3 +1,9 @@
+use @SQLConnect[I16](ConnectionHandle: Pointer[None] tag, ServerName: Pointer[U8] tag, NameLength1: I16, UserName: Pointer[U8] tag, NameLength2: I16, Authentication: Pointer[U8] tag, NameLength3: I16)
+use @SQLSetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, StringLength: I32)
+use @SQLGetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength
+: Pointer[I32] tag)
+
+
 struct ODBCHandleDbc
   fun set_application_name(s: String val): SQLReturn val =>
     ODBCHandleDbcs.set_application_name(this, s)

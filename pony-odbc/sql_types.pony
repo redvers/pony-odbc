@@ -1,3 +1,4 @@
+/*
 use @SQLGetTypeInfo[I16](StatementHandle: Pointer[None] tag, DataType: I16)
 
 class SQLTypeInfo
@@ -20,9 +21,10 @@ class SQLTypeInfo
   var sql_datetime_sub: SQLCSShort = SQLCSShort
   var num_prec_radix: SQLCSLong = SQLCSLong
   var interval_precision: SQLCSShort = SQLCSShort
-
+*/
 primitive SQLNullData
   fun apply(): I64 => -1
+
 
 trait SQLPrimitiveType
   fun resolve(id: I16): SQLPrimitiveType val =>
@@ -71,6 +73,7 @@ primitive SQLGuid          is SQLPrimitiveType fun apply(): I16 =>  (-11)
 
 primitive SQLSignedOffset                      fun apply(): I16 => -20
 primitive SQLUnsignedOffset                    fun apply(): I16 => -22
+
 /*
  * #define SQL_C_CHAR    SQL_CHAR             /* CHAR, VARCHAR, DECIMAL, NUMERIC */
  * #define SQL_C_LONG    SQL_INTEGER          /* INTEGER                      */
