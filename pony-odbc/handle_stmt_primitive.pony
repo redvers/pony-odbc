@@ -9,6 +9,7 @@ use @SQLGetTypeInfo[I16](StatementHandle: Pointer[None] tag, DataType: I16)
 use @SQLDescribeCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, ColumnName: Pointer[U8] tag, BufferLength: I16, NameLength: CBoxedI16 tag, DataType: CBoxedI16 tag, ColumnSize: CBoxedU64 tag, DecimalDigits: CBoxedI16 tag, Nullable: CBoxedI16 tag)
 
 use "debug"
+use "ctypes"
 
 struct ODBCHandleStmt
 
