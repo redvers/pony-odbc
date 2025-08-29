@@ -4,6 +4,7 @@ type SQLReturn is (SQLSuccess |
                  SQLError |
                  SQLInvalidHandle |
                  SQLNeedData |
+                 PonyDriverError |
                  SQLNoData)
 
 
@@ -28,4 +29,6 @@ primitive SQLNoData
   fun apply(): I16 => 100
   fun string(): String val => "SQLNoData"
 
+primitive PonyDriverError
+  fun string(): String val => "SQLNoData"
 
