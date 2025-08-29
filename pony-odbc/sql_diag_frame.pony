@@ -11,6 +11,9 @@ class SQLDiagFrame
   var msgbuff: String ref = ".".mul(4096)
   var textlen: I16 = 0
 
+  fun rec_tuple(): (I16, String val, String val) =>
+    (recnum, sqlstate.clone(), msgbuff.clone())
+
   fun recstring(): String val =>
     "[" +
     match handle_type

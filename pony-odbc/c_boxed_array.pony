@@ -13,7 +13,7 @@ struct CBoxedArray
     buffer = @pony_alloc(@pony_ctx(), buffersize)
 
   fun string(): String iso^ ? =>
-      Debug.out("Written: " + writtensize.string() + ", Vuffer: " + buffersize.string())
+    Debug.out("Written: " + writtensize.string() + ", Buffer: " + buffersize.string())
     if (writtensize.usize() <= buffersize) then
       let rv: String iso = recover iso "!".mul(writtensize.usize()) end
       @memcpy(rv.cpointer(), buffer, writtensize.usize())

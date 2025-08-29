@@ -43,7 +43,7 @@ primitive ODBCHandleDbcs
     else
       PonyDriverError
     end
-
+/*
   fun prepare(hdbc: ODBCHandleDbc tag, sql: String val, prev: SQLReturn val): (SQLReturn val, ODBCHandleStmt tag) =>
     (var rv: SQLReturn val, var stmt: ODBCHandleStmt val) = ODBCHandleStmts.alloc(hdbc)
     match rv
@@ -58,6 +58,7 @@ primitive ODBCHandleDbcs
   fun _prepare(hstmt: ODBCHandleStmt tag, sql: String val, prev: SQLReturn val): (SQLReturn val, ODBCHandleStmt tag) =>
     var rv: SQLReturn val = ODBCHandleStmts.prepare(hstmt, sql, prev)
     (rv, hstmt)
+    */
 
 
 

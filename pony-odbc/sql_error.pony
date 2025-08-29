@@ -13,6 +13,13 @@ class SQLError
     end
     consume rv
 
+  fun get_tuples(): Array[(I16, String val, String val)] val =>
+    let rv: Array[(I16, String val, String val)] trn = recover trn Array[(I16, String val, String val)](8) end
+    for (i,f) in records.values() do
+      rv.push(f.rec_tuple())
+    end
+    consume rv
+
     /*
   new create(htype: ODBCHandle) =>
     for num in Range[I16](1,1024) do

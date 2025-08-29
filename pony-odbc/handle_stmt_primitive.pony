@@ -1,23 +1,32 @@
-use @SQLBindParam[I16](StatementHandle: Pointer[None] tag, ParameterNumber: U16, ValueType: I16, ParameterType: I16, LengthPrecision: U64, ParameterScale: I16, ParameterValue: Pointer[None] tag, StrLenorInd: Pointer[I64] tag)
+use @SQLBindParameter[I16](hstmt: Pointer[None] tag, ipar: U16, fParamType: I16, fCType: I16, fSqlType: I16, cbColDef: U64, ibScale: I16, rgbValue: Pointer[None] tag, cbValueMax: I64, pcbValue: Pointer[I64] tag)
 use @SQLExecDirect[I16](StatementHandle: Pointer[None] tag, StatementText: Pointer[U8] tag, TextLength: I32)
 use @SQLPrepare[I16](StatementHandle: Pointer[None] tag, StatementText: Pointer[U8] tag, TextLength: I32)
 use @SQLExecute[I16](StatementHandle: Pointer[None] tag)
 use @SQLNumResultCols[I16](StatementHandle: Pointer[None] tag, ColumnCount: Pointer[I16] tag)
 use @SQLBindCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, ...) // TargetValue: Pointer[None] tag, BufferLength: I64, StrLenorInd: BoxedI64)
 use @SQLFetch[I16](StatementHandle: Pointer[None] tag)
+use @SQLGetTypeInfo[I16](StatementHandle: Pointer[None] tag, DataType: I16)
+//use @SQLDescribeCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, ColumnName: Pointer[U8] tag, BufferLength: I16, NameLength: Pointer[I16] tag, DataType: Pointer[I16] tag, ColumnSize: Pointer[U64] tag, DecimalDigits: Pointer[I16] tag, Nullable: Pointer[I16] tag)
+use @SQLDescribeCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, ColumnName: Pointer[U8] tag, BufferLength: I16, NameLength: CBoxedI16 tag, DataType: CBoxedI16 tag, ColumnSize: CBoxedU64 tag, DecimalDigits: CBoxedI16 tag, Nullable: CBoxedI16 tag)
+
 
 
 use "debug"
 
 struct ODBCHandleStmt
-  fun prepare(str: String val, prev: SQLReturn val): SQLReturn val =>
-    var rv: SQLReturn val = ODBCHandleStmts.prepare(this, str, prev)
-    Debug.out("ODBCHandleStmt.prepare: [" + prev.string() + "|" + rv.string() + "]")
+  fun get_type_info(dt: I16 = 0): SQLReturn val =>
+    var rv: SQLReturn val = ODBCHandleStmts.get_type_info(this, dt)
+    Debug.out("ODBCHandleStmt.get_type_info: [" + rv.string() + "]")
     rv
 
-  fun bind_col_i32(colnum: U16, target: CBoxedI32 tag, prev: SQLReturn val): SQLReturn val =>
-    var rv: SQLReturn val = ODBCHandleStmts.bind_col_i32(this, colnum, target, prev)
-    Debug.out("ODBCHandleStmt.bind_col_i32: [" + prev.string() + "|" + rv.string() + "]")
+  fun prepare(str: String val): SQLReturn val =>
+    var rv: SQLReturn val = ODBCHandleStmts.prepare(this, str)
+    Debug.out("ODBCHandleStmt.prepare: [" + rv.string() + "]")
+    rv
+
+  fun bind_col_i32(colnum: U16, target: CBoxedI32 tag): SQLReturn val =>
+    var rv: SQLReturn val = ODBCHandleStmts.bind_col_i32(this, colnum, target)
+    Debug.out("ODBCHandleStmt.bind_col_i32: [" + rv.string() + "]")
     rv
 
   fun fetch(prev: SQLReturn val): SQLReturn val =>
@@ -25,10 +34,11 @@ struct ODBCHandleStmt
     Debug.out("ODBCHandleStmt.fetch: [" + prev.string() + "|" + rv.string() + "]")
     rv
 
-  fun execute(prev: SQLReturn val): SQLReturn val =>
-    var rv: SQLReturn val = ODBCHandleStmts.execute(this,  prev)
-    Debug.out("ODBCHandleStmt.execute: [" + prev.string() + "|" + rv.string() + "]")
+  fun execute(): SQLReturn val =>
+    var rv: SQLReturn val = ODBCHandleStmts.execute(this)
+    Debug.out("ODBCHandleStmt.execute: [" + rv.string() + "]")
     rv
+
 
 primitive ODBCHandleStmts
   fun alloc(h: ODBCHandleDbc tag): (SQLReturn val, ODBCHandleStmt iso^) =>
@@ -42,7 +52,49 @@ primitive ODBCHandleStmts
       (PonyDriverError, consume rv)
     end
 
-  fun prepare(h: ODBCHandleStmt tag, str: String val, prev: SQLReturn val): SQLReturn val =>
+  fun describe_col(h: ODBCHandleStmt tag, col: U16, fillme: SQLDescribeColOut): SQLReturn val =>  // This needs refactoring - FIXME
+    Debug("Checking col: " + col.string())
+    var rv: I16 = @SQLDescribeCol[I16](NullablePointer[ODBCHandleStmt tag](h),
+    col,
+    fillme.column_name.buffer,
+    fillme.column_name.buffersize.i16(),
+    fillme.writtenlen,
+    fillme.datatype,
+    fillme.colsize,
+    fillme.decdigits,
+    fillme.nullable)
+    fillme.column_name.writtensize = fillme.writtenlen.value.i64()
+
+    fillme.column_number = col
+    try Debug.out(fillme.column_name.string()?) else Debug.out("oof") end
+    Debug.out("writtenlen: " + fillme.writtenlen.value.string())
+
+
+    match rv
+    | 0 => return SQLSuccess
+    | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
+    | 2 => return SQLStillExecuting
+    | -1 => return recover val SQLError.create_pstmt(h) end
+    | -2 => return SQLInvalidHandle
+    else
+      PonyDriverError
+    end
+
+
+
+  fun get_type_info(h: ODBCHandleStmt tag, dt: I16): SQLReturn val =>
+    var rv: I16 = @SQLGetTypeInfo(NullablePointer[ODBCHandleStmt tag](h), dt)
+    match rv
+    | 0 => return SQLSuccess
+    | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
+    | 2 => return SQLStillExecuting
+    | -1 => return recover val SQLError.create_pstmt(h) end
+    | -2 => return SQLInvalidHandle
+    else
+      PonyDriverError
+    end
+
+  fun prepare(h: ODBCHandleStmt tag, str: String val): SQLReturn val =>
     Debug.out("CFFI: SQLPrepare")
     var rv: I16 = @SQLPrepare(NullablePointer[ODBCHandleStmt tag](h), str.cstring(), str.size().i32())
     match rv
@@ -55,18 +107,10 @@ primitive ODBCHandleStmts
       PonyDriverError
     end
 
-  fun bind_col_i32(h: ODBCHandleStmt tag, colnum: U16, target: CBoxedI32 tag, prev: SQLReturn val): SQLReturn val =>
-    match prev
-    | let x: SQLSuccess val => _bind_col_i32(h, colnum, target)
-    | let x: SQLSuccessWithInfo val => _bind_col_i32(h, colnum, target)
-    else
-      prev
-    end
-
-  fun _bind_col_i32(h: ODBCHandleStmt tag, colnum: U16, target: CBoxedI32 tag): SQLReturn val =>
-    var boxedsize: SQLCSBigInt = SQLCSBigInt
+  fun bind_col_i32(h: ODBCHandleStmt tag, colnum: U16, target: CBoxedI32 tag): SQLReturn val =>
+    var boxedsize: CBoxedI64 = CBoxedI64
     Debug.out("CFFI: SQLBindCol")
-    match @SQLBindCol(NullablePointer[ODBCHandleStmt tag](h), colnum, SQLInteger()+SQLSignedOffset(), target, I64(4), boxedsize)
+    match @SQLBindCol(NullablePointer[ODBCHandleStmt tag](h), colnum, 4 - 20, target, I64(4), boxedsize)
     | 0 => return SQLSuccess
     | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
     | 2 => return SQLStillExecuting
@@ -77,15 +121,7 @@ primitive ODBCHandleStmts
     end
     PonyDriverError
 
-  fun execute(h: ODBCHandleStmt tag, prev: SQLReturn val): SQLReturn val =>
-    match prev
-    | let x: SQLSuccess val => _execute(h)
-    | let x: SQLSuccessWithInfo val => _execute(h)
-    else
-      prev
-    end
-
-  fun _execute(h: ODBCHandleStmt tag): SQLReturn val =>
+  fun execute(h: ODBCHandleStmt tag): SQLReturn val =>
     """
     SQL_SUCCESS
     SQL_SUCCESS_WITH_INFO

@@ -1,24 +1,46 @@
 use "debug"
 
-type SQLCSTinyInt is CBoxedI8
-type SQLCBit      is CBoxedU8
-type SQLCUTinyInt is CBoxedU8
+/*
+//type SQLCSTinyInt is CBoxedI8
+//type SQLCBit      is CBoxedU8
+//type SQLCUTinyInt is CBoxedU8
 
-type SQLCSShort   is CBoxedI16
-type SQLCUShort   is CBoxedU16
+class SQLCSShort
+  var strct: CBoxedI16 = CBoxedI16
 
-type SQLCSLong    is CBoxedI32
-type SQLCULong    is CBoxedU32
+//type SQLCUShort   is CBoxedU16
 
-type SQLCSBigInt  is CBoxedI64
-type SQLCUBigInt  is CBoxedU64
+class SQLCSLong
+  var strct: CBoxedI32 = CBoxedI32(0)
 
-type SQLCFloat    is CBoxedF32
-type SQLCDouble   is CBoxedF64
+//type SQLCULong    is CBoxedU32
 
-type SQLCChar     is CBoxedArray
-type SQLCWChar    is CBoxedArray
-type SQLCBinary   is CBoxedArray
+//type SQLCSBigInt  is CBoxedI64
+//type SQLCUBigInt  is CBoxedU64
+
+//type SQLCFloat    is CBoxedF32
+//type SQLCDouble   is CBoxedF64
+*/
+
+class SQLDescribeColOut
+  var column_number: U16 = 1
+  var column_name: CBoxedArray = CBoxedArray(4096)
+  var writtenlen:    CBoxedI16 = CBoxedI16
+  var datatype:      CBoxedI16 = CBoxedI16
+  var colsize:       CBoxedU64 = CBoxedU64
+  var decdigits:     CBoxedI16 = CBoxedI16
+  var nullable:      CBoxedI16 = CBoxedI16
+
+
+
+
+
+
+class SQLCChar
+  var strct: CBoxedArray = CBoxedArray
+
+//type SQLCWChar    is CBoxedArray
+//type SQLCBinary   is CBoxedArray
 
 
 //struct CBoxedArray
@@ -58,6 +80,7 @@ struct CBoxedU16
 struct CBoxedI32
   var value: I32 = I32(0)
   fun sizeof(): I64 => 4
+  new create(a: I32 = 0) => value = a
 
 struct CBoxedU32
   var value: U32 = U32(4)
