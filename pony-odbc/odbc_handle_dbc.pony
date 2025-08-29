@@ -5,10 +5,6 @@ use @SQLGetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32,
 
 
 struct ODBCHandleDbc
-  fun set_application_name(s: String val): SQLReturn val =>
-    ODBCHandleDbcs.set_application_name(this, s)
-  fun connect(dsn: String val): SQLReturn val =>
-    ODBCHandleDbcs.connect(this, dsn)
   fun dispose() =>
     @SQLFreeHandle(2, NullablePointer[ODBCHandleDbc tag](this))
 
@@ -43,6 +39,12 @@ primitive ODBCHandleDbcs
     else
       PonyDriverError
     end
+
+
+
+
+
+
 /*
   fun prepare(hdbc: ODBCHandleDbc tag, sql: String val, prev: SQLReturn val): (SQLReturn val, ODBCHandleStmt tag) =>
     (var rv: SQLReturn val, var stmt: ODBCHandleStmt val) = ODBCHandleStmts.alloc(hdbc)
@@ -59,14 +61,6 @@ primitive ODBCHandleDbcs
     var rv: SQLReturn val = ODBCHandleStmts.prepare(hstmt, sql, prev)
     (rv, hstmt)
     */
-
-
-
-
-
-
-
-
 //    match @SQLPrepare(NullablePointer[ODBCHandleStmt tag](stmt), sql.cstring(), sql.size().i32())
 
 

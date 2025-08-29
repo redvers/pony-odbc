@@ -3,14 +3,6 @@ use @SQLGetEnvAttr[I16](EnvironmentHandle: Pointer[None] tag, Attribute: I32, Va
 
 
 struct ODBCHandleEnv
-  fun set_odbc2(): SQLReturn => ODBCHandleEnvs.set_odbc2(this)
-  fun set_odbc3(inputstatus: SQLReturn val): SQLReturn val =>
-    match inputstatus
-    | let x: SQLSuccess => return ODBCHandleEnvs.set_odbc3(this)
-    else
-      return inputstatus
-    end
-
   fun dispose() =>
     @SQLFreeHandle(1, NullablePointer[ODBCHandleEnv tag](this))
 

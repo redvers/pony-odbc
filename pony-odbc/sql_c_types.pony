@@ -1,27 +1,5 @@
 use "debug"
 
-/*
-//type SQLCSTinyInt is CBoxedI8
-//type SQLCBit      is CBoxedU8
-//type SQLCUTinyInt is CBoxedU8
-
-class SQLCSShort
-  var strct: CBoxedI16 = CBoxedI16
-
-//type SQLCUShort   is CBoxedU16
-
-class SQLCSLong
-  var strct: CBoxedI32 = CBoxedI32(0)
-
-//type SQLCULong    is CBoxedU32
-
-//type SQLCSBigInt  is CBoxedI64
-//type SQLCUBigInt  is CBoxedU64
-
-//type SQLCFloat    is CBoxedF32
-//type SQLCDouble   is CBoxedF64
-*/
-
 class SQLDescribeColOut
   var column_number: U16 = 1
   var column_name: CBoxedArray = CBoxedArray(4096)
@@ -38,27 +16,6 @@ class SQLDescribeColOut
 
 class SQLCChar
   var strct: CBoxedArray = CBoxedArray
-
-//type SQLCWChar    is CBoxedArray
-//type SQLCBinary   is CBoxedArray
-
-
-//struct CBoxedArray
-//  var value: Pointer[U8] ref
-//  var buffersize: USize = 4096
-//  var writtensize: I64 = I64(0)
-
-//  new create(buffersize': USize = 4096) =>
-//    buffersize = buffersize'
-//    value = Array[U8].init(0, buffersize)
-//
-//  fun ref array(): Array[U8] iso^ =>
-//    Debug.out("Allocated: " + value.size().string() + ", written: " + writtensize.string())
-//    recover iso Array[U8]
-//      var rv: Array[U8] = Array[U8](writtensize.usize())
-//      rv.copy_from(value, 0, 0, writtensize.usize())
-//      consume rv
-//    end
 
 struct CBoxedI8
   var value: I8 = I8(0)
@@ -85,7 +42,6 @@ struct CBoxedI32
 struct CBoxedU32
   var value: U32 = U32(4)
   fun sizeof(): I64 => 2
-
 
 struct CBoxedF32
   var value: F32 = F32(0)

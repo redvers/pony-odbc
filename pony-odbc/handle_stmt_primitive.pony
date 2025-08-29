@@ -6,39 +6,11 @@ use @SQLNumResultCols[I16](StatementHandle: Pointer[None] tag, ColumnCount: Poin
 use @SQLBindCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, ...) // TargetValue: Pointer[None] tag, BufferLength: I64, StrLenorInd: BoxedI64)
 use @SQLFetch[I16](StatementHandle: Pointer[None] tag)
 use @SQLGetTypeInfo[I16](StatementHandle: Pointer[None] tag, DataType: I16)
-//use @SQLDescribeCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, ColumnName: Pointer[U8] tag, BufferLength: I16, NameLength: Pointer[I16] tag, DataType: Pointer[I16] tag, ColumnSize: Pointer[U64] tag, DecimalDigits: Pointer[I16] tag, Nullable: Pointer[I16] tag)
 use @SQLDescribeCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, ColumnName: Pointer[U8] tag, BufferLength: I16, NameLength: CBoxedI16 tag, DataType: CBoxedI16 tag, ColumnSize: CBoxedU64 tag, DecimalDigits: CBoxedI16 tag, Nullable: CBoxedI16 tag)
-
-
 
 use "debug"
 
 struct ODBCHandleStmt
-  fun get_type_info(dt: I16 = 0): SQLReturn val =>
-    var rv: SQLReturn val = ODBCHandleStmts.get_type_info(this, dt)
-    Debug.out("ODBCHandleStmt.get_type_info: [" + rv.string() + "]")
-    rv
-
-  fun prepare(str: String val): SQLReturn val =>
-    var rv: SQLReturn val = ODBCHandleStmts.prepare(this, str)
-    Debug.out("ODBCHandleStmt.prepare: [" + rv.string() + "]")
-    rv
-
-  fun bind_col_i32(colnum: U16, target: CBoxedI32 tag): SQLReturn val =>
-    var rv: SQLReturn val = ODBCHandleStmts.bind_col_i32(this, colnum, target)
-    Debug.out("ODBCHandleStmt.bind_col_i32: [" + rv.string() + "]")
-    rv
-
-  fun fetch(prev: SQLReturn val): SQLReturn val =>
-    var rv: SQLReturn val = ODBCHandleStmts.fetch(this,  prev)
-    Debug.out("ODBCHandleStmt.fetch: [" + prev.string() + "|" + rv.string() + "]")
-    rv
-
-  fun execute(): SQLReturn val =>
-    var rv: SQLReturn val = ODBCHandleStmts.execute(this)
-    Debug.out("ODBCHandleStmt.execute: [" + rv.string() + "]")
-    rv
-
 
 primitive ODBCHandleStmts
   fun alloc(h: ODBCHandleDbc tag): (SQLReturn val, ODBCHandleStmt iso^) =>
@@ -66,8 +38,6 @@ primitive ODBCHandleStmts
     fillme.column_name.writtensize = fillme.writtenlen.value.i64()
 
     fillme.column_number = col
-    try Debug.out(fillme.column_name.string()?) else Debug.out("oof") end
-    Debug.out("writtenlen: " + fillme.writtenlen.value.string())
 
 
     match rv
@@ -79,8 +49,6 @@ primitive ODBCHandleStmts
     else
       PonyDriverError
     end
-
-
 
   fun get_type_info(h: ODBCHandleStmt tag, dt: I16): SQLReturn val =>
     var rv: I16 = @SQLGetTypeInfo(NullablePointer[ODBCHandleStmt tag](h), dt)
@@ -107,20 +75,6 @@ primitive ODBCHandleStmts
       PonyDriverError
     end
 
-  fun bind_col_i32(h: ODBCHandleStmt tag, colnum: U16, target: CBoxedI32 tag): SQLReturn val =>
-    var boxedsize: CBoxedI64 = CBoxedI64
-    Debug.out("CFFI: SQLBindCol")
-    match @SQLBindCol(NullablePointer[ODBCHandleStmt tag](h), colnum, 4 - 20, target, I64(4), boxedsize)
-    | 0 => return SQLSuccess
-    | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
-    | 2 => return SQLStillExecuting
-    | -1 => return recover val SQLError.create_pstmt(h) end
-    | -2 => return SQLInvalidHandle
-    | 99 => return SQLNeedData
-    | 100 => return SQLNoData
-    end
-    PonyDriverError
-
   fun execute(h: ODBCHandleStmt tag): SQLReturn val =>
     """
     SQL_SUCCESS
@@ -144,7 +98,7 @@ primitive ODBCHandleStmts
     end
     PonyDriverError
 
-
+/*
   fun fetch(h: ODBCHandleStmt tag, prev: SQLReturn val): SQLReturn val =>
     match prev
     | let x: SQLSuccess val => _fetch(h)
@@ -174,4 +128,18 @@ primitive ODBCHandleStmts
     end
     PonyDriverError
 
+  fun bind_col_i32(h: ODBCHandleStmt tag, colnum: U16, target: CBoxedI32 tag): SQLReturn val =>
+    var boxedsize: CBoxedI64 = CBoxedI64
+    Debug.out("CFFI: SQLBindCol")
+    match @SQLBindCol(NullablePointer[ODBCHandleStmt tag](h), colnum, 4 - 20, target, I64(4), boxedsize)
+    | 0 => return SQLSuccess
+    | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
+    | 2 => return SQLStillExecuting
+    | -1 => return recover val SQLError.create_pstmt(h) end
+    | -2 => return SQLInvalidHandle
+    | 99 => return SQLNeedData
+    | 100 => return SQLNoData
+    end
+    PonyDriverError
 
+    */
