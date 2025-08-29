@@ -1,5 +1,5 @@
-use "debug"
 use ".."
+use "debug"
 
 use @memcpy[Pointer[U8] ref](dest: Pointer[U8] tag, src: Pointer[U8] tag, size: USize)
 use @pony_ctx[Pointer[None]]()

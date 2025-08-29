@@ -1,5 +1,5 @@
 {
-  "packages": [],
+  "packages": [ "pony-odbc", "pony-odbc/ctypes" ],
   "deps": [],
   "info": {
     "description": "",
