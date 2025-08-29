@@ -3,7 +3,7 @@ use "pony_test"
 //use "lib:iodbc"
 use "lib:odbc"
 
-actor Main is TestList
+actor \nodoc\ Main is TestList
   let env: Env
 
   new create(env': Env) =>
@@ -15,7 +15,7 @@ actor Main is TestList
 
 
 
-class iso _TestPostgreSQL is UnitTest
+class \nodoc\ iso _TestPostgreSQL is UnitTest
   fun name(): String val => "_TestPostgreSQL"
 
   fun apply(h: TestHelper) =>

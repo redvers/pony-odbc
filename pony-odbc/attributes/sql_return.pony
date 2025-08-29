@@ -1,3 +1,5 @@
+use "../instrumentation"
+
 type SQLReturn is (SQLSuccess |
                  SQLSuccessWithInfo |
                  SQLStillExecuting |

@@ -1,8 +1,11 @@
 use @SQLSetEnvAttr[I16](henv: Pointer[None] tag, attr: I32, v: I32, sl: I32)
 use @SQLGetEnvAttr[I16](EnvironmentHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength: Pointer[I32] tag)
 
+use "ctypes"
+use "attributes"
+use "instrumentation"
 
-struct ODBCHandleEnv
+struct \nodoc\ ODBCHandleEnv
   fun dispose() =>
     @SQLFreeHandle(1, NullablePointer[ODBCHandleEnv tag](this))
 

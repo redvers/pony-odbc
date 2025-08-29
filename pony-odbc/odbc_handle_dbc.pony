@@ -3,8 +3,10 @@ use @SQLSetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32,
 use @SQLGetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength
 : Pointer[I32] tag)
 
+use "attributes"
+use "instrumentation"
 
-struct ODBCHandleDbc
+struct \nodoc\ ODBCHandleDbc
   fun dispose() =>
     @SQLFreeHandle(2, NullablePointer[ODBCHandleDbc tag](this))
 

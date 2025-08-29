@@ -1,24 +1,13 @@
 use "debug"
 use "collections"
 
-class SQLError
+use ".."
+
+class SQLSuccessWithInfo
   var records: Array[(I16, SQLDiagFrame)] = Array[(I16, SQLDiagFrame)]
-  fun apply(): I16 => -1
 
-  fun string(): String val => "SQLError"
-  fun get_records(): Array[String val] val =>
-    let rv: Array[String val] trn = recover trn Array[String val](8) end
-    for (i,f) in records.values() do
-      rv.push(f.recstring())
-    end
-    consume rv
-
-  fun get_tuples(): Array[(I16, String val, String val)] val =>
-    let rv: Array[(I16, String val, String val)] trn = recover trn Array[(I16, String val, String val)](8) end
-    for (i,f) in records.values() do
-      rv.push(f.rec_tuple())
-    end
-    consume rv
+  fun string(): String val => "SQLSuccessWithInfo"
+  fun apply(): I16 => 1
 
     /*
   new create(htype: ODBCHandle) =>
@@ -31,7 +20,7 @@ class SQLError
     end
     */
 
-  new create_penv(htype: ODBCHandleEnv tag) => None
+  new create_penv(htype: ODBCHandleEnv tag) =>
     for num in Range[I16](1,1024) do
       try
         records.push((num, SQLDiagFrame.create_penv(htype, num)?))
@@ -40,7 +29,7 @@ class SQLError
       end
     end
 
-  new create_pdbc(htype: ODBCHandleDbc tag) => None
+  new create_pdbc(htype: ODBCHandleDbc tag) =>
     for num in Range[I16](1,1024) do
       try
         records.push((num, SQLDiagFrame.create_pdbc(htype, num)?))
@@ -57,4 +46,6 @@ class SQLError
         break
       end
     end
+
+
 

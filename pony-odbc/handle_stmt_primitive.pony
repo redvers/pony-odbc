@@ -10,8 +10,10 @@ use @SQLDescribeCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, 
 
 use "debug"
 use "ctypes"
+use "attributes"
+use "instrumentation"
 
-struct ODBCHandleStmt
+struct \nodoc\ ODBCHandleStmt
 
 primitive ODBCHandleStmts
   fun alloc(h: ODBCHandleDbc tag): (SQLReturn val, ODBCHandleStmt iso^) =>
