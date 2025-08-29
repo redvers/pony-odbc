@@ -1,4 +1,5 @@
 use ".."
+use "../attributes"
 use "debug"
 
 use @memcpy[Pointer[U8] ref](dest: Pointer[U8] tag, src: Pointer[U8] tag, size: USize)
