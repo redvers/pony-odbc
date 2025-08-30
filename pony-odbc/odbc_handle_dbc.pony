@@ -3,25 +3,16 @@ use @SQLSetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32,
 use @SQLGetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength
 : Pointer[I32] tag)
 
+use "dbc"
 use "attributes"
 use "instrumentation"
 
 struct \nodoc\ ODBCHandleDbc
-  fun dispose() =>
-    @SQLFreeHandle(2, NullablePointer[ODBCHandleDbc tag](this))
 
 
 primitive ODBCHandleDbcs
-  fun alloc(h: ODBCHandleEnv tag): (SQLReturn val, ODBCHandleDbc) =>
-    var rv: ODBCHandleDbc = ODBCHandleDbc
-    match @SQLAllocHandle(2, h, addressof rv)
-    | 0 => return (SQLSuccess, rv)
-    | 1 => return (recover val SQLSuccessWithInfo.create_pdbc(rv) end, rv)
-    | -1 => return (recover val SQLError.create_pdbc(rv) end, rv)
-    | -2 => return (SQLInvalidHandle, rv)
-    else
-      (PonyDriverError, rv)
-    end
+  fun alloc(h: ODBCHandleEnv tag): (SQLReturn val, ODBCHandleDbc tag) =>
+    ODBCDbc.sql_alloc_handle(h)
 
   fun set_application_name(h: ODBCHandleDbc tag, s: String val): SQLReturn val =>
     match @SQLSetConnectAttr[I16](NullablePointer[ODBCHandleDbc tag](h), SQLAttrApplicationName(), s.cstring(), s.size().i32())

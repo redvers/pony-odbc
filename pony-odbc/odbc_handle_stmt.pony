@@ -8,6 +8,7 @@ use @SQLFetch[I16](StatementHandle: Pointer[None] tag)
 use @SQLGetTypeInfo[I16](StatementHandle: Pointer[None] tag, DataType: I16)
 use @SQLDescribeCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, ColumnName: Pointer[U8] tag, BufferLength: I16, NameLength: CBoxedI16 tag, DataType: CBoxedI16 tag, ColumnSize: CBoxedU64 tag, DecimalDigits: CBoxedI16 tag, Nullable: CBoxedI16 tag)
 
+use "stmt"
 use "debug"
 use "ctypes"
 use "attributes"
@@ -16,16 +17,8 @@ use "instrumentation"
 struct \nodoc\ ODBCHandleStmt
 
 primitive ODBCHandleStmts
-  fun alloc(h: ODBCHandleDbc tag): (SQLReturn val, ODBCHandleStmt iso^) =>
-    var rv: ODBCHandleStmt iso = ODBCHandleStmt
-    match @SQLAllocHandle(3, h, addressof rv)
-    | 0 => return (SQLSuccess, consume rv)
-    | 1 => return (recover val SQLSuccessWithInfo.create_pstmt(rv) end, consume rv)
-    | -1 => return (recover val SQLError.create_pstmt(rv) end, consume rv)
-    | -2 => return (SQLInvalidHandle, consume rv)
-    else
-      (PonyDriverError, consume rv)
-    end
+  fun alloc(h: ODBCHandleDbc tag): (SQLReturn val, ODBCHandleStmt tag) =>
+    ODBCStmt.alloc(h)
 
   fun describe_col(h: ODBCHandleStmt tag, col: U16, fillme: SQLDescribeColOut): SQLReturn val =>  // This needs refactoring - FIXME
     Debug("Checking col: " + col.string())

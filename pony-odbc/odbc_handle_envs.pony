@@ -1,25 +1,16 @@
 use @SQLSetEnvAttr[I16](henv: Pointer[None] tag, attr: I32, v: I32, sl: I32)
 use @SQLGetEnvAttr[I16](EnvironmentHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength: Pointer[I32] tag)
 
+use "env"
 use "ctypes"
 use "attributes"
 use "instrumentation"
 
 struct \nodoc\ ODBCHandleEnv
-  fun dispose() =>
-    @SQLFreeHandle(1, NullablePointer[ODBCHandleEnv tag](this))
 
 primitive ODBCHandleEnvs
-  fun alloc(): (SQLReturn val, ODBCHandleEnv) =>
-    var rv: ODBCHandleEnv = ODBCHandleEnv
-    match @SQLAllocHandle(1, Pointer[None], addressof rv)
-    | 0 => return (SQLSuccess, rv)
-    | 1 => return (recover val SQLSuccessWithInfo.create_penv(rv) end, rv)
-    | -1 => return (recover val SQLError.create_penv(rv) end, rv)
-    | -2 => return (SQLInvalidHandle, rv)
-    else
-      (PonyDriverError, rv)
-    end
+  fun alloc(): (SQLReturn val, ODBCHandleEnv tag) =>
+    ODBCEnv.sql_alloc_handle()
 
   fun set_odbc2(h: ODBCHandleEnv tag): SQLReturn =>
     match @SQLSetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), SQLAttrOdbcVersion(), SQLAttrOvOdbc2(), SQLIsInteger())
