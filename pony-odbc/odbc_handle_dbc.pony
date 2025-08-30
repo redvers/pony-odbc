@@ -10,9 +10,9 @@ use "instrumentation"
 struct \nodoc\ ODBCHandleDbc
 
 
-primitive ODBCHandleDbcs
+primitive ODBCDbc
   fun alloc(h: ODBCHandleEnv tag): (SQLReturn val, ODBCHandleDbc tag) =>
-    ODBCDbc.sql_alloc_handle(h)
+    ODBCDbcFFI.sql_alloc_handle(h)
 
   fun set_application_name(h: ODBCHandleDbc tag, s: String val): SQLReturn val =>
     match @SQLSetConnectAttr[I16](NullablePointer[ODBCHandleDbc tag](h), SQLAttrApplicationName(), s.cstring(), s.size().i32())

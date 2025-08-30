@@ -16,9 +16,9 @@ use "instrumentation"
 
 struct \nodoc\ ODBCHandleStmt
 
-primitive ODBCHandleStmts
+primitive ODBCStmt
   fun alloc(h: ODBCHandleDbc tag): (SQLReturn val, ODBCHandleStmt tag) =>
-    ODBCStmt.alloc(h)
+    ODBCStmtFFI.alloc(h)
 
   fun describe_col(h: ODBCHandleStmt tag, col: U16, fillme: SQLDescribeColOut): SQLReturn val =>  // This needs refactoring - FIXME
     Debug("Checking col: " + col.string())

@@ -8,9 +8,9 @@ use "instrumentation"
 
 struct \nodoc\ ODBCHandleEnv
 
-primitive ODBCHandleEnvs
+primitive ODBCEnv
   fun alloc(): (SQLReturn val, ODBCHandleEnv tag) =>
-    ODBCEnv.sql_alloc_handle()
+    ODBCEnvFFI.sql_alloc_handle()
 
   fun set_odbc2(h: ODBCHandleEnv tag): SQLReturn =>
     match @SQLSetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), SQLAttrOdbcVersion(), SQLAttrOvOdbc2(), SQLIsInteger())

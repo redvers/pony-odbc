@@ -4,7 +4,7 @@ use @SQLAllocHandle[I16](handletype: I16, inputhandle: Pointer[None] tag, output
 use ".."
 use "../instrumentation"
 
-primitive ODBCDbc
+primitive \nodoc\ ODBCDbcFFI
   fun sql_alloc_handle(h: ODBCHandleEnv tag): (SQLReturn val, ODBCHandleDbc tag) =>
     var rv: ODBCHandleDbc tag = ODBCHandleDbc
     match @SQLAllocHandle(2, NullablePointer[ODBCHandleEnv tag](h), addressof rv)
