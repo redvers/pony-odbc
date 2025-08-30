@@ -7,6 +7,8 @@ use @SQLBindCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, Targ
 use @SQLFetch[I16](StatementHandle: Pointer[None] tag)
 use @SQLGetTypeInfo[I16](StatementHandle: Pointer[None] tag, DataType: I16)
 use @SQLDescribeCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, ColumnName: Pointer[U8] tag, BufferLength: I16, NameLength: CBoxedI16 tag, DataType: CBoxedI16 tag, ColumnSize: CBoxedU64 tag, DecimalDigits: CBoxedI16 tag, Nullable: CBoxedI16 tag)
+use @SQLDescribeParam[I16](hstmt: Pointer[None] tag, ipar: U16, pfSqlType: Pointer[I16] tag, pcbParamDef: Pointer[U64] tag, pibScale: Pointer[I16] tag, pfNullable: Pointer[I16] tag)
+
 
 use "stmt"
 use "debug"
@@ -19,6 +21,27 @@ struct \nodoc\ ODBCHandleStmt
 primitive ODBCStmt
   fun alloc(h: ODBCHandleDbc tag): (SQLReturn val, ODBCHandleStmt tag) =>
     ODBCStmtFFI.alloc(h)
+
+//use @SQLDescribeParam[I16](hstmt: Pointer[None] tag, ipar: U16, pfSqlType: Pointer[I16] tag, pcbParamDef: Pointer[U64] tag, pibScale: Pointer[I16] tag, pfNullable: Pointer[I16] tag)
+  fun describe_param(h: ODBCHandleStmt tag, col: U16, i: SQLDescribeParamOut): SQLReturn val =>
+    var rv: I16 = @SQLDescribeParam[I16](
+        NullablePointer[ODBCHandleStmt tag](h),
+        col,
+        addressof i.data_type_ptr,
+        addressof i.parameter_size_ptr,
+        addressof i.decimal_digits_ptr,
+        addressof i.nullable_ptr)
+    match rv
+    | 0 => return SQLSuccess
+    | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
+    | 2 => return SQLStillExecuting
+    | -1 => return recover val SQLError.create_pstmt(h) end
+    | -2 => return SQLInvalidHandle
+    else
+      PonyDriverError
+    end
+
+
 
   fun describe_col(h: ODBCHandleStmt tag, col: U16, fillme: SQLDescribeColOut): SQLReturn val =>  // This needs refactoring - FIXME
     Debug("Checking col: " + col.string())
@@ -34,7 +57,6 @@ primitive ODBCStmt
     fillme.column_name.writtensize = fillme.writtenlen.value.i64()
 
     fillme.column_number = col
-
 
     match rv
     | 0 => return SQLSuccess
