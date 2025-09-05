@@ -1,6 +1,11 @@
 use "debug"
 use "lib:odbc"
 use "pony_test"
+use "instrumentation"
+use "env"
+use "dbc"
+use "stmt"
+use "ctypes"
 
 actor \nodoc\ Main is TestList
   let env: Env
@@ -28,7 +33,31 @@ class \nodoc\ iso _TestMariaDB is UnitTest
     h.assert_true(dbc.is_valid())
     h.assert_true(dbc.set_application_name("_DBConnect"))
 
-    h.assert_true(dbc.connect("mariadb"))
+    h.assert_false(dbc.connect("mariadb"))
+    show_error_dbc(dbc)
+
+
+
+
+
+
+
+  fun show_error_dbc(dbc: ODBCDbc) =>
+    var err: SQLReturn val = recover val SQLError.create_pdbc(dbc.dbc) end
+    try
+      if (false) then error end
+      for f in (dbc.err as SQLError val).get_records().values() do
+        Debug.out(f)
+      end
+      true
+    end
+
+
+
+
+
+
+
 /*
     var henv: HandleENV = HandleENV.create()?
                           .>set_odbc3()?
