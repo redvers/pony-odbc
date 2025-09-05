@@ -108,4 +108,19 @@ all: ci
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
+start-pg-container:
+	@docker run --name pg -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_HOST_AUTH_METHOD=md5 -e POSTGRES_INITDB_ARGS="--auth-host=md5" -p 5432:5432 -d postgres:14.5
+
+stop-pg-container:
+	@docker stop pg
+	@docker rm pg
+
+start-mariadb-container:
+	@docker run --name mariadb -e MYSQL_USER=pony -e MYSQL_PASSWORD=pony -e MYSQL_DATABASE=pony -e MYSQL_ROOT_PASSWORD=pony -p 3306:3306 -d mariadb
+
+stop-mariadb-container:
+	@docker stop mariadb
+	@docker rm mariadb
+
+
 .PHONY: all clean realclean TAGS test
