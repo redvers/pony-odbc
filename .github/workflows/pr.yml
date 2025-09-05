@@ -50,10 +50,10 @@ jobs:
         ports:
           - 3306
         env:
-          MYSQL_USER=pony
-          MYSQL_PASSWORD=pony
-          MYSQL_DATABASE=pony
-          MYSQL_ROOT_PASSWORD=mysql
+          MYSQL_USER: pony
+          MYSQL_PASSWORD: pony
+          MYSQL_DATABASE: pony
+          MYSQL_ROOT_PASSWORD: mysql
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
     steps:
