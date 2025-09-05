@@ -47,8 +47,6 @@ jobs:
       #    --health-retries 5
       mariadb:
         image: mariadb
-        ports:
-          - 3306
         env:
           MYSQL_USER: pony
           MYSQL_PASSWORD: pony
@@ -59,11 +57,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
-      - name: Verify Connection
-        env:
-          PORT: ${{ job.services.mariadb.ports[3306] }}
-        run:
-          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT"; do sleep 1; done
       - name: Unit tests
         run: make unit-tests config=debug ssl=0.9.0
       - name: Integration tests

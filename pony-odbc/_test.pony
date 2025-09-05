@@ -1,4 +1,5 @@
 use "debug"
+use "lib:odbc"
 use "pony_test"
 
 actor \nodoc\ Main is TestList
@@ -9,15 +10,25 @@ actor \nodoc\ Main is TestList
     PonyTest(env, this)
 
   fun tag tests(test: PonyTest) =>
-    test(_TestPostgreSQL)
+    test(_TestMariaDB)
 
 
 
-class \nodoc\ iso _TestPostgreSQL is UnitTest
-  fun name(): String val => "_TestPostgreSQL"
+class \nodoc\ iso _TestMariaDB is UnitTest
+  fun name(): String val => "_TestMariaDB"
 
   fun apply(h: TestHelper) =>
     h.assert_true(true)
+    var e: ODBCEnv = ODBCEnv
+    h.assert_true(e.is_valid())
+    h.assert_true(e.set_odbc3())
+    h.assert_true(e.is_valid())
+
+    var dbc: ODBCDbc = ODBCDbc(e)
+    h.assert_true(dbc.is_valid())
+    h.assert_true(dbc.set_application_name("_DBConnect"))
+
+    h.assert_true(dbc.connect("mariadb"))
 /*
     var henv: HandleENV = HandleENV.create()?
                           .>set_odbc3()?
