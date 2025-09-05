@@ -16,6 +16,7 @@ actor \nodoc\ Main is TestList
 
   fun tag tests(test: PonyTest) =>
     test(_TestMariaDB)
+    test(_TestPostgres)
 
 
 
@@ -31,9 +32,26 @@ class \nodoc\ iso _TestMariaDB is UnitTest
 
     var dbc: ODBCDbc = ODBCDbc(e)
     h.assert_true(dbc.is_valid())
-    h.assert_true(dbc.set_application_name("_DBConnect"))
+    h.assert_true(dbc.set_application_name("_Postgres"))
 
     h.assert_true(dbc.connect("mariadb"))
+    show_error_dbc(dbc)
+
+class \nodoc\ iso _TestPostgres is UnitTest
+  fun name(): String val => "_TestPostgres"
+
+  fun apply(h: TestHelper) =>
+    h.assert_true(true)
+    var e: ODBCEnv = ODBCEnv
+    h.assert_true(e.is_valid())
+    h.assert_true(e.set_odbc3())
+    h.assert_true(e.is_valid())
+
+    var dbc: ODBCDbc = ODBCDbc(e)
+    h.assert_true(dbc.is_valid())
+    h.assert_true(dbc.set_application_name("_Postgres"))
+
+    h.assert_true(dbc.connect("psqlred"))
     show_error_dbc(dbc)
 
 
