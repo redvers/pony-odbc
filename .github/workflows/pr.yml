@@ -63,9 +63,7 @@ jobs:
         env:
           PORT: ${{ job.services.mariadb.ports[3306] }}
         run:
-          while ! mariadb-admin ping -h"127.0.0.1" -P"$PORT"; do
-            sleep 1
-          done
+          while ! mariadb-admin ping -h"127.0.0.1" -P"$PORT"; do sleep 1; done
       - name: Unit tests
         run: make unit-tests config=debug ssl=0.9.0
       - name: Integration tests
