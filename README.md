@@ -84,4 +84,3 @@
 |             | DATE       | SQL\_C\_TYPE\_DATE     | Date (year, month, day)                     | —                             | —                             |
 |             | TIME       | SQL\_C\_TYPE\_TIME     | Time (hours, minutes, seconds)              | —                             | —                             |
 |             | TIMESTAMP  | SQL\_C\_TYPE\_TIMESTAMP| Date and time (year to fractions)           | —                             | —                             |
-
