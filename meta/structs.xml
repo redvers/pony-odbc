@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<castxml2pony xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="./types.xml"/>
+<xi:include href="./renderstructs.xml"/>
+<xi:include href="./t.xml"/>
+                    <structs>
+                      <struct name="TagDATESTRUCTStruct" id="_543" size="48" align="16" fid="f37" lineno="242">
+    <field name="_year" id="_889" type="I16" fieldid="_497" offset="0" fid="f37" line="244"/>
+    <field name="_month" id="_890" type="U16" fieldid="_498" offset="16" fid="f37" line="245"/>
+    <field name="_day" id="_891" type="U16" fieldid="_498" offset="32" fid="f37" line="246"/>
+  </struct>
+
+  <struct name="TagTIMESTRUCTStruct" id="_546" size="48" align="16" fid="f37" lineno="255">
+    <field name="_hour" id="_893" type="U16" fieldid="_498" offset="0" fid="f37" line="257"/>
+    <field name="_minute" id="_894" type="U16" fieldid="_498" offset="16" fid="f37" line="258"/>
+    <field name="_second" id="_895" type="U16" fieldid="_498" offset="32" fid="f37" line="259"/>
+  </struct>
+
+  <struct name="TagTIMESTAMPSTRUCTStruct" id="_549" size="128" align="32" fid="f37" lineno="268">
+    <field name="_year" id="_897" type="I16" fieldid="_497" offset="0" fid="f37" line="270"/>
+    <field name="_month" id="_898" type="U16" fieldid="_498" offset="16" fid="f37" line="271"/>
+    <field name="_day" id="_899" type="U16" fieldid="_498" offset="32" fid="f37" line="272"/>
+    <field name="_hour" id="_900" type="U16" fieldid="_498" offset="48" fid="f37" line="273"/>
+    <field name="_minute" id="_901" type="U16" fieldid="_498" offset="64" fid="f37" line="274"/>
+    <field name="_second" id="_902" type="U16" fieldid="_498" offset="80" fid="f37" line="275"/>
+    <field name="_fraction" id="_903" type="U32" fieldid="_500" offset="96" fid="f37" line="276"/>
+  </struct>
+
+  <struct name="TagSQLYEARMONTHStruct" id="_554" size="64" align="32" fid="f37" lineno="310">
+    <field name="_year" id="_906" type="U32" fieldid="_500" offset="0" fid="f37" line="312"/>
+    <field name="_month" id="_907" type="U32" fieldid="_500" offset="32" fid="f37" line="313"/>
+  </struct>
+
+  <struct name="TagSQLDAYSECONDStruct" id="_556" size="160" align="32" fid="f37" lineno="318">
+    <field name="_day" id="_909" type="U32" fieldid="_500" offset="0" fid="f37" line="320"/>
+    <field name="_hour" id="_910" type="U32" fieldid="_500" offset="32" fid="f37" line="321"/>
+    <field name="_minute" id="_911" type="U32" fieldid="_500" offset="64" fid="f37" line="322"/>
+    <field name="_second" id="_912" type="U32" fieldid="_500" offset="96" fid="f37" line="323"/>
+    <field name="_fraction" id="_913" type="U32" fieldid="_500" offset="128" fid="f37" line="324"/>
+  </struct>
+
+  <struct name="TagSQLINTERVALSTRUCTStruct" id="_558" size="224" align="32" fid="f37" lineno="329">
+    <field name="_interval_type" id="_915" type="I32" fieldid="_553" offset="0" fid="f37" line="331"/>
+    <field name="_interval_sign" id="_916" type="I16" fieldid="_497" offset="32" fid="f37" line="332"/>
+    <field name="_intval" id="_918" type="None" fieldid="_982" offset="64" fid="f37" line="338"/>
+  </struct>
+
+  <struct name="TagSQLNUMERICSTRUCTStruct" id="_562" size="152" align="8" fid="f37" lineno="374">
+    <field name="_precision" id="_920" type="U8" fieldid="_496" offset="0" fid="f37" line="376"/>
+    <field name="_scale" id="_921" type="I8" fieldid="_502" offset="8" fid="f37" line="377"/>
+    <field name="_sign" id="_922" type="U8" fieldid="_496" offset="16" fid="f37" line="378"/>
+    <field name="_val" id="_923" type="Pointer[U8]" fieldid="_983" offset="24" fid="f37" line="379"/>
+  </struct>
+
+  <struct name="TagSQLGUIDStruct" id="_564" size="128" align="32" fid="f37" lineno="389">
+    <field name="_Data1" id="_925" type="U32" fieldid="_745" offset="0" fid="f37" line="391"/>
+    <field name="_Data2" id="_926" type="U16" fieldid="_744" offset="32" fid="f37" line="392"/>
+    <field name="_Data3" id="_927" type="U16" fieldid="_744" offset="48" fid="f37" line="393"/>
+    <field name="_Data4" id="_928" type="Pointer[U8]" fieldid="_984" offset="64" fid="f37" line="394"/>
+  </struct>
+</structs>
+</castxml2pony>
+

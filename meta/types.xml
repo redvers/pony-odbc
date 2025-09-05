@@ -1,0 +1,38 @@
+<typedefs>
+  <typedef name="String"
+    ponytypein="String"
+    ponytypeinconv=".cstring()"
+    ponytypeout="String"
+    structtype="Pointer[U8]"
+    structdef="Pointer[U8]"
+    argtype="Pointer[U8] tag"
+    rvtype="Pointer[U8]">
+    <ponytypeconvout>
+      <prefixs>
+        <prefix>var pcstring: Pointer[U8] = </prefix>
+      </prefixs>
+      <suffixes>
+        <suffix>let p: String iso = String.from_cstring(pcstring).clone()</suffix>
+        <suffix>consume p</suffix>
+      </suffixes>
+    </ponytypeconvout>
+  </typedef>
+
+  <typedef name="Array[String]"
+    ponytypein="Array[String]"
+    ponytypeinconv=""
+    ponytypeout="Pointer[Pointer[U8]]"
+    structtype="Pointer[Pointer[U8]]"
+    structdef="Pointer[Pointer[U8]]"
+    argtype="Pointer[Pointer[U8]] tag"
+    rvtype="Pointer[Pointer[U8]]"/>
+
+<typedef name="I8" ponytypein="I8" ponytypeinconv="" ponytypeout="I8" structtype="I8" structdef="I8(0)" argtype="I8" rvtype="I8" decl="  var "/>
+<typedef name="I16" ponytypein="I16" ponytypeinconv="" ponytypeout="I16" structtype="I16" structdef="I16(0)" argtype="I16" rvtype="I16" decl="  var "/>
+<typedef name="I32" ponytypein="I32" ponytypeinconv="" ponytypeout="I32" structtype="I32" structdef="I32(0)" argtype="I32" rvtype="I32" decl="  var "/>
+<typedef name="U32" ponytypein="U32" ponytypeinconv="" ponytypeout="U32" structtype="U32" structdef="U32(0)" argtype="U32" rvtype="U32" decl="  var "/>
+<typedef name="U8" ponytypein="U8" ponytypeinconv="" ponytypeout="U8" structtype="U8" structdef="U8(0)" argtype="U8" rvtype="U8" decl="  var "/>
+<typedef name="U16" ponytypein="U16" ponytypeinconv="" ponytypeout="U16" structtype="U16" structdef="U16(0)" argtype="U16" rvtype="U16" decl="  var "/>
+<typedef name="Pointer[U8]" ponytypein="Pointer[U8] tag" ponytypeinconv="" ponytypeout="Pointer[U8]" structtype="Pointer[U8]" structdef="Pointer[U8]" argtype="Pointer[U8] tag" rvtype="Pointer[U8]" decl="  var "/>
+<typedef name="None" ponytypein="None tag" ponytypeinconv="" ponytypeout="None" structtype="None" structdef="None" argtype="None tag" rvtype="None" decl="  embed "/></typedefs>
+

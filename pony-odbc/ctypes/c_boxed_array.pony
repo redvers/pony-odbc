@@ -1,0 +1,60 @@
+use ".."
+use "../attributes"
+use "debug"
+
+use @memcpy[Pointer[U8] ref](dest: Pointer[U8] tag, src: Pointer[U8] tag, size: USize)
+use @pony_ctx[Pointer[None]]()
+use @pony_alloc[Pointer[U8] ref](ctx: Pointer[None], size: USize)
+use @explicit_bzero[None](ptr: Pointer[U8] tag, size: USize)
+
+
+primitive ODBCVarcharConsts
+  fun sql_nts():         I16 => -3
+  fun sql_param_input(): I16 => 1
+  fun sql_c_char():      I16 => 1
+  fun sql_varchar():     I16 => 12
+
+class CBoxedArray
+  var ptr: Pointer[U8] = Pointer[U8]
+  var is_null: Bool = true
+  var alloc_size: USize = 0
+  var written_size: CBoxedI64 = CBoxedI64
+
+  fun ref init(str: String val): Bool =>
+    if (not alloc(str.size() + 1)) then return false end
+    write(str)
+
+
+  fun ref alloc(size: USize): Bool =>
+    if (not ptr.is_null()) then return false end
+    ptr = @pony_alloc(@pony_ctx(), size)
+    alloc_size = size
+    written_size.value = size.i64()
+    @explicit_bzero(ptr, size)
+    true
+
+  fun ref reset(): Bool =>
+    if (ptr.is_null()) then return false end
+    @explicit_bzero(ptr, alloc_size)
+    written_size.value = alloc_size.i64()
+    true
+
+  fun string(): String iso^ =>
+    String.copy_cstring(ptr).clone()
+
+  fun ref write(str: String val): Bool =>
+    if (ptr.is_null()) then return false end
+    if (str.size() > alloc_size) then
+      return false
+    end
+    reset()
+    @memcpy(ptr, str.cpointer(), str.size())
+    written_size.value = str.size().i64()
+    true
+
+  fun array(): Array[U8] iso^ =>
+    let written_s: USize = written_size.value.usize()
+    let rv: Array[U8] iso = recover iso Array[U8](written_s) end
+    @memcpy(rv.cpointer(), ptr, written_size.value.usize())
+    consume rv
+

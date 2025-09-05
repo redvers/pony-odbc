@@ -1,0 +1,10 @@
+<renderstructs>
+  <renderstruct id="_543" render="1"/><!-- TagDATESTRUCT f37 -->
+  <renderstruct id="_546" render="1"/><!-- TagTIMESTRUCT f37 -->
+  <renderstruct id="_549" render="1"/><!-- TagTIMESTAMPSTRUCT f37 -->
+  <renderstruct id="_554" render="1"/><!-- TagSQLYEARMONTH f37 -->
+  <renderstruct id="_556" render="1"/><!-- TagSQLDAYSECOND f37 -->
+  <renderstruct id="_558" render="1"/><!-- TagSQLINTERVALSTRUCT f37 -->
+  <renderstruct id="_562" render="1"/><!-- TagSQLNUMERICSTRUCT f37 -->
+  <renderstruct id="_564" render="1"/><!-- TagSQLGUID f37 -->
+</renderstructs>
