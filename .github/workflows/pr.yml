@@ -24,3 +24,49 @@ jobs:
           VALIDATE_DOCKERFILE: true
           VALIDATE_MD: true
           VALIDATE_YAML: true
+
+  vs-release-ponyc-linux:
+    name: Test against pony-odbc test image
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/redvers/pony-odbc:latest
+    services:
+      postgres:
+        image: postgres:14.5
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_HOST_AUTH_METHOD: md5
+          POSTGRES_INITDB_ARGS: "--auth-host=md5"
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      mariadb:
+        image: mariadb
+        ports:
+          - 3306
+        env:
+          MYSQL_USER=pony
+          MYSQL_PASSWORD=pony
+          MYSQL_DATABASE=pony
+          MYSQL_ROOT_PASSWORD=mysql
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+      - name: Verify Connection
+        env:
+          PORT: ${{ job.services.mariadb.ports[3306] }}
+        run:
+          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+            sleep 1
+          done
+      - name: Unit tests
+        run: make unit-tests config=debug ssl=0.9.0
+      - name: Integration tests
+        run: make integration-tests config=debug
