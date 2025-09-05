@@ -35,7 +35,6 @@ class \nodoc\ iso _TestMariaDB is UnitTest
     h.assert_true(dbc.set_application_name("_Postgres"))
 
     h.assert_true(dbc.connect("mariadb"))
-    show_error_dbc(dbc)
 
 class \nodoc\ iso _TestPostgres is UnitTest
   fun name(): String val => "_TestPostgres"
