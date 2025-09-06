@@ -17,11 +17,10 @@ actor \nodoc\ Main is TestList
 
   fun tag tests(test: PonyTest) =>
     test(_TestPGMariaDBTypes("psqlred", "mariadb"))
-//    test(_TestPostgresTypes("psqlred"))
-//    test(_TestConnect("mariadb"))
-//    test(_TestConnect("psqlred"))
-//    test(_TestExecDirect("mariadb"))
-//    test(_TestExecDirect("psqlred"))
+    test(_TestConnect("mariadb"))
+    test(_TestConnect("psqlred"))
+    test(_TestExecDirect("mariadb"))
+    test(_TestExecDirect("psqlred"))
 
 //    test(_TestInteger("mariadb"))
 //    test(_TestInteger("psqlred"))
