@@ -29,7 +29,7 @@ jobs:
     name: Test against pony-odbc test image
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/redvers/pony-odbc:latest
+      image: ghcr.io/redvers/pony-dependency-builder:latest
     services:
       postgres:
         image: postgres:14.5
