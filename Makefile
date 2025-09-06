@@ -71,7 +71,7 @@ unit-tests: $(tests_binary)
 	$^
 
 $(tests_binary): $(GEN_FILES) $(SOURCE_FILES) | $(BUILD_DIR) dependencies
-	${PONYC} -o ${BUILD_DIR} $(SRC_DIR)
+	$(PONYC) -o $(BUILD_DIR) $(SRC_DIR)/tests -b pony-odbc
 
 examples: $(EXAMPLES_BINARIES)
 

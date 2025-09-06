@@ -12,9 +12,11 @@ class SQLInteger
 
   fun ref bind_parameter(h: ODBCHandleStmt tag, col: U16): SQLReturn val => SQLSuccess
     var desc: SQLDescribeParamOut = SQLDescribeParamOut(col)
-    if (not _verify_parameter(h, desc)) then
-      return err
-    end
+    _verify_parameter(h, desc)
+    Debug.out(desc.debug())
+//    if (not _verify_parameter(h, desc)) then
+//      return err
+//    end
     err
     if (not _bind_parameter(h, desc)) then
       return err
@@ -31,6 +33,7 @@ class SQLInteger
       return false
     end
     match desc.data_type_ptr.value
+      // Apparently, mariadb insists on calling this a string - wut?
     | 4  => return true // _bind_parameter(h, desc)
     else
       err = PonyDriverError
