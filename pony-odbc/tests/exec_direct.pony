@@ -40,6 +40,7 @@ class \nodoc\ iso _TestExecDirect is UnitTest
 
     /* Attempt to create the same table again - this WILL fail */
     h.assert_false(stmt.exec_direct("create temp table test_exec_direct (foo integer)"))
+    Debug.out(stmt.err.string())
     var er: SQLError val = recover val SQLError.create_pstmt(stmt.stmt) end
     try
       match dsn
