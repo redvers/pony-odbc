@@ -1,5 +1,6 @@
 use "debug"
 use "pony_test"
+use "format"
 use ".."
 use "../env"
 use "../dbc"
@@ -8,12 +9,15 @@ use "../ctypes"
 use "../attributes"
 use "../instrumentation"
 
-class \nodoc\ iso _TestMariaDBTypes is UnitTest
-  var dsn: String val
+class \nodoc\ iso _TestPGMariaDBTypes is UnitTest
+  var pgdsn: String val
+  var mariadsn: String val
 
-  new create(dsn': String val) => dsn = dsn'
+  new create(pgdsn': String val, mariadsn': String val) =>
+    pgdsn = pgdsn'
+    mariadsn = mariadsn'
 
-  fun name(): String val => "_TestMariaDBTypes(" + dsn + ")"
+  fun name(): String val => "_TestPGMariaTypes(" + pgdsn + "/" + mariadsn + ")"
 
   fun apply(h: TestHelper) =>
     var e: ODBCEnv = ODBCEnv
@@ -21,42 +25,114 @@ class \nodoc\ iso _TestMariaDBTypes is UnitTest
     h.assert_true(e.set_odbc3())
     h.assert_true(e.is_valid())
 
-    var dbc: ODBCDbc = ODBCDbc(e)
-    h.assert_true(dbc.is_valid())
-    h.assert_true(dbc.set_application_name("TestMariaDBTypes"))
+    var mdbc: ODBCDbc = ODBCDbc(e)
+    h.assert_true(mdbc.is_valid())
+    h.assert_true(mdbc.set_application_name("TestMariaDBTypes"))
+    h.assert_true(mdbc.connect(mariadsn))
+    h.assert_eq[String]("SQLSuccess", mdbc.err.string())
 
-    h.assert_true(dbc.connect(dsn))
-    h.assert_eq[String]("SQLSuccess", dbc.err.string())
+    var pdbc: ODBCDbc = ODBCDbc(e)
+    h.assert_true(pdbc.is_valid())
+    h.assert_true(pdbc.set_application_name("TestPostgresDBTypes"))
+    h.assert_true(pdbc.connect(pgdsn))
+    h.assert_eq[String]("SQLSuccess", pdbc.err.string())
+
+/*
+ *  MARIA DB                PostgreSQL      Pony
+ *
+ * tinyint                  X
+ * smallint                 smallint        I16
+ * mediumint                X
+ * int                      int             I32
+ * bigint                   bigint          I64
+ * float (F32)              real (F32)
+ * real (F64)               float (F64)
+ * double (F64)             double
+ * decimal                  decimal
+ * bit                      X
+ *
+ * COMMON TYPES ARE:
+ * smallint                 smallint
+ * int                      int
+ * bigint                   bigint
+ * float                    real      // These types do NOT match across since
+ * double                   double    // it is defined completely differently
+ * decimal                  decimal
+*/
 
     /* Create temporary tables */
-    var numerics: ODBCSth = ODBCSth(dbc)
     var numericsql: String val = "create temporary table test_mariadb_numerics (" +
-                                    "mtinyint tinyint, " +
                                     "msmallint smallint, " +
-                                    "mmediumint mediumint, " +
                                     "mint int, " +
                                     "mbigint bigint, " +
                                     "mfloat float, " +
-                                    "mdouble double, " +
-                                    "mdecimal decimal, " +
-                                    "mbit bit" +
+                                    "mreal real, " +
+                                    "mdecimal decimal" +
                                     ")"
 
-    h.assert_true(numerics.exec_direct(numericsql))
+    var mnumerics: ODBCSth = ODBCSth(mdbc)
+    var pnumerics: ODBCSth = ODBCSth(pdbc)
+
+    h.assert_true(mnumerics.exec_direct(numericsql))
+    h.assert_true(pnumerics.exec_direct(numericsql))
+
     var numerics_q: String val = "select * from test_mariadb_numerics where " +
-                                    "mtinyint = ? AND " +
                                     "msmallint = ? AND " +
-                                    "mmediumint = ? AND " +
                                     "mint = ? AND " +
                                     "mbigint = ? AND " +
                                     "mfloat = ? AND " +
-                                    "mdouble = ? AND " +
-                                    "mdecimal = ? AND " +
-                                    "mbit = ?"
+                                    "mreal = ? AND " +
+                                    "mdecimal = ?"
 
-    var err: SQLReturn val = ODBCStmtFFI.prepare(numerics.stmt, numerics_q)
-    show_error(numerics)
+    h.assert_is[SQLReturn val](SQLSuccess, (ODBCStmtFFI.prepare(mnumerics.stmt, numerics_q)))
+    h.assert_is[SQLReturn val](SQLSuccess, (ODBCStmtFFI.prepare(pnumerics.stmt, numerics_q)))
 
+    Debug.out("| #  | Column Name      | Parameter Values (dt / sz)| Column Values    (dt / sz)|")
+    Debug.out("|    |                  | MariaDB     |    Postgres | MariaDB     |    Postgres |")
+
+    show_both(h, mnumerics, pnumerics, 1, "msmallint")
+    show_both(h, mnumerics, pnumerics, 2, "mint")
+    show_both(h, mnumerics, pnumerics, 3, "mbigint")
+    show_both(h, mnumerics, pnumerics, 4, "mfloat")
+    show_both(h, mnumerics, pnumerics, 5, "mreal")
+    show_both(h, mnumerics, pnumerics, 6, "mdecimal")
+
+  fun show_both(h: TestHelper, mn: ODBCSth,  pn: ODBCSth, col: U16, name': String val) =>
+    var mparo: SQLDescribeParamOut = SQLDescribeParamOut(col)
+    var mcolo: SQLDescribeColOut = SQLDescribeColOut(col)
+
+    var pparo: SQLDescribeParamOut = SQLDescribeParamOut(col)
+    var pcolo: SQLDescribeColOut = SQLDescribeColOut(col)
+
+    h.assert_is[SQLReturn val](SQLSuccess, ODBCStmtFFI.describe_column(mn.stmt, mcolo, name'))
+    h.assert_is[SQLReturn val](SQLSuccess, ODBCStmtFFI.describe_param(mn.stmt, mparo))
+
+    h.assert_is[SQLReturn val](SQLSuccess, ODBCStmtFFI.describe_column(pn.stmt, pcolo, name'))
+    h.assert_is[SQLReturn val](SQLSuccess, ODBCStmtFFI.describe_param(pn.stmt, pparo))
+
+    var mpdt: I16 = mparo.data_type_ptr.value
+    var mcdt: I16 = mcolo.datatype_ptr.value
+    var mpsz: U64 = mparo.parameter_size_ptr.value
+    var mcsz: U64 = mcolo.colsize_ptr.value
+
+    var ppdt: I16 = pparo.data_type_ptr.value
+    var pcdt: I16 = pcolo.datatype_ptr.value
+    var ppsz: U64 = pparo.parameter_size_ptr.value
+    var pcsz: U64 = pcolo.colsize_ptr.value
+
+    Debug.out("| " + Format.int[U16](col where width = 2, fill = '0') + " | " +
+        Format(name' where width = 16) + " | " +
+                     Format.int[I16](mpdt where width = 3) + " | " +
+                     Format.int[U64](mpsz where width = 5) + " | " +
+                     Format.int[I16](ppdt where width = 3) + " | " +
+                     Format.int[U64](ppsz where width = 5) + " | " +
+
+                     Format.int[I16](mcdt where width = 3) + " | " +
+                     Format.int[U64](mcsz where width = 5) + " | " +
+                     Format.int[I16](pcdt where width = 3) + " | " +
+                     Format.int[U64](pcsz where width = 5) + " | " )
+
+/*
     show_both(h, numerics.stmt, 1, "mtinyint")
     show_both(h, numerics.stmt, 2, "msmallint")
     show_both(h, numerics.stmt, 3, "mmediumint")
@@ -138,7 +214,8 @@ class \nodoc\ iso _TestMariaDBTypes is UnitTest
     h.assert_eq[USize](0, cnt)
     h.assert_true(stmt.finish())
 */
-  fun show_error(stmta: ODBCSth) =>
+*/
+  fun show_error_stmt(stmta: ODBCSth) =>
     var err: SQLReturn val = recover val SQLError.create_pstmt(stmta.stmt) end
     try
       if (false) then error end
@@ -148,5 +225,10 @@ class \nodoc\ iso _TestMariaDBTypes is UnitTest
       true
     end
 
-
+  fun show_error(err: SQLReturn val) =>
+    try
+      for f in (err as SQLError val).get_records().values() do
+        Debug.out(f)
+      end
+    end
 
