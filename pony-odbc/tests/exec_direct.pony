@@ -93,4 +93,4 @@ class \nodoc\ iso _TestExecDirect is UnitTest
     h.assert_true(bool)
     h.assert_eq[USize](0, cnt)
     h.assert_true(stmt.finish())
-*/
+
