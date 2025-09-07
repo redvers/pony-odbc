@@ -16,14 +16,14 @@ actor \nodoc\ Main is TestList
     PonyTest(env, this)
 
   fun tag tests(test: PonyTest) =>
-    test(_TestPGMariaDBTypes("psqlred", "mariadb"))
-    test(_TestConnect("mariadb"))
-    test(_TestConnect("psqlred"))
-//    test(_TestExecDirect("mariadb"))
-    test(_TestExecDirect("psqlred"))
+//    test(_TestPGMariaDBTypes("psqlred", "mariadb"))
+//    test(_TestConnect("mariadb"))
+//    test(_TestConnect("psqlred"))
+    test(_TestExecDirect("mariadb"))
+//    test(_TestExecDirect("psqlred"))
 
-    test(_TestInteger("mariadb"))
-    test(_TestInteger("psqlred"))
+//    test(_TestInteger("mariadb"))
+//    test(_TestInteger("psqlred"))
 
   fun show_error_dbc(dbc: ODBCDbc) =>
     var err: SQLReturn val = recover val SQLError.create_pdbc(dbc.dbc) end

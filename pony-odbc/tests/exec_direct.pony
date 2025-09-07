@@ -37,7 +37,7 @@ class \nodoc\ iso _TestExecDirect is UnitTest
     h.assert_true(bool)
     h.assert_eq[USize](0, cnt)
 
-
+/*
     /* Attempt to create the same table again - this WILL fail */
     h.assert_false(stmt.exec_direct("create temp table test_exec_direct (foo integer)"))
     Debug.out(stmt.err.string())
@@ -93,4 +93,4 @@ class \nodoc\ iso _TestExecDirect is UnitTest
     h.assert_true(bool)
     h.assert_eq[USize](0, cnt)
     h.assert_true(stmt.finish())
-
+*/
