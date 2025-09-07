@@ -53,7 +53,7 @@ class \nodoc\ iso _TestExecDirect is UnitTest
       h.fail("We got an empty SQLError - this should never happen™")
     end
 
-
+*/
     /* Insert a single value into the table */
     h.assert_true(stmt.exec_direct("insert into test_exec_direct values (0)"))
 
