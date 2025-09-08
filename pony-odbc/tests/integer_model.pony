@@ -30,24 +30,30 @@ class \nodoc\ iso _TestIntegerModel is ODBCQueryModel
     if (not is_success()) then return err end
     err
 
-  fun ref execute[A: Any val](h: ODBCHandleStmt tag, i: A): SQLReturn val =>
+  fun ref execute[A: Any val](h: ODBCHandleStmt tag, i: A): SQLReturn val => SQLSuccess
     match i
-    | let x: I32 => pin.integera.v.value = x
+    | let int: I32 =>
+      pin.integera.write(int)
+      SQLSuccess
     else
-      err = PonyDriverError
+      PonyDriverError
     end
-    err
 
-  fun ref bind_columns(h: ODBCHandleStmt tag): SQLReturn val =>
+
+  fun ref bind_columns(h: ODBCHandleStmt tag): SQLReturn val => SQLSuccess
     err = pout.integer.bind_column(h, 1, "i")
     err
 
-  fun ref fetch(h: ODBCHandleStmt tag): (SQLReturn val, _PCMResultI) =>
+  fun ref fetch(h: ODBCHandleStmt tag): (SQLReturn val, _PCMResultI) => (SQLSuccess, _PCMResultI)
     err = ODBCStmtFFI.fetch(h)
     if (not is_success()) then return (err, result) end
 
-    result.integer = pout.integer.native()
-    (err, result)
+    try
+      result.integer = pout.integer.read()?
+      (err, result)
+    else
+      (PonyDriverError, result)
+    end
 
   fun is_success(): Bool =>
     match err

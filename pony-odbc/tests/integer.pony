@@ -41,7 +41,6 @@ class \nodoc\ iso _TestInteger is UnitTest
 
 
     var stmta: ODBCSth = ODBCSth(dbc, consume pcmp)
-
     h.assert_is[SQLReturn val](SQLSuccess, stmta.err)
     h.assert_true(stmta.prepare())
     show_error(stmta)
@@ -70,4 +69,3 @@ class \nodoc\ iso _TestInteger is UnitTest
       end
       true
     end
-
