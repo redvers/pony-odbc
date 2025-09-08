@@ -17,17 +17,22 @@ actor \nodoc\ Main is TestList
     PonyTest(env, this)
 
   fun tag tests(test: PonyTest) =>
-//    test(_TestPGMariaDBTypes("psqlred", "mariadb"))
-//    test(_TestConnect("mariadb"))
-//    test(_TestConnect("psqlred"))
-//    test(_TestExecDirect("mariadb"))
-//    test(_TestExecDirect("psqlred"))
+    test(_TestPGMariaDBTypes("psqlred", "mariadb"))
+    test(_TestConnect("mariadb"))
+    test(_TestConnect("psqlred"))
+    test(_TestConnect("sqlitedb3"))
 
-//    test(_TestInteger("mariadb"))
-//    test(_TestInteger("psqlred"))
+    test(_TestExecDirect("mariadb"))
+    test(_TestExecDirect("psqlred"))
+    test(_TestExecDirect("sqlitedb3"))
+
+    test(_TestInteger("mariadb"))
+    test(_TestInteger("psqlred"))
+    test(_TestInteger("sqlitedb3"))
 
     test(_TestAPIIdea("psqlred"))
     test(_TestAPIIdea("mariadb"))
+    test(_TestAPIIdea("sqlitedb3"))
 
   fun show_error_dbc(dbc: ODBCDbc) =>
     var err: SQLReturn val = recover val SQLError.create_pdbc(dbc.dbc) end
@@ -99,17 +104,23 @@ class \nodoc\ iso _TestAPIIdea is UnitTest
       stm.bind_column(poutb._2, 2)?
       pinb.write(-1)
       stm.execute()?
-      h.assert_eq[I64](300, stm.rowcount()?)
+      if (dsn != "sqlitedb3") then
+        h.assert_eq[I64](300, stm.rowcount()?)
+      end
       stm.finish()?
 
       pinb.write(150)
       stm.execute()?
-      h.assert_eq[I64](150, stm.rowcount()?)
+      if (dsn != "sqlitedb3") then
+        h.assert_eq[I64](150, stm.rowcount()?)
+      end
       stm.finish()?
 
       pinb.write(290)
       stm.execute()?
-      h.assert_eq[I64](10, stm.rowcount()?)
+      if (dsn != "sqlitedb3") then
+        h.assert_eq[I64](10, stm.rowcount()?)
+      end
 
       try
         while true do

@@ -35,20 +35,30 @@ class \nodoc\ iso _TestInteger is UnitTest
     h.assert_true(st.exec_direct("insert into integer_tests values  (0)"))
     h.assert_true(st.exec_direct("insert into integer_tests values  (0)"))
     h.assert_true(st.exec_direct("insert into integer_tests values  (-2147483648)"))
-    h.assert_false(st.exec_direct("insert into integer_tests values (-2147483649)"))
     h.assert_true(st.exec_direct("insert into integer_tests values  (2147483647)"))
-    h.assert_false(st.exec_direct("insert into integer_tests values (2147483648)"))
+
+    // Apparently sqlite3 allows you to exceed type limits. // FIXME - verify
+    if (dsn != "sqlitedb3") then
+      h.assert_false(st.exec_direct("insert into integer_tests values (-2147483649)"))
+      h.assert_false(st.exec_direct("insert into integer_tests values (2147483648)"))
+    end
 
 
     var stmta: ODBCSth = ODBCSth(dbc, consume pcmp)
     h.assert_is[SQLReturn val](SQLSuccess, stmta.err)
     h.assert_true(stmta.prepare())
     show_error(stmta)
+
+    var s: Bool = true
+    var cnt: USize = 0
+    // sqlite does not return a correct value for rowcount
     h.assert_true(stmta.execute[I32](10))
-    (var s: Bool, var cnt: USize) = stmta.result_count()
-    show_error(stmta)
-    h.assert_true(s)
-    h.assert_eq[USize](1, cnt)
+    if (dsn != "sqlitedb3") then
+      (s, cnt) = stmta.result_count()
+      show_error(stmta)
+      h.assert_true(s)
+      h.assert_eq[USize](1, cnt)
+    end
 
     (var bool: Bool, var result: ODBCResultOut) = stmta.fetch()
     h.assert_true(bool)
