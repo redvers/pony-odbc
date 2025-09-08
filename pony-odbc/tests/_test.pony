@@ -22,8 +22,8 @@ actor \nodoc\ Main is TestList
     test(_TestExecDirect("mariadb"))
     test(_TestExecDirect("psqlred"))
 
-    test(_TestInteger("mariadb"))
-    test(_TestInteger("psqlred"))
+    test(_TestNumeric("mariadb"))
+    test(_TestNumeric("psqlred"))
 
   fun show_error_dbc(dbc: ODBCDbc) =>
     var err: SQLReturn val = recover val SQLError.create_pdbc(dbc.dbc) end

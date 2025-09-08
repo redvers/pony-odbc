@@ -9,14 +9,17 @@ use "../instrumentation"
 
 class \nodoc\ _PCMInI is ODBCQueryParamsIn
   var integera: SQLInteger = SQLInteger(0)
+  var smallint: SQLSmallInt = SQLSmallInt(0)
 
 class \nodoc\ _PCMOutI is ODBCQueryParamsOut
   var integer: SQLInteger = SQLInteger(0)
+  var smallint: SQLSmallInt = SQLSmallInt(0)
 
 class \nodoc\ _PCMResultI is ODBCResultOut
   var integer: I32 = 0
+  var smallint: I16 = 0
 
-class \nodoc\ iso _TestIntegerModel is ODBCQueryModel
+class \nodoc\ iso _TestNumericModel is ODBCQueryModel
   var err: SQLReturn val = SQLSuccess
   var pin: _PCMInI = _PCMInI
   var pout: _PCMOutI = _PCMOutI
@@ -26,7 +29,8 @@ class \nodoc\ iso _TestIntegerModel is ODBCQueryModel
 
   fun ref bind_params(h: ODBCHandleStmt tag): SQLReturn val => SQLSuccess
     err = pin.integera.bind_parameter(h, 1)
-    Debug.out(err.string())
+    if (not is_success()) then return err end
+    err = pin.smallint.bind_parameter(h, 2)
     if (not is_success()) then return err end
     err
 
@@ -36,12 +40,14 @@ class \nodoc\ iso _TestIntegerModel is ODBCQueryModel
       pin.integera.write(int)
       SQLSuccess
     else
-      recover val PonyDriverError("Wrong type provided to _TestIntegerModel.execute()") end
+      recover val PonyDriverError("Wrong type provided to _TestNumericModel.execute()") end
     end
 
 
   fun ref bind_columns(h: ODBCHandleStmt tag): SQLReturn val => SQLSuccess
     err = pout.integer.bind_column(h, 1, "i")
+    if (not is_success()) then return err end
+    err = pout.smallint.bind_column(h, 2, "s")
     err
 
   fun ref fetch(h: ODBCHandleStmt tag): (SQLReturn val, _PCMResultI) => (SQLSuccess, _PCMResultI)
@@ -52,7 +58,7 @@ class \nodoc\ iso _TestIntegerModel is ODBCQueryModel
       result.integer = pout.integer.read()?
       (err, result)
     else
-      (recover val PonyDriverError("_TestIntegerModel.fetch() did not return an I32") end, result)
+      (recover val PonyDriverError("_TestNumericModel.fetch() did not return an I32") end, result)
     end
 
   fun is_success(): Bool =>
