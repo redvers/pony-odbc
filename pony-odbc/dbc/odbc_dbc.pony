@@ -24,36 +24,39 @@ primitive \nodoc\ ODBCDbcFFI
     Tells the ODBC driver your application name.  I'm not sure if it passes
     it to the database for all database drivers.
     """
-    match @SQLSetConnectAttr[I16](NullablePointer[ODBCHandleDbc tag](h), SQLAttrApplicationName(), s.cstring(), s.size().i32())
+    var rv: I16 = @SQLSetConnectAttr[I16](NullablePointer[ODBCHandleDbc tag](h), SQLAttrApplicationName(), s.cstring(), s.size().i32())
+    match rv
     | 0 => return SQLSuccess
     | -1 => return recover val SQLError.create_pdbc(h) end
     | -2 => return SQLInvalidHandle
     else
-      PonyDriverError
+      recover val PonyDriverError("ODBCFFI.set_application_name() got invalid return code: " + rv.string()) end
     end
 
   fun connect(h: ODBCHandleDbc tag, dsn: String val): SQLReturn val =>
     """
     Opens the connection to the database on the provided DSN.
     """
-    match @SQLConnect(NullablePointer[ODBCHandleDbc tag](h), dsn.cstring(), dsn.size().i16(), "".cstring(), 0, "".cstring(), 0)
+    var rv: I16 = @SQLConnect(NullablePointer[ODBCHandleDbc tag](h), dsn.cstring(), dsn.size().i16(), "".cstring(), 0, "".cstring(), 0)
+    match rv
     | 0 => return SQLSuccess
     | 1 => return recover val SQLSuccessWithInfo.create_pdbc(h) end
     | -1 => return recover val SQLError.create_pdbc(h) end
     | -2 => return SQLInvalidHandle
     else
-      PonyDriverError
+      recover val PonyDriverError("ODBCFFI.connect() got invalid return code: " + rv.string()) end
     end
 
   fun sql_alloc_handle(h: ODBCHandleEnv tag): (SQLReturn val, ODBCHandleDbc tag) =>
     var rv: ODBCHandleDbc tag = ODBCHandleDbc
-    match @SQLAllocHandle(2, NullablePointer[ODBCHandleEnv tag](h), addressof rv)
+    var rvv: I16 = @SQLAllocHandle(2, NullablePointer[ODBCHandleEnv tag](h), addressof rv)
+    match rvv
     | 0 => return (SQLSuccess, rv)
     | 1 => return (recover val SQLSuccessWithInfo.create_pdbc(rv) end, rv)
     | -1 => return (recover val SQLError.create_pdbc(rv) end, rv)
     | -2 => return (SQLInvalidHandle, rv)
     else
-      (PonyDriverError, rv)
+      (recover val PonyDriverError("ODBCFFI.sql_alloc_handle() got invalid return code: " + rvv.string()) end, rv)
     end
 
   fun free(h: ODBCHandleDbc tag) => @SQLFreeHandle(2, NullablePointer[ODBCHandleDbc tag](h))
