@@ -76,7 +76,7 @@ trait ODBCResultOut
 class ODBCResultOutNull is ODBCResultOut
 class ODBCQueryModelNull is ODBCQueryModel
   fun sql(): (String val | SQLReturn val) => ""
-  fun ref bind_params(h: ODBCHandleStmt tag): SQLReturn val => PonyDriverError
-  fun ref bind_columns(h: ODBCHandleStmt tag): SQLReturn val => PonyDriverError
-  fun ref fetch(h: ODBCHandleStmt tag): (SQLReturn val, ODBCResultOut) => (PonyDriverError, ODBCResultOutNull)
-  fun ref execute[A: Any val](h: ODBCHandleStmt tag, i: A): SQLReturn val => PonyDriverError
+  fun ref bind_params(h: ODBCHandleStmt tag): SQLReturn val => recover val PonyDriverError("ODBCQueryModelNull.bind_params shouldn't be called" ) end
+  fun ref bind_columns(h: ODBCHandleStmt tag): SQLReturn val => recover val PonyDriverError("ODBCQueryModelNull.bind_columns shouldn't be called") end
+  fun ref fetch(h: ODBCHandleStmt tag): (SQLReturn val, ODBCResultOut) => (recover val PonyDriverError("ODBCQueryModelNull.fetch shouldn't be called") end, ODBCResultOutNull)
+  fun ref execute[A: Any val](h: ODBCHandleStmt tag, i: A): SQLReturn val => recover val PonyDriverError("ODBCQueryModelNull.execute shouldn't be called") end

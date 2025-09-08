@@ -24,13 +24,14 @@ struct \nodoc\ ODBCHandleStmt
 primitive \nodoc\ ODBCStmtFFI
   fun alloc(h: ODBCHandleDbc tag): (SQLReturn val, ODBCHandleStmt tag) =>
     var rv: ODBCHandleStmt tag = ODBCHandleStmt
-    match @SQLAllocHandle(3, NullablePointer[ODBCHandleDbc tag](h), addressof rv)
+    var rvv: I16 = @SQLAllocHandle(3, NullablePointer[ODBCHandleDbc tag](h), addressof rv)
+    match rvv
     | 0 => return (SQLSuccess, rv)
     | 1 => return (recover val SQLSuccessWithInfo.create_pstmt(rv) end, rv)
     | -1 => return (recover val SQLError.create_pstmt(rv) end, rv)
     | -2 => return (SQLInvalidHandle, rv)
     else
-      (PonyDriverError, rv)
+      (recover val PonyDriverError("ODBCStmtFFI.alloc() got invalid return code: " + rvv.string()) end, rv)
     end
 
   fun prepare(h: ODBCHandleStmt tag, str: String val): SQLReturn val =>
@@ -45,12 +46,13 @@ primitive \nodoc\ ODBCStmtFFI
     | -1 => return recover val SQLError.create_pstmt(h) end
     | -2 => return SQLInvalidHandle
     else
-      PonyDriverError
+      recover val PonyDriverError("ODBCEnvFFI.prepare() got invalid return code: " + rv.string()) end
     end
 
 // use @SQLExecDirect[I16](StatementHandle: Pointer[None] tag, StatementText: Pointer[U8] tag, TextLength: I32)
   fun exec_direct(h: ODBCHandleStmt tag, query: String val): SQLReturn val =>
-    match @SQLExecDirect[I16](NullablePointer[ODBCHandleStmt tag](h), query.cstring(), query.size().i32())
+    var rv: I16 =  @SQLExecDirect[I16](NullablePointer[ODBCHandleStmt tag](h), query.cstring(), query.size().i32())
+    match rv
     | 0 => return SQLSuccess
     | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
     | 2 => return SQLStillExecuting
@@ -59,7 +61,7 @@ primitive \nodoc\ ODBCStmtFFI
     | 99 => return SQLNeedData
     | 100 => return SQLNoData
     end
-    PonyDriverError
+    recover val PonyDriverError("ODBCHandleStmt.exec_direct() get invalid return code: " + rv.string()) end
 
 
 
@@ -80,7 +82,8 @@ primitive \nodoc\ ODBCStmtFFI
 //    SQL_NEED_DATA
 //    SQL_NO_DATA
 //    SQL_PARAM_DATA_AVAILABLE. // Not present in our impementation?
-    match @SQLExecute(NullablePointer[ODBCHandleStmt tag](h))
+    var rv: I16 = @SQLExecute(NullablePointer[ODBCHandleStmt tag](h))
+    match rv
     | 0 => return SQLSuccess
     | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
     | 2 => return SQLStillExecuting
@@ -89,7 +92,7 @@ primitive \nodoc\ ODBCStmtFFI
     | 99 => return SQLNeedData
     | 100 => return SQLNoData
     end
-    PonyDriverError
+    recover val PonyDriverError("ODBCHandleStmt.execute() get invalid return code: " + rv.string()) end
 
   fun describe_param(h: ODBCHandleStmt tag, i: SQLDescribeParamOut): SQLReturn val =>
     """
@@ -113,7 +116,7 @@ primitive \nodoc\ ODBCStmtFFI
     | -1 => return recover val SQLError.create_pstmt(h) end
     | -2 => return SQLInvalidHandle
     else
-      PonyDriverError
+      recover val PonyDriverError("ODBCHandleStmt.describe_param() get invalid return code: " + rv.string()) end
     end
 
   fun bind_parameter_varchar(h: ODBCHandleStmt tag, desc: SQLDescribeParamOut, v: CBoxedArray): SQLReturn val => // FIXME Refactor time
@@ -142,7 +145,7 @@ primitive \nodoc\ ODBCStmtFFI
     | -1 => return recover val SQLError.create_pstmt(h) end
     | -2 => return SQLInvalidHandle
     else
-      PonyDriverError
+      recover val PonyDriverError("ODBCHandleStmt.bind_parameter_varchar() get invalid return code: " + rv.string()) end
     end
 
 
@@ -172,7 +175,7 @@ primitive \nodoc\ ODBCStmtFFI
     | -1 => return recover val SQLError.create_pstmt(h) end
     | -2 => return SQLInvalidHandle
     else
-      PonyDriverError
+      recover val PonyDriverError("ODBCHandleStmt.bind_parameter_i32() get invalid return code: " + rv.string()) end
     end
 
 
@@ -199,8 +202,10 @@ primitive \nodoc\ ODBCStmtFFI
     fillme.decdigits_ptr,
     fillme.nullable_ptr)
 
-    if (colname != fillme.column_name.string()) then
-      return PonyDriverError
+    var cn: String val = fillme.column_name.string()
+
+    if (colname != cn) then
+      return recover val PonyDriverError("ODBCHandleStmt.describe_column(): columns don't match: " + colname + " != " + cn) end
     end
 
     match rv
@@ -210,7 +215,7 @@ primitive \nodoc\ ODBCStmtFFI
     | -1 => return recover val SQLError.create_pstmt(h) end
     | -2 => return SQLInvalidHandle
     else
-      PonyDriverError
+      recover val PonyDriverError("ODBCHandleStmt.describe_column() get invalid return code: " + rv.string()) end
     end
 
   fun bind_column_varchar(h: ODBCHandleStmt tag, desc: SQLDescribeColOut, v: CBoxedArray): SQLReturn val =>
@@ -239,7 +244,7 @@ primitive \nodoc\ ODBCStmtFFI
     | -1 => return recover val SQLError.create_pstmt(h) end
     | -2 => return SQLInvalidHandle
     else
-      PonyDriverError
+      recover val PonyDriverError("ODBCHandleStmt.bind_column_varchar() get invalid return code: " + rv.string()) end
     end
 
   fun bind_column_i32(h: ODBCHandleStmt tag, desc: SQLDescribeColOut, v: CBoxedI32): SQLReturn val =>
@@ -268,7 +273,7 @@ primitive \nodoc\ ODBCStmtFFI
     | -1 => return recover val SQLError.create_pstmt(h) end
     | -2 => return SQLInvalidHandle
     else
-      PonyDriverError
+      recover val PonyDriverError("ODBCHandleStmt.bind_column_i32() get invalid return code: " + rv.string()) end
     end
 
 
@@ -323,7 +328,7 @@ primitive \nodoc\ ODBCStmtFFI
     | -1 => return recover val SQLError.create_pstmt(h) end
     | -2 => return SQLInvalidHandle
     else
-      PonyDriverError
+      recover val PonyDriverError("ODBCHandleStmt.get_type_info() get invalid return code: " + rv.string()) end
     end
 
 
@@ -336,7 +341,8 @@ primitive \nodoc\ ODBCStmtFFI
     SQL_INVALID_HANDLE
     SQL_NO_DATA
     """
-    match @SQLFetch(NullablePointer[ODBCHandleStmt tag](h))
+    var rv: I16 = @SQLFetch(NullablePointer[ODBCHandleStmt tag](h))
+    match rv
     | 0 => return SQLSuccess
     | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
     | 2 => return SQLStillExecuting
@@ -345,11 +351,12 @@ primitive \nodoc\ ODBCStmtFFI
     | 99 => return SQLNeedData
     | 100 => return SQLNoData
     end
-    PonyDriverError
+    recover val PonyDriverError("ODBCHandleStmt.fetch() get invalid return code: " + rv.string()) end
 
 //use @SQLNumResultCols[I16](StatementHandle: Pointer[None] tag, ColumnCount: CBoxedI16 tag)
   fun result_count(h: ODBCHandleStmt tag, colcnt: CBoxedI64): SQLReturn val =>
-    match @SQLRowCount[I16](NullablePointer[ODBCHandleStmt tag](h), colcnt)
+    var rv: I16 = @SQLRowCount[I16](NullablePointer[ODBCHandleStmt tag](h), colcnt)
+    match rv
     | 0 => return SQLSuccess
     | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
     | 2 => return SQLStillExecuting
@@ -358,11 +365,12 @@ primitive \nodoc\ ODBCStmtFFI
     | 99 => return SQLNeedData
     | 100 => return SQLNoData
     end
-    PonyDriverError
+    recover val PonyDriverError("ODBCHandleStmt.result_count() get invalid return code: " + rv.string()) end
 
     // use @SQLCloseCursor[I16](StatementHandle: Pointer[None] tag)
   fun close_cursor(h: ODBCHandleStmt tag): SQLReturn val =>
-    match @SQLCloseCursor(NullablePointer[ODBCHandleStmt tag](h))
+    var rv: I16 = @SQLCloseCursor(NullablePointer[ODBCHandleStmt tag](h))
+    match rv
     | 0 => return SQLSuccess
     | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
     | 2 => return SQLStillExecuting
@@ -370,7 +378,7 @@ primitive \nodoc\ ODBCStmtFFI
     | -2 => return SQLInvalidHandle
     | 100 => return SQLNoData
     end
-    PonyDriverError
+    recover val PonyDriverError("ODBCHandleStmt.close_cursor() get invalid return code: " + rv.string()) end
 
   fun free(h: ODBCHandleStmt tag) => @SQLFreeHandle(3, NullablePointer[ODBCHandleStmt tag](h))
 

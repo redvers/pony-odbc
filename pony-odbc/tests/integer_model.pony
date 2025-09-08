@@ -36,7 +36,7 @@ class \nodoc\ iso _TestIntegerModel is ODBCQueryModel
       pin.integera.write(int)
       SQLSuccess
     else
-      PonyDriverError
+      recover val PonyDriverError("Wrong type provided to _TestIntegerModel.execute()") end
     end
 
 
@@ -52,7 +52,7 @@ class \nodoc\ iso _TestIntegerModel is ODBCQueryModel
       result.integer = pout.integer.read()?
       (err, result)
     else
-      (PonyDriverError, result)
+      (recover val PonyDriverError("_TestIntegerModel.fetch() did not return an I32") end, result)
     end
 
   fun is_success(): Bool =>

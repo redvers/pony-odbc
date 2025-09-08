@@ -94,7 +94,8 @@ class SQLVarchar
      *  -4  SQLLongVarBinary
      */
 
-    match desc.data_type_ptr.value
+    var dt: I16 = desc.data_type_ptr.value
+    match dt
     | 1  => true
     | 12 => true
     | -1 => true
@@ -102,7 +103,7 @@ class SQLVarchar
     | -3 => true
     | -4 => true
     else
-      err = PonyDriverError
+      err = recover val PonyDriverError("SQLVarchar._verify_parameter: Wanted [1,12,-1,-2,-3,-4], got: " + dt.string()) end
       return false
     end
 
@@ -135,7 +136,8 @@ class SQLVarchar
      *  -3  SQLVarBinary
      *  -4  SQLLongVarBinary
      */
-    match desc.datatype_ptr.value
+    var dt: I16 = desc.datatype_ptr.value
+    match dt
     | 1  => v.alloc(desc.colsize_ptr.value.usize()); return true
     | 12 => v.alloc(desc.colsize_ptr.value.usize()); return true
     | -1 => v.alloc(desc.colsize_ptr.value.usize()); return true
@@ -143,7 +145,7 @@ class SQLVarchar
     | -3 => v.alloc(desc.colsize_ptr.value.usize()); return true
     | -4 => v.alloc(desc.colsize_ptr.value.usize()); return true
     else
-      err = PonyDriverError
+      err = recover val PonyDriverError("SQLVarchar._verify_column: Wanted [1,12,-1,-2,-3,-4], got: " + dt.string()) end
       return false
     end
 
