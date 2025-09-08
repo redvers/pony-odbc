@@ -71,15 +71,16 @@ class SQLVarchar
 
   fun \nodoc\ ref bind_parameter(h: ODBCHandleStmt tag, col: U16): SQLReturn val =>
     var desc: SQLDescribeParamOut = SQLDescribeParamOut(col)
-    if (not _verify_parameter(h, desc)) then
-      return err
-    end
-    err
+//    if (not _verify_parameter(h, desc)) then
+//      return err
+//    end
+//    err
     if (not _bind_parameter(h, desc)) then
       return err
     end
     err
 
+    /*
   fun \nodoc\ ref _verify_parameter(h: ODBCHandleStmt tag, desc: SQLDescribeParamOut): Bool =>
     err = ODBCStmtFFI.describe_param(h, desc)
     if (not is_success()) then
@@ -106,22 +107,23 @@ class SQLVarchar
       err = recover val PonyDriverError("SQLVarchar._verify_parameter: Wanted [1,12,-1,-2,-3,-4], got: " + dt.string()) end
       return false
     end
-
+*/
   fun \nodoc\ ref _bind_parameter(h: ODBCHandleStmt tag, desc: SQLDescribeParamOut): Bool =>
     err = ODBCStmtFFI.bind_parameter_varchar(h, desc, v)
     is_success()
 
   fun \nodoc\ ref bind_column(h: ODBCHandleStmt tag, col: U16, colname: String val): SQLReturn val =>
     var desc: SQLDescribeColOut = SQLDescribeColOut(col)
-    if (not _verify_column(h, desc, colname)) then
-      return err
-    end
-    err
+//    if (not _verify_column(h, desc, colname)) then
+//      return err
+//    end
+//    err
     if (not _bind_column(h, desc)) then
       return err
     end
     err
 
+    /*
   fun \nodoc\ ref _verify_column(h: ODBCHandleStmt tag, desc: SQLDescribeColOut, colname: String val): Bool =>
     err = ODBCStmtFFI.describe_column(h, desc, colname)
     if (not is_success()) then
@@ -148,6 +150,7 @@ class SQLVarchar
       err = recover val PonyDriverError("SQLVarchar._verify_column: Wanted [1,12,-1,-2,-3,-4], got: " + dt.string()) end
       return false
     end
+    */
 
   fun \nodoc\ ref _bind_column(h: ODBCHandleStmt tag, desc: SQLDescribeColOut): Bool =>
     err = ODBCStmtFFI.bind_column_varchar(h, desc, v)
@@ -160,3 +163,5 @@ class SQLVarchar
     else
       false
     end
+
+  fun get_err(): SQLReturn val => err

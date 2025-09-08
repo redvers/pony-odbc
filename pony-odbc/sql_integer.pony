@@ -32,7 +32,7 @@ class SQLInteger
       false
     end
 
-  fun ref bind_column(h: ODBCHandleStmt tag, col: U16, colname: String val): SQLReturn val => SQLSuccess
+  fun ref bind_column(h: ODBCHandleStmt tag, col: U16, colname: String val = ""): SQLReturn val => SQLSuccess
     var desc: SQLDescribeColOut = SQLDescribeColOut(col)
     if (not _bind_column(h, desc)) then
       return err
@@ -47,7 +47,7 @@ class SQLInteger
   fun ref write(a: I32) =>
     v.write(a.string())
 
-
+  fun get_err(): SQLReturn val => err
 
 
 
