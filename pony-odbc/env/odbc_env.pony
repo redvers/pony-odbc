@@ -9,7 +9,7 @@ use "../instrumentation"
 
 struct \nodoc\ ODBCHandleEnv
 
-primitive \nodoc\ ODBCEnvFFI
+primitive ODBCEnvFFI
   """
   |*Attribute*|*ValuePtr* contents|
 |-----------------|-------------------------|
