@@ -1,6 +1,7 @@
 use "../instrumentation"
 
 primitive SqlAttrOutputNts fun apply(): I32 => 10001
+  fun string(): String val => "SqlAttrOutputNts"
   fun id(i: I32): (SqlBool | PonyDriverError val) =>
     match i
     | 0 => SqlFalse
@@ -10,6 +11,8 @@ primitive SqlAttrOutputNts fun apply(): I32 => 10001
     end
 
 type SqlBool is (SqlTrue | SqlFalse)
-primitive SqlFalse fun apply(): I32 => 0
 primitive SqlTrue fun apply(): I32 => 1
+  fun string(): String val => "SqlTrue"
+primitive SqlFalse fun apply(): I32 => 0
+  fun string(): String val => "SqlFalse"
 
