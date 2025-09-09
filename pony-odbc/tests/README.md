@@ -110,4 +110,3 @@ Validate handling of stored procedures or batch statements that return multiple 
 | Edge Cases \& Performance | Min/max boundary: INT, BIGINT, FLOAT extremes |  |
 | Edge Cases \& Performance | Transaction handling: Commit \& rollback (when supported) |  |
 | Edge Cases \& Performance | Concurrency: Multiple parallel statements |  |
-
