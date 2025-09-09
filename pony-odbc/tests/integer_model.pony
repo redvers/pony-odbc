@@ -26,7 +26,6 @@ class \nodoc\ iso _TestIntegerModel is ODBCQueryModel
 
   fun ref bind_params(h: ODBCHandleStmt tag): SQLReturn val => SQLSuccess
     err = pin.integera.bind_parameter(h, 1)
-    Debug.out(err.string())
     if (not is_success()) then return err end
     err
 

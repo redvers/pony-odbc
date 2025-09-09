@@ -1,7 +1,7 @@
 /*
  *  SQLGetEnvAttr - Attributes
  */
-primitive SQLAttrOdbcVersion       fun apply(): I32 => 200
+//primitive SQLAttrOdbcVersion       fun apply(): I32 => 200
 
 /*
  * SQLGetEnvAttr - SQL_ATTR_ODBC_VERSION

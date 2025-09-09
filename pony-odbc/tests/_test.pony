@@ -125,7 +125,6 @@ class \nodoc\ iso _TestAPIIdea is UnitTest
       try
         while true do
           stm.fetch()?
-          Debug.out(poutb._1.read()?.string() + ": " + poutb._2.string())
         end
         stm.finish()?
       end

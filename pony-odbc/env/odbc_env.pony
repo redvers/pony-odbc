@@ -18,19 +18,29 @@ primitive ODBCEnvFFI
 |SQL_ATTR_ODBC_VERSION (ODBC 3.0)|A 32-bit integer that determines whether certain functionality exhibits ODBC *2.x* behavior or ODBC *3.x* behavior. The following values are used to set the value of this attribute:<br /><br /> SQL_OV_ODBC3_80 = The Driver Manager and driver exhibit the following ODBC 3.8 behavior:<br /><br /> -   The driver returns and expects ODBC *3.x* codes for date, time, and timestamp.<br />-   The driver returns ODBC *3.x* SQLSTATE codes when **SQLError**, **SQLGetDiagField**, or **SQLGetDiagRec** is called.<br />-   The *CatalogName* argument in a call to **SQLTables** accepts a search pattern.<br />-   The Driver Manager supports C data type extensibility. For more information about C data type extensibility, see [C Data Types in ODBC](../../../odbc/reference/develop-app/c-data-types-in-odbc.md).<br /><br /> For more information, see [What's New in ODBC 3.8](../../../odbc/reference/what-s-new-in-odbc-3-8.md).<br /><br /> SQL_OV_ODBC3 = The Driver Manager and driver exhibit the following ODBC *3.x* behavior:<br /><br /> -   The driver returns and expects ODBC *3.x* codes for date, time, and timestamp.<br />-   The driver returns ODBC *3.x* SQLSTATE codes when **SQLError**, **SQLGetDiagField**, or **SQLGetDiagRec** is called.<br />-   The *CatalogName* argument in a call to **SQLTables** accepts a search pattern.<br />-   The Driver Manager does not support C data type extensibility.<br /><br /> SQL_OV_ODBC2 = The Driver Manager and driver exhibit the following ODBC *2.x* behavior. This is especially useful for an ODBC *2.x* application working with an ODBC *3.x* driver.<br /><br /> -   The driver returns and expects ODBC *2.x* codes for date, time, and timestamp.<br />-   The driver returns ODBC *2.x* SQLSTATE codes when **SQLError**, **SQLGetDiagField**, or **SQLGetDiagRec** is called.<br />-   The *CatalogName* argument in a call to **SQLTables** does not accept a search pattern.<br />-   The Driver Manager does not support C data type extensibility.<br /><br /> An application must set this environment attribute before it calls any function that has an SQLHENV argument, or the call will return SQLSTATE HY010 (Function sequence error). It is driver-specific whether additional behavior exists for these environmental flags.<br /><br /> -   For more information, see [Declaring the Application's ODBC Version](../../../odbc/reference/develop-app/declaring-the-application-s-odbc-version.md) and [Behavioral Changes](../../../odbc/reference/develop-app/behavioral-changes.md).|
 |SQL_ATTR_OUTPUT_NTS (ODBC 3.0)|A 32-bit integer that determines how the driver returns string data. If SQL_TRUE, the driver returns string data null-terminated. If SQL_FALSE, the driver does not return string data null-terminated.<br /><br /> This attribute defaults to SQL_TRUE. A call to **SQLSetEnvAttr** to set it to SQL_TRUE returns SQL_SUCCESS. A call to **SQLSetEnvAttr** to set it to SQL_FALSE returns SQL_ERROR and SQLSTATE HYC00 (Optional feature not implemented).|
 """
+
   fun alloc(): (SQLReturn val, ODBCHandleEnv tag) =>
     """
     Returns an ODBCHandleEnv, used by the ODBC FFI calls to represent
     your environment.
     """
-    ODBCEnvFFI.sql_alloc_handle()
+    var rv: ODBCHandleEnv tag = ODBCHandleEnv
+    var rvv: I16 = @SQLAllocHandle(1, Pointer[None], addressof rv)
+    match rvv
+    | 0 => return (SQLSuccess, rv)
+    | 1 => return (recover val SQLSuccessWithInfo.create_penv(rv) end, rv)
+    | -1 => return (recover val SQLError.create_penv(rv) end, rv)
+    | -2 => return (SQLInvalidHandle, rv)
+    else
+      (recover val PonyDriverError("ODBCEnvFFI.set_odbc2() got invalid return code: " + rvv.string()) end, rv)
+    end
 
   fun set_odbc2(h: ODBCHandleEnv tag): SQLReturn val =>
     """
     Sets the Environment to version ODBC2.  I should probably remove this
     since I've not implemented any of those functionsi (yet).
     """
-    var rv: I16 = @SQLSetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), SQLAttrOdbcVersion(), SQLAttrOvOdbc2(), SQLIsInteger())
+    var rv: I16 = @SQLSetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), SqlAttrODBCVersion(), SqlODBC2(), SQLIsInteger())
     match rv
     | 0 => return SQLSuccess
     | 1 => return recover val SQLSuccessWithInfo.create_penv(h) end
@@ -45,7 +55,7 @@ primitive ODBCEnvFFI
     Sets the Environment to version ODBC3.  You should always call
     this, since version 3 is the only one implemented thus far.
     """
-    var rv: I16 = @SQLSetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), SQLAttrOdbcVersion(), SQLAttrOvOdbc3(), SQLIsInteger())
+    var rv: I16 = @SQLSetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), SqlAttrODBCVersion(), SqlODBC3(), SQLIsInteger())
     match rv
     | 0 => return SQLSuccess
     | 1 => return recover val SQLSuccessWithInfo.create_penv(h) end
@@ -53,18 +63,6 @@ primitive ODBCEnvFFI
     | -2 => return SQLInvalidHandle
     else
       recover val PonyDriverError("ODBCEnvFFI.set_odbc3() got invalid return code: " + rv.string()) end
-    end
-
-  fun sql_alloc_handle(): (SQLReturn val, ODBCHandleEnv tag) =>
-    var rv: ODBCHandleEnv tag = ODBCHandleEnv
-    var rvv: I16 = @SQLAllocHandle(1, Pointer[None], addressof rv)
-    match rvv
-    | 0 => return (SQLSuccess, rv)
-    | 1 => return (recover val SQLSuccessWithInfo.create_penv(rv) end, rv)
-    | -1 => return (recover val SQLError.create_penv(rv) end, rv)
-    | -2 => return (SQLInvalidHandle, rv)
-    else
-      (recover val PonyDriverError("ODBCEnvFFI.set_odbc2() got invalid return code: " + rvv.string()) end, rv)
     end
 
   fun free(h: ODBCHandleEnv tag) => @SQLFreeHandle(1, NullablePointer[ODBCHandleEnv tag](h))
