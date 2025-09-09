@@ -60,9 +60,7 @@ Validate handling of stored procedures or batch statements that return multiple 
 ***
 
 **A well-structured suite across these areas will ensure robust validation of the Pony ODBC binding, covering basic correctness and all edge cases.**[^11]
-<span style="display:none">[^1][^10][^2][^3][^4][^5][^6][^7][^8][^9]</span>
-
-<div style="text-align: center">⁂</div>
+[^1][^10][^2][^3][^4][^5][^6][^7][^8][^9]
 
 [^1]: https://www.codecademy.com/resources/docs/markdown/tables
 
