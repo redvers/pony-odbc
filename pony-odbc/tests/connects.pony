@@ -82,7 +82,7 @@ class \nodoc\ iso _TestConnects is UnitTest
 
     err = SQLError.create_pdbc(dbc.dbc)
     try
-      h.assert_eq[String val]("HY000", err.get_tuples()(0)?._2)
+      h.assert_eq[String val]("28000", err.get_tuples()(0)?._2)
     else
       h.fail("SQLError contents not found: " + err.string())
     end
@@ -93,7 +93,7 @@ class \nodoc\ iso _TestConnects is UnitTest
 
     err = SQLError.create_pdbc(dbc.dbc)
     try
-      h.assert_eq[String val]("HY000", err.get_tuples()(0)?._2)
+      h.assert_eq[String val]("42000", err.get_tuples()(0)?._2)
     else
       h.fail("SQLError contents not found: " + err.string())
     end
