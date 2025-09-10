@@ -1,6 +1,6 @@
 # Documentation
 
-Full documentation can be found at [https://redvers.github.com/redvers/pony-odbc](https://redvers.github.com/redvers/pony-odbc)
+Full documentation can be found at [https://redvers.github.io/pony-odbc](https://redvers.github.io/pony-odbc)
 
 # Currently Supported
 
