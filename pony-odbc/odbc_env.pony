@@ -34,5 +34,8 @@ class ODBCEnv
       valid = false ; return false
     end
 
+  fun get_attr(a: SqlEnvAttr): (SQLReturn val, I32) =>
+    ODBCEnvFFI.get_env_attr(odbcenv, a)
+
   fun _final() =>
     ODBCEnvFFI.free(odbcenv)
