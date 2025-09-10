@@ -1,107 +1,92 @@
-use "debug"
 use "dbc"
 use "stmt"
 use "ctypes"
 use "attributes"
 use "instrumentation"
-
-
-class ODBCSth
-  let stmt: ODBCHandleStmt tag
-  let tablemodel: ODBCQueryModel
+class ODBCThing
+  var dbc: ODBCDbc
+  var sth: ODBCHandleStmt tag
   var err: SQLReturn val
-  var valid: Bool = false
-  /*
-   * We store a PgDbc tag to ensure we don't have the PgDbc GC
-   * before this PgSth.  That would be "bad"™
-   */
-  let dbc: ODBCDbc tag
+  var parameters: (Array[SQLVarchar] | None) = None
+  var columns:    (Array[SQLVarchar] | None) = None
 
-  new create(dbc': ODBCDbc, qm: ODBCQueryModel iso = ODBCQueryModelNull) =>
+  new create(dbc': ODBCDbc) =>
+    (err, sth) = ODBCStmtFFI.alloc(dbc'.dbc)
     dbc = dbc'
-    (err, stmt) = ODBCStmtFFI.alloc(dbc'.dbc)
-    tablemodel = consume qm
-    _set_valid(err)
 
-  fun ref exec_direct(query: String val): Bool =>
-    err = ODBCStmtFFI.exec_direct(stmt, query)
-    if (not _set_valid(err)) then return false end
-    true
-
-  fun ref prepare(): Bool =>
-    """
-    Prepares your SQL statement for the database
-    """
-    match tablemodel.sql()
-    | let x: String val => err = ODBCStmtFFI.prepare(stmt, x)
-    | let x: SQLReturn val => err = x
-    end
-    if (not _set_valid(err)) then return false end
-    if (not _bind_params()) then return false end
-    if (not _bind_columns()) then return false end
-    true
-
-  fun \nodoc\ ref _bind_params(): Bool =>
-    """
-    Binds the provided parameters to your query
-    """
-    err = tablemodel.bind_params(stmt)
-    _set_valid(err)
-
-  fun \nodoc\ ref _bind_columns(): Bool =>
-    """
-    Binds the columns to your parameters
-    """
-    err = tablemodel.bind_columns(stmt)
-    _set_valid(err)
-
-  fun ref execute[A: Any val](i: A): Bool =>
-    """
-    Executes your query
-    """
-    err = tablemodel.execute[A](stmt, i)
-    if (not _set_valid(err)) then return false end
-    err = ODBCStmtFFI.execute(stmt)
-    if (not _set_valid(err)) then return false end
-    true
-
-  fun ref fetch(): (Bool, ODBCResultOut) =>
-    """
-    Attempts to fetch a row of data and populate the provided
-    buffers
-    """
-    (err, var r: ODBCResultOut) = tablemodel.fetch(stmt)
-    (_set_valid(err), r)
-
-  fun ref result_count(): (Bool, USize) =>
-    """
-    Returns the number of rows for the current executed query.
-    
-    NOTE - The standard says drivers are allowed to lie
-    """
-    var cnt: CBoxedI64 = CBoxedI64
-    err = ODBCStmtFFI.result_count(stmt, cnt)
-    (_set_valid(err), cnt.value.usize())
-
-  fun ref finish(): Bool =>
-    """
-    Closes the active cursor on a query so it can be reexecuted
-    with potentially new parameters.
-    """
-    err = ODBCStmtFFI.close_cursor(stmt)
-    _set_valid(err)
-
-
-  fun \nodoc\ is_valid(): Bool => valid
-
-  fun \nodoc\ ref _set_valid(sqlr: SQLReturn val): Bool =>
-    match sqlr
-    | let x: SQLSuccess val => valid = true ; return true
-    | let x: SQLSuccessWithInfo val => valid = true ; return true
+  fun ref prepare(str: String val)? =>
+    err = ODBCStmtFFI.prepare(sth, str)
+    match err
+    | let x: SQLSuccess val => None
     else
-      valid = false ; return false
+      error
     end
 
-  fun _final() =>
-    ODBCStmtFFI.free(stmt)
+//  fun ref bind_parameters(params: Array[SQLVarchar]): SQLReturn =>
+//    SQLSuccess
+  fun ref execute()? =>
+    err = ODBCStmtFFI.execute(sth)
+    match err
+    | let x: SQLSuccess val => None
+    else
+      error
+    end
 
+  fun ref finish()? =>
+    err = ODBCStmtFFI.close_cursor(sth)
+    match err
+    | let x: SQLSuccess val => None
+    else
+      error
+    end
+
+  fun ref bind_parameter(i: SQLType, col: U16)? =>
+    i.bind_parameter(sth, col)
+    err = i.get_err()
+    match err
+    | let x: SQLSuccess val => None
+    else
+      error
+    end
+
+  fun ref bind_column(i: SQLType, col: U16)? =>
+    i.bind_column(sth, col)
+    err = i.get_err()
+    match err
+    | let x: SQLSuccess val => None
+    else
+      error
+    end
+
+  fun ref rowcount(): I64 ? =>
+    var rv: CBoxedI64 = CBoxedI64
+    err = ODBCStmtFFI.result_count(sth, rv)
+    match err
+    | let x: SQLSuccess val => return rv.value
+    else
+      error
+    end
+
+  fun ref fetch() ? =>
+    err = ODBCStmtFFI.fetch(sth)
+    match err
+    | let x: SQLSuccess val => None
+    else
+      error
+    end
+
+
+
+
+
+
+
+
+
+
+
+
+interface SQLType
+  fun ref bind_parameter(h: ODBCHandleStmt tag, col: U16): SQLReturn val
+  fun ref bind_column(h: ODBCHandleStmt tag, col: U16, colname: String val = ""): SQLReturn val
+  fun get_err(): SQLReturn val
