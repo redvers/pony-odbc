@@ -19,6 +19,7 @@ actor \nodoc\ Main is TestList
   fun tag tests(test: PonyTest) =>
     test(_TestPGMariaDBTypes("psqlred", "mariadb"))
     test(_TestEnvironment)
+    test(_TestConnects)
 
     test(_TestConnect("mariadb"))
     test(_TestConnect("psqlred"))
