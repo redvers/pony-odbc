@@ -3,8 +3,11 @@ use @SQLSetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32,
 //use @SQLGetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength
 use @SQLAllocHandle[I16](handletype: I16, inputhandle: Pointer[None] tag, outputhandle: Pointer[ODBCHandleDbc tag] tag)
 use @SQLFreeHandle[I16](HandleType: I16, Handle: Pointer[None] tag)
+use @SQLGetInfo[I16](ConnectionHandle: Pointer[None] tag, InfoType: U16, InfoValue: Pointer[None] tag, BufferLength: I16, StringLength: Pointer[I16] tag)
 
 use "../env"
+use "debug"
+use "../ctypes"
 use "../attributes"
 use "../instrumentation"
 
@@ -18,6 +21,22 @@ primitive \nodoc\ ODBCDbcFFI
     database connection.
     """
     ODBCDbcFFI.sql_alloc_handle(h)
+
+  fun get_info(h: ODBCHandleDbc tag, infotype: SQLInfoTypes): (SQLReturn val, String val) =>
+    var buffer: CBoxedArray = CBoxedArray.>alloc(4096)
+    var rv: I16 = @SQLGetInfo(NullablePointer[ODBCHandleDbc tag](h),
+                              infotype(),
+                              buffer.ptr,
+                              4096,
+                              Pointer[I16])
+    match rv
+    | 0 => return (SQLSuccess, buffer.string())
+    | 1 => return (recover val SQLSuccessWithInfo.create_pdbc(h) end, "")
+    | -1 => return (recover val SQLError.create_pdbc(h) end, "")
+    | -2 => return (SQLInvalidHandle, "")
+    else
+      return (recover val PonyDriverError("ODBCFFI.get_info() got invalid return code: " + rv.string()) end, "")
+    end
 
   fun set_application_name(h: ODBCHandleDbc tag, s: String val): SQLReturn val =>
     """
