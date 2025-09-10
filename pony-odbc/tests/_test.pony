@@ -17,29 +17,29 @@ actor \nodoc\ Main is TestList
     PonyTest(env, this)
 
   fun tag tests(test: PonyTest) =>
-//    test(_TestPGMariaDBTypes("psqlred", "mariadb"))
-//    test(_TestEnvironment)
-//    test(_TestConnects)
+    test(_TestPGMariaDBTypes("psqlred", "mariadb"))
+    test(_TestEnvironment)
+    test(_TestConnects)
 
-//    test(_TestConnect("mariadb"))
-//    test(_TestConnect("psqlred"))
-//    test(_TestConnect("sqlitedb3"))
+    test(_TestConnect("mariadb"))
+    test(_TestConnect("psqlred"))
+    test(_TestConnect("sqlitedb3"))
 
     test(_TestDatabase("mariadb"))
     test(_TestDatabase("psqlred"))
     test(_TestDatabase("sqlitedb3"))
 
-//    test(_TestExecDirect("mariadb"))
-//    test(_TestExecDirect("psqlred"))
-//    test(_TestExecDirect("sqlitedb3"))
+    test(_TestExecDirect("mariadb"))
+    test(_TestExecDirect("psqlred"))
+    test(_TestExecDirect("sqlitedb3"))
 
-//    test(_TestInteger("mariadb"))
-//    test(_TestInteger("psqlred"))
-//    test(_TestInteger("sqlitedb3"))
+    test(_TestInteger("mariadb"))
+    test(_TestInteger("psqlred"))
+    test(_TestInteger("sqlitedb3"))
 
-//    test(_TestAPIIdea("psqlred"))
-//    test(_TestAPIIdea("mariadb"))
-//    test(_TestAPIIdea("sqlitedb3"))
+    test(_TestAPIIdea("psqlred"))
+    test(_TestAPIIdea("mariadb"))
+    test(_TestAPIIdea("sqlitedb3"))
 
   fun show_error_dbc(dbc: ODBCDbc) =>
     var err: SQLReturn val = recover val SQLError.create_pdbc(dbc.dbc) end

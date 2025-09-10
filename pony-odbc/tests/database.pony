@@ -37,4 +37,43 @@ class \nodoc\ iso _TestDatabase is UnitTest
     h.assert_is[SQLReturn val](SQLSuccess, r)
     Debug.out("Version: " + s)
 
+    (r, s) = dbc.get_info(SqlDataSourceName)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    Debug.out("DataSourceName: " + s)
+
+    (r, s) = dbc.get_info(SqlDriverName)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    Debug.out("DriverName: " + s)
+
+    (r, s) = dbc.get_info(SqlServerName)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    Debug.out("ServerName: " + s)
+
+    (r, s) = dbc.get_info(SqlDatabaseName)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    Debug.out("DatabaseName: " + s)
+
+    (r, s) = dbc.get_info(SqlUserName)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    Debug.out("UserName: " + s)
+
+    (r, s) = dbc.get_info(SqlCatalogName)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    Debug.out("CatalogName: " + s)
+
+    (r, s) = dbc.get_info(SqlDriverODBCVer)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    Debug.out("DriverODBCVersion: " + s)
+
+    (r, s) = dbc.get_info(SqlDriverVer)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    Debug.out("DriverVer: " + s)
+
+    (r, s) = dbc.get_info(SqlODBCVer)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    Debug.out("ODBCVer: " + s)
+
+    (r, s) = dbc.get_info(SqlDMVer)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    Debug.out("DMVer: " + s)
 
