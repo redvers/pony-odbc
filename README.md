@@ -1,3 +1,6 @@
+# Documentation
+
+Full documentation can be found at [https://redvers.github.com/redvers/pony-odbc](https://redvers.github.com/redvers/pony-odbc)
 
 # Currently Supported
 
@@ -7,7 +10,7 @@
 | Yes               | SQLBindCol              | Binds application buffers to columns in result set rows.                                               |
 | Yes               | SQLBindParameter        | Binds application buffers to parameters in an SQL statement.                                           |
 | No                | SQLBrowseConnect        | Returns attributes/values needed for connecting to the data source, building up as values are supplied.|
-| SQLBulkOperations | Performs bulk Insert, Update, Delete, or Fetch by bookmark.                                                                      |
+| No                | SQLBulkOperations | Performs bulk Insert, Update, Delete, or Fetch by bookmark.                                                                      |
 | No                | SQLCancel               | Cancels statement execution or processing of a result set.                                             |
 | Yes               | SQLCloseCursor          | Closes an open cursor on a statement handle.                                                           |
 | No                | SQLColAttribute         | Gets attributes for a result set column.                                                               |
@@ -27,7 +30,7 @@
 | No                | SQLForeignKeys          | Information about foreign keys in tables.                                                              |
 | No                | SQLFreeHandle           | Releases resources for handles allocated using SQLAllocHandle.                                         |
 | No                | SQLFreeStmt             | Releases statement resources or closes active cursors for a statement.                                 |
-| No                | SQLGetConnectAttr       | Retrieves the value of a connection attribute.                                                         |
+| Yes               | SQLGetConnectAttr       | Retrieves the value of a connection attribute.                                                         |
 | No                | SQLGetCursorName        | Gets the name of the cursor for a statement handle.                                                    |
 | No                | SQLGetData              | Retrieves data for a single column, useful for long data values.                                       |
 | No                | SQLGetDescField         | Gets an individual field from a descriptor.                                                            |
@@ -35,7 +38,7 @@
 | No                | SQLGetDiagField         | Gets diagnostic information (such as error codes) for operations.                                      |
 | No                | SQLGetDiagRec           | Gets detailed diagnostic records.                                                                      |
 | No                | SQLGetEnvAttr           | Retrieves the value of an environment attribute.                                                       |
-| No                | SQLGetInfo              | Retrieves details about the behavior/capabilities of a specific driver and data source.                |
+| Yes               | SQLGetInfo              | Retrieves details about the behavior/capabilities of a specific driver and data source.                |
 | No                | SQLGetStmtAttr          | Gets a statement attribute value.                                                                      |
 | No                | SQLGetTypeInfo          | Gets information about supported SQL data types by the driver.                                         |
 | No                | SQLMoreResults          | Advances to the next result set for statements that produce multiple results.                          |
@@ -66,7 +69,7 @@
 | Implemented | SQL Type   | C Type                 | Description                                 | Min Value                     | Max Value                     |
 |-------------|------------|------------------------|---------------------------------------------|-------------------------------|-------------------------------|
 |             | CHAR       | SQL\_C\_CHAR           | Fixed-length character string               | —                             | —                             |
-|             | VARCHAR    | SQL\_C\_CHAR           | Variable-length character string            | —                             | —                             |
+| Yes         | VARCHAR    | SQL\_C\_CHAR           | Variable-length character string            | —                             | —                             |
 |             | WCHAR      | SQL\_C\_WCHAR          | Fixed-length Unicode string                 | —                             | —                             |
 |             | WVARCHAR   | SQL\_C\_WCHAR          | Variable-length Unicode string              | —                             | —                             |
 |             | BINARY     | SQL\_C\_BINARY         | Fixed-length binary data                    | —                             | —                             |
@@ -74,7 +77,7 @@
 |             | BIT        | SQL\_C\_BIT            | Boolean value (0 or 1)                      | 0                             | 1                             |
 |             | TINYINT    | SQL\_C\_TINYINT        | 1-byte signed integer                       | -128                          | 127                           |
 |             | SMALLINT   | SQL\_C\_SHORT          | 2-byte signed integer                       | -32,768                       | 32,767                        |
-|             | INTEGER    | SQL\_C\_LONG           | 4-byte signed integer                       | -2,147,483,648                | 2,147,483,647                 |
+| Yes         | INTEGER    | SQL\_C\_LONG           | 4-byte signed integer                       | -2,147,483,648                | 2,147,483,647                 |
 |             | BIGINT     | SQL\_C\_SBIGINT        | 8-byte signed integer                       | -9,223,372,036,854,775,808    | 9,223,372,036,854,775,807     |
 |             | FLOAT      | SQL\_C\_DOUBLE         | Double-precision floating point             | ~±2.23E-308                   | ~±1.79E+308                   |
 |             | REAL       | SQL\_C\_FLOAT          | Single-precision floating point             | ~±1.18E-38                    | ~±3.40E+38                    |
