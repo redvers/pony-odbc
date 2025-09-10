@@ -25,5 +25,5 @@ class \nodoc\ iso _TestConnect is UnitTest
     h.assert_true(dbc.is_valid())
     h.assert_true(dbc.set_application_name("_Postgres"))
 
-    h.assert_true(dbc.connect("mariadb"))
+    h.assert_true(dbc.connect(dsn))
 

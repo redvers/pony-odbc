@@ -77,3 +77,14 @@ class \nodoc\ iso _TestDatabase is UnitTest
     h.assert_is[SQLReturn val](SQLSuccess, r)
     Debug.out("DMVer: " + s)
 
+    (r, var i: I32) = ODBCDbcFFI.get_attr_i32(dbc.dbc, SqlAttrAccessMode)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    h.assert_eq[I32](0, i)
+
+    (r, i) = ODBCDbcFFI.get_attr_i32(dbc.dbc, SqlAttrAutoCommit)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    h.assert_eq[I32](1, i)
+
+    (r, i) = ODBCDbcFFI.get_attr_i32(dbc.dbc, SqlAttrTrace)
+    h.assert_is[SQLReturn val](SQLSuccess, r)
+    h.assert_eq[I32](0, i)
