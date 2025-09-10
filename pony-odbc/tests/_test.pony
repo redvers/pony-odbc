@@ -18,6 +18,8 @@ actor \nodoc\ Main is TestList
 
   fun tag tests(test: PonyTest) =>
     test(_TestPGMariaDBTypes("psqlred", "mariadb"))
+    test(_TestEnvironment)
+
     test(_TestConnect("mariadb"))
     test(_TestConnect("psqlred"))
     test(_TestConnect("sqlitedb3"))
@@ -125,7 +127,6 @@ class \nodoc\ iso _TestAPIIdea is UnitTest
       try
         while true do
           stm.fetch()?
-          Debug.out(poutb._1.read()?.string() + ": " + poutb._2.string())
         end
         stm.finish()?
       end
