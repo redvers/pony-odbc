@@ -69,7 +69,6 @@ class \nodoc\ iso _TestAPIIdea is UnitTest
       stm
       .>prepare("create temporary table odbthingtest (i integer, s varchar(100))")?
       .>execute()?
-      .>finish()?
     else
       Debug.out("Something in there failed")
       try
@@ -92,7 +91,6 @@ class \nodoc\ iso _TestAPIIdea is UnitTest
         pina._2.write("A Number: " + f.string())
         stm.execute()?
       end
-      stm.finish()?
     else
       try
         for f in (stm.err as SQLError val).get_records().values() do
