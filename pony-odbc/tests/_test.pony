@@ -19,10 +19,15 @@ actor \nodoc\ Main is TestList
   fun tag tests(test: PonyTest) =>
     test(_TestPGMariaDBTypes("psqlred", "mariadb"))
     test(_TestEnvironment)
+    test(_TestConnects)
 
     test(_TestConnect("mariadb"))
     test(_TestConnect("psqlred"))
     test(_TestConnect("sqlitedb3"))
+
+    test(_TestDatabase("mariadb"))
+    test(_TestDatabase("psqlred"))
+    test(_TestDatabase("sqlitedb3"))
 
     test(_TestExecDirect("mariadb"))
     test(_TestExecDirect("psqlred"))
@@ -64,7 +69,6 @@ class \nodoc\ iso _TestAPIIdea is UnitTest
       stm
       .>prepare("create temporary table odbthingtest (i integer, s varchar(100))")?
       .>execute()?
-      .>finish()?
     else
       Debug.out("Something in there failed")
       try
@@ -87,7 +91,6 @@ class \nodoc\ iso _TestAPIIdea is UnitTest
         pina._2.write("A Number: " + f.string())
         stm.execute()?
       end
-      stm.finish()?
     else
       try
         for f in (stm.err as SQLError val).get_records().values() do

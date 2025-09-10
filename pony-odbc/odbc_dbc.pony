@@ -19,6 +19,10 @@ class ODBCDbc
     (err, dbc) = ODBCDbcFFI.alloc(henv.odbcenv)
     _set_valid(err)
 
+  fun ref get_info(i: SQLInfoTypes): (SQLReturn val, String val) =>
+    ODBCDbcFFI.get_info(dbc, i)
+
+
   fun ref set_application_name(appname: String val): Bool =>
     """
     Notifies the database of your application's name. (It does not
