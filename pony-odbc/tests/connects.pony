@@ -5,9 +5,6 @@ use ".."
 use "../env"
 use "../dbc"
 use "../stmt"
-use "../ctypes"
-use "../attributes"
-use "../instrumentation"
 
 class \nodoc\ iso _TestConnects is UnitTest
   fun name(): String val => "_TestConnects"
@@ -23,7 +20,7 @@ class \nodoc\ iso _TestConnects is UnitTest
 
     // Unknown ODBC Identifier
     h.assert_false(dbc.connect("IDontExist"))
-    h.assert_eq[String]("SQLError", dbc.err.string())
+    h.assert_eq[String]("SQLError", dbc.get_err().string())
 
     var err: SQLError val = SQLError.create_pdbc(dbc.dbc)
     try
@@ -34,7 +31,7 @@ class \nodoc\ iso _TestConnects is UnitTest
 
     // Unknown Driver .so file
     h.assert_false(dbc.connect("psqlred_baddriver"))
-    h.assert_eq[String]("SQLError", dbc.err.string())
+    h.assert_eq[String]("SQLError", dbc.get_err().string())
 
     err = SQLError.create_pdbc(dbc.dbc)
     try
@@ -45,7 +42,7 @@ class \nodoc\ iso _TestConnects is UnitTest
 
     // Unknown PostgreSQL Server
     h.assert_false(dbc.connect("psqlred_badserver"))
-    h.assert_eq[String]("SQLError", dbc.err.string())
+    h.assert_eq[String]("SQLError", dbc.get_err().string())
 
     err = SQLError.create_pdbc(dbc.dbc)
     try
@@ -56,7 +53,7 @@ class \nodoc\ iso _TestConnects is UnitTest
 
     // Unknown Postgresql User
     h.assert_false(dbc.connect("psqlred_baduser"))
-    h.assert_eq[String]("SQLError", dbc.err.string())
+    h.assert_eq[String]("SQLError", dbc.get_err().string())
 
     err = SQLError.create_pdbc(dbc.dbc)
     try
@@ -67,7 +64,7 @@ class \nodoc\ iso _TestConnects is UnitTest
 
     // Unknown Postgresql Database
     h.assert_false(dbc.connect("psqlred_baddatabase"))
-    h.assert_eq[String]("SQLError", dbc.err.string())
+    h.assert_eq[String]("SQLError", dbc.get_err().string())
 
     err = SQLError.create_pdbc(dbc.dbc)
     try
@@ -78,7 +75,7 @@ class \nodoc\ iso _TestConnects is UnitTest
 
     // Unknown MariaDB User
     h.assert_false(dbc.connect("mariadb_baduser"))
-    h.assert_eq[String]("SQLError", dbc.err.string())
+    h.assert_eq[String]("SQLError", dbc.get_err().string())
 
     err = SQLError.create_pdbc(dbc.dbc)
     try
@@ -89,7 +86,7 @@ class \nodoc\ iso _TestConnects is UnitTest
 
     // Unknown MariaDB database
     h.assert_false(dbc.connect("mariadb_baddatabase"))
-    h.assert_eq[String]("SQLError", dbc.err.string())
+    h.assert_eq[String]("SQLError", dbc.get_err().string())
 
     err = SQLError.create_pdbc(dbc.dbc)
     try

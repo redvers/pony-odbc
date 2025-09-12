@@ -1,11 +1,9 @@
 use "debug"
 use "pony_test"
 use ".."
-use "../instrumentation"
 use "../env"
 use "../dbc"
 use "../stmt"
-use "../ctypes"
 
 class \nodoc\ iso _TestEnvironment is UnitTest
   fun name(): String val => "_TestEnvironment"

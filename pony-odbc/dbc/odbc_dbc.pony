@@ -7,11 +7,9 @@ use @SQLGetInfo[I16](ConnectionHandle: Pointer[None] tag, InfoType: U16, InfoVal
 use @SQLGetData[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, TargetValue: Pointer[None] tag, BufferLength: I64, StrLenorInd: Pointer[I64] tag)
 
 
-use "../env"
 use "debug"
-use "../ctypes"
-use "../attributes"
-use "../instrumentation"
+use ".."
+use "../env"
 
 struct \nodoc\ ODBCHandleDbc
 

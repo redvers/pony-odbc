@@ -1,10 +1,5 @@
 {
-  "packages": [
-                "pony-odbc",
-                "pony-odbc/ctypes",
-                "pony-odbc/attributes",
-                "pony-odbc/instrumentation"
-              ],
+  "packages": [ "pony-odbc" ],
   "deps": [],
   "info": {
     "description": "",

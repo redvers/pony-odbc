@@ -1,6 +1,5 @@
-use "../instrumentation"
-
-primitive SqlAttrCPMatch fun apply(): I32 => 202
+use ".."
+primitive \nodoc\ SqlAttrCPMatch fun apply(): I32 => 202
   fun string(): String val => "SqlAttrCPMatch"
   fun id(i: I32): (SqlCPMatch | PonyDriverError val) =>
     match i
@@ -11,10 +10,10 @@ primitive SqlAttrCPMatch fun apply(): I32 => 202
     end
 
 type SqlCPMatch is (SqlCPStrict | SqlCPRelaxed | SqlCPDefault)
-primitive SqlCPStrict fun apply(): I32 => 0
+primitive \nodoc\ SqlCPStrict fun apply(): I32 => 0
   fun string(): String val => "SqlCPStrict"
-primitive SqlCPRelaxed fun apply(): I32 => 1
+primitive \nodoc\ SqlCPRelaxed fun apply(): I32 => 1
   fun string(): String val => "SqlCPRelaxed"
-primitive SqlCPDefault fun apply(): I32 => 0
+primitive \nodoc\ SqlCPDefault fun apply(): I32 => 0
   fun string(): String val => "SqlCPDefault"
 

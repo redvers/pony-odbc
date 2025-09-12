@@ -1,5 +1,3 @@
-use ".."
-use "../attributes"
 use "debug"
 
 use @memcpy[Pointer[U8] ref](dest: Pointer[U8] tag, src: Pointer[U8] tag, size: USize)
@@ -8,13 +6,13 @@ use @pony_alloc[Pointer[U8] ref](ctx: Pointer[None], size: USize)
 use @explicit_bzero[None](ptr: Pointer[U8] tag, size: USize)
 
 
-primitive ODBCVarcharConsts
+primitive \nodoc\ ODBCVarcharConsts
   fun sql_nts():         I16 => -3
   fun sql_param_input(): I16 => 1
   fun sql_c_char():      I16 => 1
   fun sql_varchar():     I16 => 12
 
-class CBoxedArray
+class \nodoc\ CBoxedArray
   var ptr: Pointer[U8] = Pointer[U8]
   var is_null: Bool = true
   var alloc_size: USize = 0
