@@ -33,14 +33,13 @@ class SQLInteger
     end
 
   fun ref bind_column(h: ODBCHandleStmt tag, col: U16, colname: String val = ""): SQLReturn val => SQLSuccess
-    var desc: SQLDescribeColOut = SQLDescribeColOut(col)
-    if (not _bind_column(h, desc)) then
+    if (not _bind_column(h, col)) then
       return err
     end
     err
 
-  fun ref _bind_column(h: ODBCHandleStmt tag, desc: SQLDescribeColOut): Bool =>
-    err = ODBCStmtFFI.bind_column_varchar(h, desc, v)
+  fun ref _bind_column(h: ODBCHandleStmt tag, col: U16): Bool =>
+    err = ODBCStmtFFI.bind_column_varchar(h, col, v)
     is_success()
     true
 

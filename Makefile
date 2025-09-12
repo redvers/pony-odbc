@@ -63,9 +63,9 @@ STRESS_TESTS := $(notdir $(shell find $(STRESS_TESTS_DIR)/* -type d))
 STRESS_TESTS_SOURCE_FILES := $(shell find $(STRESS_TESTS_DIR) -name *.pony)
 STRESS_TESTS_BINARIES := $(addprefix $(BUILD_DIR)/,$(STRESS_TESTS))
 
-test: unit-tests
-
 ci: unit-tests examples stress-tests
+
+test: unit-tests
 
 unit-tests: $(tests_binary)
 	$^
