@@ -7,6 +7,7 @@ use "../dbc"
 use "../stmt"
 
 class SQLError
+  var location: SourceLoc val = __loc
   var records: Array[(I16, SQLDiagFrame)] = Array[(I16, SQLDiagFrame)]
 
   fun apply(): I16 => -1
@@ -26,6 +27,12 @@ class SQLError
     end
     consume rv
 
+  fun get_err_strings(): String val =>
+    location.type_name() + "." +
+    location.method_name() + "() returned the following error from ODBC\n\n" +
+    "\n".join(get_records().values())
+
+
     /*
   new create(htype: ODBCHandle) =>
     for num in Range[I16](1,1024) do
@@ -37,7 +44,8 @@ class SQLError
     end
     */
 
-  new create_penv(htype: ODBCHandleEnv tag) => None
+  new create_penv(htype: ODBCHandleEnv tag, sl: SourceLoc val = __loc) => None
+    location = sl
     for num in Range[I16](1,1024) do
       try
         records.push((num, SQLDiagFrame.create_penv(htype, num)?))
@@ -46,7 +54,8 @@ class SQLError
       end
     end
 
-  new create_pdbc(htype: ODBCHandleDbc tag) => None
+  new create_pdbc(htype: ODBCHandleDbc tag, sl: SourceLoc val = __loc) => None
+    location = sl
     for num in Range[I16](1,1024) do
       try
         records.push((num, SQLDiagFrame.create_pdbc(htype, num)?))
@@ -55,7 +64,8 @@ class SQLError
       end
     end
 
-  new create_pstmt(htype: ODBCHandleStmt tag) =>
+  new create_pstmt(htype: ODBCHandleStmt tag, sl: SourceLoc val = __loc) =>
+    location = sl
     for num in Range[I16](1,1024) do
       try
         records.push((num, SQLDiagFrame.create_pstmt(htype, num)?))
@@ -63,4 +73,5 @@ class SQLError
         break
       end
     end
+
 

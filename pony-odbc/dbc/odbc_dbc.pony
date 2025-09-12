@@ -4,6 +4,8 @@ use @SQLGetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32,
 use @SQLAllocHandle[I16](handletype: I16, inputhandle: Pointer[None] tag, outputhandle: Pointer[ODBCHandleDbc tag] tag)
 use @SQLFreeHandle[I16](HandleType: I16, Handle: Pointer[None] tag)
 use @SQLGetInfo[I16](ConnectionHandle: Pointer[None] tag, InfoType: U16, InfoValue: Pointer[None] tag, BufferLength: I16, StringLength: Pointer[I16] tag)
+use @SQLGetData[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, TargetValue: Pointer[None] tag, BufferLength: I64, StrLenorInd: Pointer[I64] tag)
+
 
 use "../env"
 use "debug"
@@ -13,7 +15,6 @@ use "../instrumentation"
 
 struct \nodoc\ ODBCHandleDbc
 
-
 primitive \nodoc\ ODBCDbcFFI
   fun alloc(h: ODBCHandleEnv tag): (SQLReturn val, ODBCHandleDbc tag) =>
     """
@@ -21,6 +22,11 @@ primitive \nodoc\ ODBCDbcFFI
     database connection.
     """
     ODBCDbcFFI.sql_alloc_handle(h)
+
+//use @SQLGetData[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, TargetValue: Pointer[None] tag, BufferLength: I64, StrLenorInd: Pointer[I64] tag)
+//  fun get_data(h: ODBCHandleDbc tag, col: U16, value: Varchar) =>
+
+
 
   fun get_info(h: ODBCHandleDbc tag, infotype: SQLInfoTypes): (SQLReturn val, String val) =>
     var buffer: CBoxedArray = CBoxedArray.>alloc(4096)

@@ -38,6 +38,7 @@ class SQLVarchar
     """
     v.alloc(size)
 
+
   fun ref reset(): Bool =>
     """
     Zeros the buffer and resets the field that defines the length of
@@ -71,89 +72,23 @@ class SQLVarchar
 
   fun \nodoc\ ref bind_parameter(h: ODBCHandleStmt tag, col: U16): SQLReturn val =>
     var desc: SQLDescribeParamOut = SQLDescribeParamOut(col)
-//    if (not _verify_parameter(h, desc)) then
-//      return err
-//    end
-//    err
     if (not _bind_parameter(h, desc)) then
       return err
     end
     err
 
-    /*
-  fun \nodoc\ ref _verify_parameter(h: ODBCHandleStmt tag, desc: SQLDescribeParamOut): Bool =>
-    err = ODBCStmtFFI.describe_param(h, desc)
-    if (not is_success()) then
-      return false
-    end
-    /* List of possible VarChar / Char based types:
-     *  1   SQLChar
-     *  12  SQLVarchar
-     *  -1  SQLLongVarChar
-     *  -2  SQLBinary
-     *  -3  SQLVarBinary
-     *  -4  SQLLongVarBinary
-     */
-
-    var dt: I16 = desc.data_type_ptr.value
-    match dt
-    | 1  => true
-    | 12 => true
-    | -1 => true
-    | -2 => true
-    | -3 => true
-    | -4 => true
-    else
-      err = recover val PonyDriverError("SQLVarchar._verify_parameter: Wanted [1,12,-1,-2,-3,-4], got: " + dt.string()) end
-      return false
-    end
-*/
   fun \nodoc\ ref _bind_parameter(h: ODBCHandleStmt tag, desc: SQLDescribeParamOut): Bool =>
     err = ODBCStmtFFI.bind_parameter_varchar(h, desc, v)
     is_success()
 
-  fun \nodoc\ ref bind_column(h: ODBCHandleStmt tag, col: U16, colname: String val): SQLReturn val =>
-    var desc: SQLDescribeColOut = SQLDescribeColOut(col)
-//    if (not _verify_column(h, desc, colname)) then
-//      return err
-//    end
-//    err
-    if (not _bind_column(h, desc)) then
+  fun \nodoc\ ref bind_column(h: ODBCHandleStmt tag, col: U16): SQLReturn val =>
+    if (not _bind_column(h, col)) then
       return err
     end
     err
 
-    /*
-  fun \nodoc\ ref _verify_column(h: ODBCHandleStmt tag, desc: SQLDescribeColOut, colname: String val): Bool =>
-    err = ODBCStmtFFI.describe_column(h, desc, colname)
-    if (not is_success()) then
-      return false
-    end
-
-    /* List of possible VarChar / Char based types:
-     *  1   SQLChar
-     *  12  SQLVarchar
-     *  -1  SQLLongVarChar
-     *  -2  SQLBinary
-     *  -3  SQLVarBinary
-     *  -4  SQLLongVarBinary
-     */
-    var dt: I16 = desc.datatype_ptr.value
-    match dt
-    | 1  => v.alloc(desc.colsize_ptr.value.usize()); return true
-    | 12 => v.alloc(desc.colsize_ptr.value.usize()); return true
-    | -1 => v.alloc(desc.colsize_ptr.value.usize()); return true
-    | -2 => v.alloc(desc.colsize_ptr.value.usize()); return true
-    | -3 => v.alloc(desc.colsize_ptr.value.usize()); return true
-    | -4 => v.alloc(desc.colsize_ptr.value.usize()); return true
-    else
-      err = recover val PonyDriverError("SQLVarchar._verify_column: Wanted [1,12,-1,-2,-3,-4], got: " + dt.string()) end
-      return false
-    end
-    */
-
-  fun \nodoc\ ref _bind_column(h: ODBCHandleStmt tag, desc: SQLDescribeColOut): Bool =>
-    err = ODBCStmtFFI.bind_column_varchar(h, desc, v)
+  fun \nodoc\ ref _bind_column(h: ODBCHandleStmt tag, col: U16): Bool =>
+    err = ODBCStmtFFI.bind_column_varchar(h, col, v)
     is_success()
 
 
@@ -163,5 +98,13 @@ class SQLVarchar
     else
       false
     end
+
+  fun ref realloc_column(h: ODBCHandleStmt tag, size: USize, col: U16): SQLReturn val =>
+    """
+    Reallocates the buffer to be populated by the database when data
+    is fetched and rebinds the new buffer to the column.
+    """
+    v = CBoxedArray .> alloc(size)
+    bind_column(h, col)
 
   fun get_err(): SQLReturn val => err

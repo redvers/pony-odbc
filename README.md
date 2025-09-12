@@ -2,7 +2,7 @@
 
 Full documentation can be found at [https://redvers.github.io/pony-odbc](https://redvers.github.io/pony-odbc)
 
-# Currently Supported
+## Currently Supported
 
 | Implemented       | API Function            | Brief Description                                                                                      |
 |-------------------|-------------------------|--------------------------------------------------------------------------------------------------------|
@@ -64,7 +64,7 @@ Full documentation can be found at [https://redvers.github.io/pony-odbc](https:/
 | No                | SQLTablePrivileges      | Gets privileges for tables in the data source.                                                         |
 | No                | SQLTables               | Returns a list of tables, schemas, or table types in the data source.                                  |
 
-# Currently Supported (Core) types
+## Currently Supported (Core) types
 
 | Implemented | SQL Type   | C Type                 | Description                                 | Min Value                     | Max Value                     |
 |-------------|------------|------------------------|---------------------------------------------|-------------------------------|-------------------------------|

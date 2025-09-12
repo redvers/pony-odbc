@@ -12,8 +12,11 @@ use @SQLRowCount[I16](StatementHandle: Pointer[None] tag, RowCount: CBoxedI64 ta
 use @SQLCloseCursor[I16](StatementHandle: Pointer[None] tag)
 use @SQLAllocHandle[I16](handletype: I16, inputhandle: Pointer[None] tag, outputhandle: Pointer[ODBCHandleStmt tag] tag)
 use @SQLFreeHandle[I16](HandleType: I16, Handle: Pointer[None] tag)
+use @SQLFetchScroll[I16](StatementHandle: Pointer[None] tag, FetchOrientation: I16, FetchOffset: I64)
+use @SQLGetData[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, TargetValue: Pointer[None] tag, BufferLength: I64, StrLenorInd: CBoxedI64 tag)
 
 use "debug"
+use ".."
 use "../dbc"
 use "../ctypes"
 use "../attributes"
@@ -32,6 +35,42 @@ primitive \nodoc\ ODBCStmtFFI
     | -2 => return (SQLInvalidHandle, rv)
     else
       (recover val PonyDriverError("ODBCStmtFFI.alloc() got invalid return code: " + rvv.string()) end, rv)
+    end
+
+  fun get_data(h: ODBCHandleStmt tag, col: U16, v: CBoxedArray): SQLReturn val =>
+    var rv: I16 = @SQLGetData[I16](
+      NullablePointer[ODBCHandleStmt tag](h),
+      col,
+      I16(1),
+      v.ptr,
+      v.alloc_size.i64(),
+      v.written_size)
+
+    match rv
+    | 0 => return SQLSuccess
+    | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
+    | 100 => return SQLNoData
+    | 2 => return SQLStillExecuting
+    | -1 => return recover val SQLError.create_pstmt(h) end
+    | -2 => return SQLInvalidHandle
+    else
+      recover val PonyDriverError("ODBCEnvFFI.fetch_scroll() got invalid return code: " + rv.string()) end
+    end
+
+  fun fetch_scroll(h: ODBCHandleStmt tag, d: SqlFetchOrientation, offset: I64 = 0): SQLReturn val =>
+    """
+    SQLFetchScroll fetches the specified rowset of data from the result set and returns data for all bound columns. Rowsets can be specified at an absolute or relative position or by bookmark.
+    """
+    var rv: I16 = @SQLFetchScroll(NullablePointer[ODBCHandleStmt tag](h), d(), offset)
+    match rv
+    | 0 => return SQLSuccess
+    | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
+    | 100 => return SQLNoData
+    | 2 => return SQLStillExecuting
+    | -1 => return recover val SQLError.create_pstmt(h) end
+    | -2 => return SQLInvalidHandle
+    else
+      recover val PonyDriverError("ODBCEnvFFI.fetch_scroll() got invalid return code: " + rv.string()) end
     end
 
   fun prepare(h: ODBCHandleStmt tag, str: String val): SQLReturn val =>
@@ -62,8 +101,6 @@ primitive \nodoc\ ODBCStmtFFI
     | 100 => return SQLNoData
     end
     recover val PonyDriverError("ODBCHandleStmt.exec_direct() get invalid return code: " + rv.string()) end
-
-
 
 
 
@@ -218,7 +255,7 @@ primitive \nodoc\ ODBCStmtFFI
       recover val PonyDriverError("ODBCHandleStmt.describe_column() get invalid return code: " + rv.string()) end
     end
 
-  fun bind_column_varchar(h: ODBCHandleStmt tag, desc: SQLDescribeColOut, v: CBoxedArray): SQLReturn val =>
+  fun bind_column_varchar(h: ODBCHandleStmt tag, col: U16, v: CBoxedArray): SQLReturn val =>
 /*SQLRETURN SQLBindCol(
       SQLHSTMT       StatementHandle,
       SQLUSMALLINT   ColumnNumber,
@@ -230,7 +267,7 @@ primitive \nodoc\ ODBCStmtFFI
     var wrlen: I64 = 0
     var rv: I16 = @SQLBindCol[I16](
       NullablePointer[ODBCHandleStmt tag](h),
-      desc.column_number,
+      col,
       I16(1),
       v.ptr,
       v.alloc_size.i64(),
