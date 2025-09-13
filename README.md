@@ -87,4 +87,3 @@ Full documentation can be found at [https://redvers.github.io/pony-odbc](https:/
 | No                | SQLStatistics           | Retrieves info/statistics about tables or indexes.                                                     |
 | No                | SQLTablePrivileges      | Gets privileges for tables in the data source.                                                         |
 | No                | SQLTables               | Returns a list of tables, schemas, or table types in the data source.                                  |
-
