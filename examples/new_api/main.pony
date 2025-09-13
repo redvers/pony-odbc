@@ -3,8 +3,8 @@ use "lib:odbc"
 
 actor Main
   let env: Env
-  var inb: (SQLVarchar, SQLVarchar) = (SQLVarchar.>alloc(25), SQLVarchar.>alloc(100))
-  var outb: (SQLVarchar, SQLVarchar) = (SQLVarchar.>alloc(25), SQLVarchar.>alloc(100))
+  var inb: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(100))
+  var outb: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(100))
 
   new create(env': Env) =>
     env = env'
@@ -25,14 +25,14 @@ actor Main
           .> bind_parameter(inb._1)?
           .> bind_parameter(inb._2)?
 
-        // Insert three good rows
-        insert_row(stm, 1, "This is my first row's string")?
-        insert_row(stm, 2, "This is my second row's string")?
+        // Insert two rows
+        inb._1.write(1); if (inb._2.write("First Row"))  then stm.execute()? end
+        inb._1.write(2); if (inb._2.write("Second Row")) then stm.execute()? end
         try
-          insert_row(stm, 2, "This will fail the uniqueness check")?
+          inb._1.write(2); if (inb._2.write("Not Unique")) then stm.execute()? end
         end
         try
-          insert_row(stm, 3, "This will fail due to the length of this string exceeding the input buffer check")?
+          inb._1.write(3); if (inb._2.write("TooLong: " + ("x"*100))) then stm.execute()? end
         end
 
         // Query our database
@@ -42,7 +42,9 @@ actor Main
           .> execute()?
 
         var i: I32 = 0 ; var s: String val = "" ; var moredata: Bool = true
-        while ((moredata, (i, s)) = fetch_row(stm)?; moredata) do
+        while (stm.fetch_scroll(SqlFetchNext)?) do
+          i = outb._1.read()?
+          s = outb._2.read()
           env.out.print("Integer: " + i.string() + ", s: " + s)
         end
       else
@@ -52,10 +54,3 @@ actor Main
       end
     end
 
-  fun ref insert_row(stm: ODBCStmt, integer: I32, str: String val)? =>
-    inb._1.write(integer.string())
-    inb._2.write(str)
-    stm.execute()?
-
-  fun ref fetch_row(stm: ODBCStmt): (Bool, (I32, String val)) ? =>
-    (stm.fetch_scroll(SqlFetchNext)?, (outb._1.string().i32()?, outb._2.string()))
