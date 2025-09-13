@@ -4,13 +4,11 @@ use @SQLAllocHandle[I16](handletype: I16, inputhandle: Pointer[None] tag, output
 use @SQLFreeHandle[I16](HandleType: I16, Handle: Pointer[None] tag)
 
 use "debug"
-use "../ctypes"
-use "../attributes"
-use "../instrumentation"
+use ".."
 
 struct \nodoc\ ODBCHandleEnv
 
-primitive ODBCEnvFFI
+primitive \nodoc\ ODBCEnvFFI
   """
   |*Attribute*|*ValuePtr* contents|
 |-----------------|-------------------------|

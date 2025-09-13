@@ -1,4 +1,4 @@
-class PonyDriverError
+class \nodoc\ PonyDriverError
   var errorstr: String val
 
   new create(str: String val) =>

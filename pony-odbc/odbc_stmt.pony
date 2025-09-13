@@ -1,10 +1,6 @@
 use "dbc"
 use "stmt"
 use "debug"
-use "ctypes"
-use "buffered"
-use "attributes"
-use "instrumentation"
 
 class ODBCStmt
   """
@@ -268,9 +264,6 @@ class ODBCStmt
   fun ref _check_columns(sl: SourceLoc val = __loc) ? =>
     _call_location = sl
     for (colindex, vc) in _columns.pairs() do
-
-      let writer: Writer = Writer
-
       if (vc.v.written_size.value.usize() > vc.v.alloc_size) then
         _err = vc.realloc_column(_sth, vc.v.written_size.value.usize() + 10, colindex.u16() + 1)
         match _err
@@ -300,7 +293,7 @@ class ODBCStmt
   // Used to do introspection during testing
   fun \nodoc\ get_err(): SQLReturn val => _err
 
-interface SQLType
+interface \nodoc\ SQLType
   fun ref bind_parameter(h: ODBCHandleStmt tag, col: U16): SQLReturn val
   fun ref bind_column(h: ODBCHandleStmt tag, col: U16, colname: String val = ""): SQLReturn val
   fun get_err(): SQLReturn val

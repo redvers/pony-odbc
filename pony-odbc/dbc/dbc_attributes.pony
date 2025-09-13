@@ -4,17 +4,17 @@ type SqlDbcAttrI32 is (SqlAttrAccessMode
                      | SqlAttrTrace
                      | SqlAttrTraceFile)
 
-primitive SqlAttrAccessMode fun apply(): I32 => 101
-primitive SqlAttrAutoCommit fun apply(): I32 => 102
-primitive SqlAttrTrace fun apply(): I32 => 104
-primitive SqlAttrTraceFile fun apply(): I32 => 105
+primitive \nodoc\ SqlAttrAccessMode fun apply(): I32 => 101
+primitive \nodoc\ SqlAttrAutoCommit fun apply(): I32 => 102
+primitive \nodoc\ SqlAttrTrace fun apply(): I32 => 104
+primitive \nodoc\ SqlAttrTraceFile fun apply(): I32 => 105
 
 
-primitive SqlAutoCommitOff fun apply(): I32 => 0
-primitive SqlAutoCommitOn fun apply(): I32 => 1
+primitive \nodoc\ SqlAutoCommitOff fun apply(): I32 => 0
+primitive \nodoc\ SqlAutoCommitOn fun apply(): I32 => 1
 
-primitive SqlTraceOff fun apply(): I32 => 0
-primitive SqlTraceOn fun apply(): I32 => 1
+primitive \nodoc\ SqlTraceOff fun apply(): I32 => 0
+primitive \nodoc\ SqlTraceOn fun apply(): I32 => 1
 
 
 /*

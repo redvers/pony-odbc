@@ -1,16 +1,7 @@
 use "debug"
 use "stmt"
-use "ctypes"
-use "attributes"
-use "instrumentation"
 
-use @memcpy[Pointer[U8] ref](dest: Pointer[U8] tag, src: Pointer[U8] tag, size: USize)
-use @pony_ctx[Pointer[None]]()
-use @pony_alloc[Pointer[U8] ref](ctx: Pointer[None], size: USize)
-use @explicit_bzero[None](ptr: Pointer[U8] tag, size: USize)
-
-
-primitive SQLVarcharConsts
+primitive \nodoc\ SQLVarcharConsts
   fun sql_nts():         I16 => -3
   fun sql_param_input(): I16 => 1
   fun sql_c_char():      I16 => 1
@@ -71,14 +62,13 @@ class SQLVarchar
     true
 
   fun \nodoc\ ref bind_parameter(h: ODBCHandleStmt tag, col: U16): SQLReturn val =>
-    var desc: SQLDescribeParamOut = SQLDescribeParamOut(col)
-    if (not _bind_parameter(h, desc)) then
+    if (not _bind_parameter(h, col)) then
       return err
     end
     err
 
-  fun \nodoc\ ref _bind_parameter(h: ODBCHandleStmt tag, desc: SQLDescribeParamOut): Bool =>
-    err = ODBCStmtFFI.bind_parameter_varchar(h, desc, v)
+  fun \nodoc\ ref _bind_parameter(h: ODBCHandleStmt tag, col: U16): Bool =>
+    err = ODBCStmtFFI.bind_parameter_varchar(h, col, v)
     is_success()
 
   fun \nodoc\ ref bind_column(h: ODBCHandleStmt tag, col: U16): SQLReturn val =>

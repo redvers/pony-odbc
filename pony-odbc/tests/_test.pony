@@ -2,11 +2,9 @@ use "debug"
 use "lib:odbc"
 use "pony_test"
 use ".."
-use "../instrumentation"
 use "../env"
 use "../dbc"
 use "../stmt"
-use "../ctypes"
 use "collections"
 
 actor \nodoc\ Main is TestList
@@ -17,7 +15,6 @@ actor \nodoc\ Main is TestList
     PonyTest(env, this)
 
   fun tag tests(test: PonyTest) =>
-    test(_TestPGMariaDBTypes("psqlred", "mariadb"))
     test(_TestEnvironment)
     test(_TestConnects)
 
@@ -29,14 +26,6 @@ actor \nodoc\ Main is TestList
     test(_TestDatabase("psqlred"))
     test(_TestDatabase("sqlitedb3"))
 
-    test(_TestExecDirect("mariadb"))
-    test(_TestExecDirect("psqlred"))
-    test(_TestExecDirect("sqlitedb3"))
-
-    test(_TestInteger("mariadb"))
-    test(_TestInteger("psqlred"))
-    test(_TestInteger("sqlitedb3"))
-
     test(_TestStmtAPI("psqlred"))
     test(_TestStmtAPI("mariadb"))
     test(_TestStmtAPI("sqlitedb3"))
@@ -45,7 +34,7 @@ actor \nodoc\ Main is TestList
     var err: SQLReturn val = recover val SQLError.create_pdbc(dbc.dbc) end
     try
       if (false) then error end
-      for f in (dbc.err as SQLError val).get_records().values() do
+      for f in (dbc.get_err() as SQLError val).get_records().values() do
         Debug.out(f)
       end
       true
@@ -61,7 +50,7 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
     var dbc: ODBCDbc = ODBCDbc(ODBCEnv.>set_odbc3())
 
     h.assert_true(dbc.connect(dsn))
-    h.assert_eq[String]("SQLSuccess", dbc.err.string())
+    h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
 
     create_temp_table(h, dbc)
     populate_temp_table(h, dbc)

@@ -4,9 +4,6 @@ use "pony_test"
 use "../env"
 use "../dbc"
 use "../stmt"
-use "../ctypes"
-use "../attributes"
-use "../instrumentation"
 
 class \nodoc\ iso _TestDatabase is UnitTest
   var dsn: String val
@@ -25,7 +22,7 @@ class \nodoc\ iso _TestDatabase is UnitTest
     h.assert_true(dbc.set_application_name("TestDatabase"))
 
     h.assert_true(dbc.connect(dsn))
-    h.assert_eq[String]("SQLSuccess", dbc.err.string())
+    h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
 
     (var r: SQLReturn val, var s: String val) = dbc.get_info(SqlDBMSName)
     h.assert_is[SQLReturn val](SQLSuccess, r)

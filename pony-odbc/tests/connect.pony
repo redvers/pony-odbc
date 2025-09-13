@@ -1,10 +1,8 @@
 use "pony_test"
 use ".."
-use "../instrumentation"
 use "../env"
 use "../dbc"
 use "../stmt"
-use "../ctypes"
 
 class \nodoc\ iso _TestConnect is UnitTest
   var dsn: String val

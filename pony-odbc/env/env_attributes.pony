@@ -1,4 +1,3 @@
-use "../instrumentation"
-
+use ".."
 type SqlEnvAttr is (SqlAttrODBCVersion | SqlAttrConnectionPooling | SqlAttrCPMatch | SqlAttrOutputNts)
 
