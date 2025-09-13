@@ -18,11 +18,6 @@ class \nodoc\ CBoxedArray
   var alloc_size: USize = 0
   var written_size: CBoxedI64 = CBoxedI64
 
-  fun ref init(str: String val): Bool =>
-    if (not alloc(str.size() + 1)) then return false end
-    write(str)
-
-
   fun ref alloc(size: USize): Bool =>
     if (not ptr.is_null()) then return false end
     ptr = @pony_alloc(@pony_ctx(), size)
@@ -48,6 +43,16 @@ class \nodoc\ CBoxedArray
     reset()
     @memcpy(ptr, str.cpointer(), str.size())
     written_size.value = str.size().i64()
+    true
+
+  fun ref write_array(arr: Array[U8] val): Bool =>
+    if (ptr.is_null()) then return false end
+    if (arr.size() > alloc_size) then
+      return false
+    end
+    reset()
+    @memcpy(ptr, arr.cpointer(), arr.size())
+    written_size.value = arr.size().i64()
     true
 
   fun array(): Array[U8] iso^ =>

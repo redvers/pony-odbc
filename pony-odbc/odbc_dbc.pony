@@ -59,7 +59,7 @@ class ODBCDbc
       _valid = false ; return false
     end
 
-  fun ref set_error_text(sqlerr: SQLError val) =>
+  fun \nodoc\ ref set_error_text(sqlerr: SQLError val) =>
     errtext =
       "ODBCDbc API Error:\n" +
       _call_location.file() + ":" + _call_location.line().string() + ": " +

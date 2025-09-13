@@ -1,16 +1,16 @@
 use "debug"
 use "stmt"
 
-class SQLVarchar is SQLType
+class SQLVarbinary is SQLType
   """
-  The internal class which represents a CHAR, VARCHAR, or TEXT
+  The internal class which represents a binary blob
   """
   var _v: CBoxedArray = CBoxedArray
   var _err: SQLReturn val = SQLSuccess
 
   new create(size: USize) => _v.alloc(size)
     """
-    Creates a SQLVarchar to be used as an input or output buffer.
+    Creates a SQLVarbinary to be used as an input or output buffer.
     """
 
   fun \nodoc\ ref get_boxed_array(): CBoxedArray => _v
@@ -19,7 +19,7 @@ class SQLVarchar is SQLType
   fun \nodoc\ ref get_err(): SQLReturn val => _err
   fun \nodoc\ ref set_err(err': SQLReturn val) => _err = err'
 
-  fun ref write(str: String val): Bool =>
+  fun ref write(str: Array[U8] val): Bool =>
     """
     Write a string to this buffer.  The string MUST fit in
     the defined buffer.
@@ -29,13 +29,13 @@ class SQLVarchar is SQLType
     Will return false if the string is too long for the buffer or
     the readback doesn't match for some other reason.
     """
-    _write(str)
+    _write_array(str)
 
 
-  fun ref read(): String iso^ =>
+  fun ref read(): Array[U8] iso^ =>
     """
     Read the value of the buffer into a String iso^. This is an iso^
     copy of the data so the buffer can remain in place and reused
     without rebinding.
     """
-    _v.string()
+    _v.array()

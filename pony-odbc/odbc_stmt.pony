@@ -24,15 +24,13 @@ class ODBCStmt
   ## Usage
 
   ```pony
-  use "../../pony-odbc"
+  use "pony-odbc"
   use "lib:odbc"
 
   actor Main
     let env: Env
-    var inb: (SQLVarchar, SQLVarchar) =
-      (SQLVarchar.>alloc(25), SQLVarchar.>alloc(100))
-    var outb: (SQLVarchar, SQLVarchar) =
-      (SQLVarchar.>alloc(25), SQLVarchar.>alloc(100))
+    var inb: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(100))
+    var outb: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(100))
 
     new create(env': Env) =>
       env = env'
@@ -53,14 +51,14 @@ class ODBCStmt
             .> bind_parameter(inb._1)?
             .> bind_parameter(inb._2)?
 
-          // Insert three good rows
-          insert_row(stm, 1, "This is my first row's string")?
-          insert_row(stm, 2, "This is my second row's string")?
+          // Insert two rows
+          inb._1.write(1); if (inb._2.write("First Row"))  then stm.execute()? end
+          inb._1.write(2); if (inb._2.write("Second Row")) then stm.execute()? end
           try
-            insert_row(stm, 2, "This will fail the uniqueness check")?
+            inb._1.write(2); if (inb._2.write("Not Unique")) then stm.execute()? end
           end
           try
-            insert_row(stm, 3, "This will fail due to the length of this string exceeding the input buffer check")?
+            inb._1.write(3); if (inb._2.write("TooLong: " + ("x"*100))) then stm.execute()? end
           end
 
           // Query our database
@@ -70,25 +68,17 @@ class ODBCStmt
             .> execute()?
 
           var i: I32 = 0 ; var s: String val = "" ; var moredata: Bool = true
-          while ((moredata, (i, s)) = fetch_row(stm)?; moredata) do
+          while (stm.fetch_scroll(SqlFetchNext)?) do
+            i = outb._1.read()?
+            s = outb._2.read()
             env.out.print("Integer: " + i.string() + ", s: " + s)
           end
-
-
         else
           env.out.print("An error was raised: ")
           env.out.print(dbc.errtext)
           env.out.print(stm.errtext)
         end
       end
-
-    fun ref insert_row(stm: ODBCStmt, integer: I32, str: String val)? =>
-      inb._1.write(integer.string())
-      inb._2.write(str)
-      stm.execute()?
-
-    fun ref fetch_row(stm: ODBCStmt): (Bool, (I32, String val)) ? =>
-      (stm.fetch_scroll(SqlFetchNext)?, (outb._1.string().i32()?, outb._2.string()))
   ```
 
   In general, please ignore the `sl: SourceLoc val` argument to all the
@@ -100,8 +90,8 @@ class ODBCStmt
   var _dbc: ODBCDbc
   var _sth: ODBCHandleStmt tag
   var _err: SQLReturn val
-  var _parameters: Array[SQLVarchar] = Array[SQLVarchar]
-  var _columns:    Array[SQLVarchar] = Array[SQLVarchar]
+  var _parameters: Array[SQLType] = Array[SQLType]
+  var _columns:    Array[SQLType] = Array[SQLType]
 
   var errtext: String val = ""
 
@@ -136,11 +126,11 @@ class ODBCStmt
       error
     end
 
-  fun ref bind_parameter(i: SQLVarchar, sl: SourceLoc val = __loc)? =>
+  fun ref bind_parameter(i: SQLType, sl: SourceLoc val = __loc)? =>
     """
     Used to bind a parameter to a prepared query.
 
-    All parameters in this API are passed via SQLVarchar objects. This object
+    All parameters in this API are passed via SQLType objects. This object
     represents a textual buffer.  You must allocate sufficient space in this
     buffer *before* you bind it to a column.
 
@@ -160,11 +150,11 @@ class ODBCStmt
       error
     end
 
-  fun ref bind_column(i: SQLVarchar, sl: SourceLoc val = __loc)? =>
+  fun ref bind_column(i: SQLType, sl: SourceLoc val = __loc)? =>
     """
     Used to bind a column in a result-set for the prepared query.
 
-    All columns in this API are received via SQLVarchar objects. This object
+    All columns in this API are received via SQLType objects. This object
     represents a textual buffer. For efficiency reasons you should allocate
     sufficient space in this buffer *before* you bind it to a column.
 
@@ -264,8 +254,8 @@ class ODBCStmt
   fun ref _check_columns(sl: SourceLoc val = __loc) ? =>
     _call_location = sl
     for (colindex, vc) in _columns.pairs() do
-      if (vc.v.written_size.value.usize() > vc.v.alloc_size) then
-        _err = vc.realloc_column(_sth, vc.v.written_size.value.usize() + 10, colindex.u16() + 1)
+      if (vc.get_boxed_array().written_size.value.usize() > vc.get_boxed_array().alloc_size) then
+        _err = vc.realloc_column(_sth, vc.get_boxed_array().written_size.value.usize() + 10, colindex.u16() + 1)
         match _err
         | let x: SQLSuccess val => None
         | let x: SQLError val => _set_error_text(x) ; error
@@ -273,7 +263,7 @@ class ODBCStmt
           error
         end
 
-        _err = ODBCStmtFFI.get_data(_sth, colindex.u16() + 1, vc.v)
+        _err = ODBCStmtFFI.get_data(_sth, colindex.u16() + 1, vc.get_boxed_array())
         match _err
         | let x: SQLSuccess val => None
         | let x: SQLError val => _set_error_text(x) ; error
@@ -293,7 +283,3 @@ class ODBCStmt
   // Used to do introspection during testing
   fun \nodoc\ get_err(): SQLReturn val => _err
 
-interface \nodoc\ SQLType
-  fun ref bind_parameter(h: ODBCHandleStmt tag, col: U16): SQLReturn val
-  fun ref bind_column(h: ODBCHandleStmt tag, col: U16, colname: String val = ""): SQLReturn val
-  fun get_err(): SQLReturn val
