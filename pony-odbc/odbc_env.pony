@@ -1,9 +1,18 @@
 use "env"
 
-class ODBCEnv
-  let odbcenv: ODBCHandleEnv tag
+class ODBCEnv is ENVTrait
+  var odbcenv: ODBCHandleEnv tag
   var _err: SQLReturn val
   var _valid: Bool = false
+
+  fun ref get_odbcenv(): ODBCHandleEnv tag => odbcenv
+  fun ref set_odbcenv(h: ODBCHandleEnv tag) => odbcenv = h
+  fun ref get_err(): SQLReturn val => _err
+  fun ref set_err(err: SQLReturn val) => _err = err
+  fun ref get_valid(): Bool => _valid
+  fun ref set_valid(valid: Bool) => _valid = valid
+
+
 
   new create() =>
     """
@@ -11,28 +20,6 @@ class ODBCEnv
     """
     (_err, odbcenv) = ODBCEnvFFI.alloc()
     _set_valid(_err)
-
-  fun ref set_odbc3(): Bool =>
-    """
-    Enables ODBC Versiion 3 support (you should do this)
-    """
-    _err = ODBCEnvFFI.set_odbc3(odbcenv)
-    _set_valid(_err)
-    _valid
-
-  fun \nodoc\ is_valid(): Bool =>
-    _valid
-
-  fun \nodoc\ ref _set_valid(sqlr: SQLReturn val): Bool =>
-    match sqlr
-    | let x: SQLSuccess val => _valid = true ; return true
-    | let x: SQLSuccessWithInfo val => _valid = true ; return true
-    else
-      _valid = false ; return false
-    end
-
-  fun get_attr(a: SqlEnvAttr): (SQLReturn val, I32) =>
-    ODBCEnvFFI.get_env_attr(odbcenv, a)
 
   fun _final() =>
     ODBCEnvFFI.free(odbcenv)

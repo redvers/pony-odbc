@@ -22,7 +22,7 @@ class \nodoc\ iso _TestConnects is UnitTest
     h.assert_false(dbc.connect("IDontExist"))
     h.assert_eq[String]("SQLError", dbc.get_err().string())
 
-    var err: SQLError val = SQLError.create_pdbc(dbc.dbc)
+    var err: SQLError val = SQLError.create_pdbc(dbc.get_dbc())
     try
       h.assert_eq[String val]("IM002", err.get_tuples()(0)?._2)
     else
@@ -33,7 +33,7 @@ class \nodoc\ iso _TestConnects is UnitTest
     h.assert_false(dbc.connect("psqlred_baddriver"))
     h.assert_eq[String]("SQLError", dbc.get_err().string())
 
-    err = SQLError.create_pdbc(dbc.dbc)
+    err = SQLError.create_pdbc(dbc.get_dbc())
     try
       h.assert_eq[String val]("01000", err.get_tuples()(0)?._2)
     else
@@ -44,7 +44,7 @@ class \nodoc\ iso _TestConnects is UnitTest
     h.assert_false(dbc.connect("psqlred_badserver"))
     h.assert_eq[String]("SQLError", dbc.get_err().string())
 
-    err = SQLError.create_pdbc(dbc.dbc)
+    err = SQLError.create_pdbc(dbc.get_dbc())
     try
       h.assert_eq[String val]("08001", err.get_tuples()(0)?._2)
     else
@@ -55,7 +55,7 @@ class \nodoc\ iso _TestConnects is UnitTest
     h.assert_false(dbc.connect("psqlred_baduser"))
     h.assert_eq[String]("SQLError", dbc.get_err().string())
 
-    err = SQLError.create_pdbc(dbc.dbc)
+    err = SQLError.create_pdbc(dbc.get_dbc())
     try
       h.assert_eq[String val]("08001", err.get_tuples()(0)?._2)
     else
@@ -66,7 +66,7 @@ class \nodoc\ iso _TestConnects is UnitTest
     h.assert_false(dbc.connect("psqlred_baddatabase"))
     h.assert_eq[String]("SQLError", dbc.get_err().string())
 
-    err = SQLError.create_pdbc(dbc.dbc)
+    err = SQLError.create_pdbc(dbc.get_dbc())
     try
       h.assert_eq[String val]("08001", err.get_tuples()(0)?._2)
     else
@@ -77,7 +77,7 @@ class \nodoc\ iso _TestConnects is UnitTest
     h.assert_false(dbc.connect("mariadb_baduser"))
     h.assert_eq[String]("SQLError", dbc.get_err().string())
 
-    err = SQLError.create_pdbc(dbc.dbc)
+    err = SQLError.create_pdbc(dbc.get_dbc())
     try
       h.assert_eq[String val]("28000", err.get_tuples()(0)?._2)
     else
@@ -88,7 +88,7 @@ class \nodoc\ iso _TestConnects is UnitTest
     h.assert_false(dbc.connect("mariadb_baddatabase"))
     h.assert_eq[String]("SQLError", dbc.get_err().string())
 
-    err = SQLError.create_pdbc(dbc.dbc)
+    err = SQLError.create_pdbc(dbc.get_dbc())
     try
       h.assert_eq[String val]("42000", err.get_tuples()(0)?._2)
     else

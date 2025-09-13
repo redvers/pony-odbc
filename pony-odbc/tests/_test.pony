@@ -35,7 +35,7 @@ actor \nodoc\ Main is TestList
     test(_TestTypeTests("sqlitedb3"))
 
   fun show_error_dbc(dbc: ODBCDbc) =>
-    var err: SQLReturn val = recover val SQLError.create_pdbc(dbc.dbc) end
+    var err: SQLReturn val = recover val SQLError.create_pdbc(dbc.get_dbc()) end
     try
       if (false) then error end
       for f in (dbc.get_err() as SQLError val).get_records().values() do

@@ -11,7 +11,7 @@ actor Main
 
     var dbc: ODBCDbc = ODBCDbc
     if (not dbc.connect("psqlred")) then
-      env.out.print(dbc.errtext)
+      env.out.print(dbc.get_errtext())
     else
       var stm: ODBCStmt = ODBCStmt(dbc)
       try
@@ -49,7 +49,7 @@ actor Main
         end
       else
         env.out.print("An error was raised: ")
-        env.out.print(dbc.errtext)
+        env.out.print(dbc.get_errtext())
         env.out.print(stm.errtext)
       end
     end

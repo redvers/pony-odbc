@@ -2,7 +2,7 @@ use "dbc"
 use "stmt"
 use "debug"
 
-class ODBCStmt
+class ODBCStmt is STMTTrait
   """
   A simple API for performing SQL queries using ODBC for maximum portability.
 
@@ -86,16 +86,30 @@ class ODBCStmt
   your application in order to enrich error reporting.
 
   """
-
   var _dbc: ODBCDbc
   var _sth: ODBCHandleStmt tag
   var _err: SQLReturn val
   var _parameters: Array[SQLType] = Array[SQLType]
   var _columns:    Array[SQLType] = Array[SQLType]
-
   var errtext: String val = ""
-
   var _call_location: SourceLoc val = __loc
+
+  fun ref get_dbc(): ODBCDbc => _dbc
+  fun ref set_dbc(dbc: ODBCDbc) => _dbc = dbc
+  fun ref get_sth(): ODBCHandleStmt tag => _sth
+  fun ref set_sth(h: ODBCHandleStmt tag) => _sth = h
+  fun ref get_err(): SQLReturn val => _err
+  fun ref set_err(sqlerr: SQLReturn val) => _err = sqlerr
+  fun ref get_parameters(): Array[SQLType] => _parameters
+  fun ref set_parameters(pin: Array[SQLType]) => _parameters = pin
+  fun ref get_columns(): Array[SQLType] => _columns
+  fun ref set_columns(pout: Array[SQLType]) => _columns = pout
+
+  fun ref get_errtext(): String val => errtext
+  fun ref set_errtext(str: String val) => errtext = str
+
+  fun ref get_call_location(): SourceLoc val => _call_location
+  fun ref set_call_location(sl: SourceLoc val) => _call_location = sl
 
   new create(dbc': ODBCDbc, sl: SourceLoc val = __loc) =>
     """
@@ -105,181 +119,6 @@ class ODBCStmt
     These handles can be recycled.
     """
     _call_location = sl
-    (_err, _sth) = ODBCStmtFFI.alloc(dbc'.dbc)
+    (_err, _sth) = ODBCStmtFFI.alloc(dbc'.get_dbc())
     _dbc = dbc'
-
-  fun ref prepare(str: String val, sl: SourceLoc val = __loc)? =>
-    """
-    Used to 'prepare' a SQL statement.
-
-    Any response from the ODBC driver other than a non-warning success will
-    result in a thrown error.
-    """
-    _call_location = sl
-    _parameters.clear()
-    _columns.clear()
-    _err = ODBCStmtFFI.prepare(_sth, str)
-    match _err
-    | let x: SQLSuccess val => None
-    | let x: SQLError val => _set_error_text(x) ; error
-    else
-      error
-    end
-
-  fun ref bind_parameter(i: SQLType, sl: SourceLoc val = __loc)? =>
-    """
-    Used to bind a parameter to a prepared query.
-
-    All parameters in this API are passed via SQLType objects. This object
-    represents a textual buffer.  You must allocate sufficient space in this
-    buffer *before* you bind it to a column.
-
-    Parameters must be bound in order.
-
-    Any response from the ODBC driver other than a non-warning success will
-    result in a thrown error.
-    """
-    _call_location = sl
-    _parameters.push(i)
-    i.bind_parameter(_sth, _parameters.size().u16())
-    _err = i.get_err()
-    match _err
-    | let x: SQLSuccess val => None
-    | let x: SQLError val => _set_error_text(x) ; error
-    else
-      error
-    end
-
-  fun ref bind_column(i: SQLType, sl: SourceLoc val = __loc)? =>
-    """
-    Used to bind a column in a result-set for the prepared query.
-
-    All columns in this API are received via SQLType objects. This object
-    represents a textual buffer. For efficiency reasons you should allocate
-    sufficient space in this buffer *before* you bind it to a column.
-
-    "Should", because this API will resize a buffer if it determines that
-    the buffer was insufficiently sized.
-
-    Columns must be bound in order.
-
-    Any response from the ODBC driver other than a non-warning success will
-    result in a thrown error.
-    """
-    _call_location = sl
-    _columns.push(i)
-    i.bind_column(_sth, _columns.size().u16())
-    _err = i.get_err()
-    match _err
-    | let x: SQLSuccess val => None
-    else
-      error
-    end
-
-  fun ref execute(sl: SourceLoc val = __loc)? =>
-    """
-    Before executing your prepared command you should populate your
-    parameters with the necessary data.
-
-    Any response from the ODBC driver other than a non-warning success will
-    result in a thrown error.
-    """
-    _call_location = sl
-    _err = ODBCStmtFFI.execute(_sth)
-    match _err
-    | let x: SQLSuccess val => None
-    | let x: SQLError val => _set_error_text(x) ; error
-    else
-      error
-    end
-
-  fun ref rowcount(sl: SourceLoc val = __loc): I64 ? =>
-    """
-    *Warning*: The ODBC standard does not mandate this function's correctness.
-
-    This call should return the number of affected rows.
-
-    Any response from the ODBC driver other than a non-warning success will
-    result in a thrown error.
-    """
-    _call_location = sl
-    var rv: CBoxedI64 = CBoxedI64
-    _err = ODBCStmtFFI.result_count(_sth, rv)
-    match _err
-    | let x: SQLSuccess val => return rv.value
-    | let x: SQLError val => _set_error_text(x) ; error
-    else
-      error
-    end
-
-  fun ref fetch_scroll(d: SqlFetchOrientation = SqlFetchNext, offset: I64 = 0, sl: SourceLoc val = __loc): Bool ? =>
-    """
-    This function causes the ODBC driver to populate your buffers with the
-    specified row of your result set. The default behaviour SqlFetchNext,
-    the next row in your result set.
-
-    Any response from the ODBC driver other than a non-warning success will
-    result in a thrown error.
-
-    This function returns `true` is there are more rows, `false` if this
-    was the last row in the set.
-    """
-    _call_location = sl
-    _err = ODBCStmtFFI.fetch_scroll(_sth, d, offset)
-    match _err
-    | let x: SQLSuccess val => true
-    | let x: SQLSuccessWithInfo val => _check_columns()? ; true
-    | let x: SQLNoData val => false
-    | let x: SQLError val => _set_error_text(x) ; error
-    else
-      error
-    end
-
-
-  fun ref finish(sl: SourceLoc val = __loc)? =>
-    """
-    Closes the cursor on a result-set.
-
-    Whether it should be used is database dependent
-    """
-    _call_location = sl
-    _err = ODBCStmtFFI.close_cursor(_sth)
-    match _err
-    | let x: SQLSuccess val => None
-    | let x: SQLError val => _set_error_text(x) ; error
-    else
-      error
-    end
-
-  fun ref _check_columns(sl: SourceLoc val = __loc) ? =>
-    _call_location = sl
-    for (colindex, vc) in _columns.pairs() do
-      if (vc.get_boxed_array().written_size.value.usize() > vc.get_boxed_array().alloc_size) then
-        _err = vc.realloc_column(_sth, vc.get_boxed_array().written_size.value.usize() + 10, colindex.u16() + 1)
-        match _err
-        | let x: SQLSuccess val => None
-        | let x: SQLError val => _set_error_text(x) ; error
-        else
-          error
-        end
-
-        _err = ODBCStmtFFI.get_data(_sth, colindex.u16() + 1, vc.get_boxed_array())
-        match _err
-        | let x: SQLSuccess val => None
-        | let x: SQLError val => _set_error_text(x) ; error
-        else
-          error
-        end
-      end
-    end
-
-  fun ref _set_error_text(sqlerr: SQLError val) =>
-    errtext =
-      "ODBCStmt API Error:\n" +
-      _call_location.file() + ":" + _call_location.line().string() + ": " +
-      _call_location.type_name() + "." + _call_location.method_name() + "()\n" +
-      "  " + sqlerr.get_err_strings()
-
-  // Used to do introspection during testing
-  fun \nodoc\ get_err(): SQLReturn val => _err
 
