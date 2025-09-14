@@ -21,9 +21,42 @@ class ODBCDbc
     (_err, dbc) = ODBCDbcFFI.alloc(_henv.odbcenv)
     _set_valid(_err)
 
+  fun ref get_autocommit(): Bool ? =>
+    (_err, var value: I32) = ODBCDbcFFI.get_attr_i32(dbc, SqlAttrAutoCommit)
+    _set_valid(_err)
+    if (value == SqlAutoCommitOn()) then return true end
+    if (value == SqlAutoCommitOff()) then return false end
+    error
+
+  fun ref set_autocommit(setting: Bool) =>
+    if (setting) then
+      _err = ODBCDbcFFI.set_attr_i32(dbc, SqlAttrAutoCommit, SqlAutoCommitOn())
+    else
+      _err = ODBCDbcFFI.set_attr_i32(dbc, SqlAttrAutoCommit, SqlAutoCommitOff())
+    end
+    _set_valid(_err)
+
   fun ref get_info(i: SQLInfoTypes, sl: SourceLoc val = __loc): (SQLReturn val, String val) =>
     _call_location = sl
     ODBCDbcFFI.get_info(dbc, i)
+
+  fun ref commit(sl: SourceLoc val = __loc): Bool =>
+    """
+    Instructs the database to commit your transaction and open a new one.
+    """
+    _call_location = sl
+    _err = ODBCDbcFFI.commit(dbc)
+    _set_valid(_err)
+    _valid
+
+  fun ref rollback(sl: SourceLoc val = __loc): Bool =>
+    """
+    Instructs the database to rollback your transaction and open a new one.
+    """
+    _call_location = sl
+    _err = ODBCDbcFFI.rollback(dbc)
+    _set_valid(_err)
+    _valid
 
 
   fun ref set_application_name(appname: String val, sl: SourceLoc val = __loc): Bool =>

@@ -1,11 +1,11 @@
 use @SQLConnect[I16](ConnectionHandle: Pointer[None] tag, ServerName: Pointer[U8] tag, NameLength1: I16, UserName: Pointer[U8] tag, NameLength2: I16, Authentication: Pointer[U8] tag, NameLength3: I16)
-use @SQLSetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, StringLength: I32)
+use @SQLSetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32, ...) //, Value: Pointer[None] tag, StringLength: I32)
 use @SQLGetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength: Pointer[I32] tag)
 use @SQLAllocHandle[I16](handletype: I16, inputhandle: Pointer[None] tag, outputhandle: Pointer[ODBCHandleDbc tag] tag)
 use @SQLFreeHandle[I16](HandleType: I16, Handle: Pointer[None] tag)
 use @SQLGetInfo[I16](ConnectionHandle: Pointer[None] tag, InfoType: U16, InfoValue: Pointer[None] tag, BufferLength: I16, StringLength: Pointer[I16] tag)
 use @SQLGetData[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, TargetValue: Pointer[None] tag, BufferLength: I64, StrLenorInd: Pointer[I64] tag)
-
+use @SQLEndTran[I16](HandleType: I16, Handle: Pointer[None] tag, CompletionType: I16)
 
 use "debug"
 use ".."
@@ -24,7 +24,29 @@ primitive \nodoc\ ODBCDbcFFI
 //use @SQLGetData[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, TargetValue: Pointer[None] tag, BufferLength: I64, StrLenorInd: Pointer[I64] tag)
 //  fun get_data(h: ODBCHandleDbc tag, col: U16, value: Varchar) =>
 
+  fun commit(h: ODBCHandleDbc tag): SQLReturn val =>
+    var rv: I16 = @SQLEndTran(2, NullablePointer[ODBCHandleDbc tag](h), 0)
+    match rv
+    | 0 => return SQLSuccess
+    | 1 => return recover val SQLSuccessWithInfo.create_pdbc(h) end
+    | 2 => return SQLStillExecuting
+    | -1 => return recover val SQLError.create_pdbc(h) end
+    | -2 => return SQLInvalidHandle
+    else
+      return recover val PonyDriverError("ODBCFFI.commit() got invalid return code: " + rv.string()) end
+    end
 
+  fun rollback(h: ODBCHandleDbc tag): SQLReturn val =>
+    var rv: I16 = @SQLEndTran(2, NullablePointer[ODBCHandleDbc tag](h), 1)
+    match rv
+    | 0 => return SQLSuccess
+    | 1 => return recover val SQLSuccessWithInfo.create_pdbc(h) end
+    | 2 => return SQLStillExecuting
+    | -1 => return recover val SQLError.create_pdbc(h) end
+    | -2 => return SQLInvalidHandle
+    else
+      return recover val PonyDriverError("ODBCFFI.commit() got invalid return code: " + rv.string()) end
+    end
 
   fun get_info(h: ODBCHandleDbc tag, infotype: SQLInfoTypes): (SQLReturn val, String val) =>
     var buffer: CBoxedArray = CBoxedArray.>alloc(4096)
@@ -58,6 +80,15 @@ primitive \nodoc\ ODBCDbcFFI
       (recover val PonyDriverError("ODBCFFI.get_attr() got invalid return code: " + rv.string()) end, value)
     end
 
+  fun set_attr_i32(h: ODBCHandleDbc tag, attrib: SqlDbcAttrI32, value': I32): SQLReturn val =>
+    var rv: I16 = @SQLSetConnectAttr[I16](NullablePointer[ODBCHandleDbc tag](h), attrib(), value', I32(0))
+    match rv
+    | 0 => return SQLSuccess
+    | -1 => return recover val SQLError.create_pdbc(h) end
+    | -2 => return SQLInvalidHandle
+    else
+      recover val PonyDriverError("ODBCFFI.set_attr_i32() got invalid return code: " + rv.string()) end
+    end
 
 
 
