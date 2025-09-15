@@ -17,7 +17,7 @@ class ODBCEnv
   ```
   """
   let odbcenv: ODBCHandleEnv tag
-  var _err: SQLReturn val
+  var _err: _SQLReturn val
   var _valid: Bool = false
 
   new create() =>
@@ -38,7 +38,7 @@ class ODBCEnv
   fun \nodoc\ is_valid(): Bool =>
     _valid
 
-  fun \nodoc\ ref _set_valid(sqlr: SQLReturn val): Bool =>
+  fun \nodoc\ ref _set_valid(sqlr: _SQLReturn val): Bool =>
     match sqlr
     | let x: SQLSuccess val => _valid = true ; return true
     | let x: SQLSuccessWithInfo val => _valid = true ; return true
@@ -46,7 +46,7 @@ class ODBCEnv
       _valid = false ; return false
     end
 
-  fun \nodoc\ get_attr(a: SqlEnvAttr): (SQLReturn val, I32) =>
+  fun \nodoc\ get_attr(a: _SqlEnvAttr): (_SQLReturn val, I32) =>
     """
     This is a primitive getter function used to retrieve i32 attributes
     from the ODBC Handle. 

@@ -15,7 +15,7 @@ primitive \nodoc\ ODBCEnvFFI
 |SQL_ATTR_OUTPUT_NTS (ODBC 3.0)|A 32-bit integer that determines how the driver returns string data. If SQL_TRUE, the driver returns string data null-terminated. If SQL_FALSE, the driver does not return string data null-terminated.<br /><br /> This attribute defaults to SQL_TRUE. A call to **SQLSetEnvAttr** to set it to SQL_TRUE returns SQL_SUCCESS. A call to **SQLSetEnvAttr** to set it to SQL_FALSE returns SQL_ERROR and SQLSTATE HYC00 (Optional feature not implemented).|
 """
 
-  fun alloc(): (SQLReturn val, ODBCHandleEnv tag) =>
+  fun alloc(): (_SQLReturn val, ODBCHandleEnv tag) =>
     """
     Returns an ODBCHandleEnv, used by the ODBC FFI calls to represent
     your environment.
@@ -32,7 +32,7 @@ primitive \nodoc\ ODBCEnvFFI
     end
 
 //use @SQLGetEnvAttr[I16](EnvironmentHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength: CBoxedI32 tag)
-  fun get_env_attr(h: ODBCHandleEnv tag, a: SqlEnvAttr): (SQLReturn val, I32) =>
+  fun get_env_attr(h: ODBCHandleEnv tag, a: _SqlEnvAttr): (_SQLReturn val, I32) =>
     var value: I32 = 76
     var rv: I16 = @SQLGetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), a(), addressof value, 0, Pointer[I32])
     match rv
@@ -44,12 +44,12 @@ primitive \nodoc\ ODBCEnvFFI
       (recover val PonyDriverError("ODBCEnvFFI.get_env_attr() got invalid return code: " + rv.string()) end, value)
     end
 
-  fun set_odbc2(h: ODBCHandleEnv tag): SQLReturn val =>
+  fun set_odbc2(h: ODBCHandleEnv tag): _SQLReturn val =>
     """
     Sets the Environment to version ODBC2.  I should probably remove this
     since I've not implemented any of those functionsi (yet).
     """
-    var rv: I16 = @SQLSetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), SqlAttrODBCVersion(), SqlODBC2(), SQLIsInteger())
+    var rv: I16 = @SQLSetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), _SqlAttrODBCVersion(), _SqlODBC2(), _SQLIsInteger())
     match rv
     | 0 => return SQLSuccess
     | 1 => return recover val SQLSuccessWithInfo.create_penv(h) end
@@ -59,12 +59,12 @@ primitive \nodoc\ ODBCEnvFFI
       recover val PonyDriverError("ODBCEnvFFI.set_odbc2() got invalid return code: " + rv.string()) end
     end
 
-  fun set_odbc3(h: ODBCHandleEnv tag): SQLReturn val =>
+  fun set_odbc3(h: ODBCHandleEnv tag): _SQLReturn val =>
     """
     Sets the Environment to version ODBC3.  You should always call
     this, since version 3 is the only one implemented thus far.
     """
-    var rv: I16 = @SQLSetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), SqlAttrODBCVersion(), SqlODBC3(), SQLIsInteger())
+    var rv: I16 = @SQLSetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), _SqlAttrODBCVersion(), _SqlODBC3(), _SQLIsInteger())
     match rv
     | 0 => return SQLSuccess
     | 1 => return recover val SQLSuccessWithInfo.create_penv(h) end

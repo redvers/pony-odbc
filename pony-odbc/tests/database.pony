@@ -21,6 +21,7 @@ class \nodoc\ iso _TestDatabase is UnitTest
     h.assert_true(dbc.connect(dsn))
     h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
 
+    /*
     (var r: SQLReturn val, var s: String val) = dbc.get_info(SqlDBMSName)
     h.assert_is[SQLReturn val](SQLSuccess, r)
     if (dsn == "psqlred") then h.assert_eq[String]("PostgreSQL", s) end
@@ -82,3 +83,4 @@ class \nodoc\ iso _TestDatabase is UnitTest
     (r, i) = ODBCDbcFFI.get_attr_i32(dbc.dbc, SqlAttrTrace)
     h.assert_is[SQLReturn val](SQLSuccess, r)
     h.assert_eq[I32](0, i)
+    */

@@ -9,14 +9,14 @@ use "debug"
 struct \nodoc\ ODBCHandleDbc
 
 primitive \nodoc\ ODBCDbcFFI
-  fun alloc(h: ODBCHandleEnv tag): (SQLReturn val, ODBCHandleDbc tag) =>
+  fun alloc(h: ODBCHandleEnv tag): (_SQLReturn val, ODBCHandleDbc tag) =>
     """
     Returns an ODBCHandleEnv, used by the ODBC FFI calls to represent a
     database connection.
     """
     ODBCDbcFFI.sql_alloc_handle(h)
 
-  fun commit(h: ODBCHandleDbc tag): SQLReturn val =>
+  fun commit(h: ODBCHandleDbc tag): _SQLReturn val =>
     var rv: I16 = @SQLEndTran(2, NullablePointer[ODBCHandleDbc tag](h), 0)
     match rv
     | 0 => return SQLSuccess
@@ -28,7 +28,7 @@ primitive \nodoc\ ODBCDbcFFI
       return recover val PonyDriverError("ODBCFFI.commit() got invalid return code: " + rv.string()) end
     end
 
-  fun rollback(h: ODBCHandleDbc tag): SQLReturn val =>
+  fun rollback(h: ODBCHandleDbc tag): _SQLReturn val =>
     var rv: I16 = @SQLEndTran(2, NullablePointer[ODBCHandleDbc tag](h), 1)
     match rv
     | 0 => return SQLSuccess
@@ -40,7 +40,7 @@ primitive \nodoc\ ODBCDbcFFI
       return recover val PonyDriverError("ODBCFFI.commit() got invalid return code: " + rv.string()) end
     end
 
-  fun get_info(h: ODBCHandleDbc tag, infotype: SQLInfoTypes): (SQLReturn val, String val) =>
+  fun get_info(h: ODBCHandleDbc tag, infotype: _SQLInfoTypes): (_SQLReturn val, String val) =>
     var buffer: CBoxedArray = CBoxedArray.>alloc(4096)
     var rv: I16 = @SQLGetInfo(NullablePointer[ODBCHandleDbc tag](h),
                               infotype(),
@@ -56,7 +56,7 @@ primitive \nodoc\ ODBCDbcFFI
       return (recover val PonyDriverError("ODBCFFI.get_info() got invalid return code: " + rv.string()) end, "")
     end
 
-  fun get_attr_i32(h: ODBCHandleDbc tag, attrib: SqlDbcAttrI32): (SQLReturn val, I32) =>
+  fun get_attr_i32(h: ODBCHandleDbc tag, attrib: _SqlDbcAttrI32): (_SQLReturn val, I32) =>
     var value: I32 = 76
     var rv: I16 = @SQLGetConnectAttr(NullablePointer[ODBCHandleDbc tag](h),
                                      attrib(),
@@ -71,7 +71,7 @@ primitive \nodoc\ ODBCDbcFFI
       (recover val PonyDriverError("ODBCFFI.get_attr() got invalid return code: " + rv.string()) end, value)
     end
 
-  fun set_attr_i32(h: ODBCHandleDbc tag, attrib: SqlDbcAttrI32, value': I32): SQLReturn val =>
+  fun set_attr_i32(h: ODBCHandleDbc tag, attrib: _SqlDbcAttrI32, value': I32): _SQLReturn val =>
     var rv: I16 = @SQLSetConnectAttr[I16](NullablePointer[ODBCHandleDbc tag](h), attrib(), value', I32(0))
     match rv
     | 0 => return SQLSuccess
@@ -81,12 +81,12 @@ primitive \nodoc\ ODBCDbcFFI
       recover val PonyDriverError("ODBCFFI.set_attr_i32() got invalid return code: " + rv.string()) end
     end
 
-  fun set_application_name(h: ODBCHandleDbc tag, s: String val): SQLReturn val =>
+  fun set_application_name(h: ODBCHandleDbc tag, s: String val): _SQLReturn val =>
     """
     Tells the ODBC driver your application name.  I'm not sure if it passes
     it to the database for all database drivers.
     """
-    var rv: I16 = @SQLSetConnectAttr[I16](NullablePointer[ODBCHandleDbc tag](h), SQLAttrApplicationName(), s.cstring(), s.size().i32())
+    var rv: I16 = @SQLSetConnectAttr[I16](NullablePointer[ODBCHandleDbc tag](h), _SQLAttrApplicationName(), s.cstring(), s.size().i32())
     match rv
     | 0 => return SQLSuccess
     | -1 => return recover val SQLError.create_pdbc(h) end
@@ -95,7 +95,7 @@ primitive \nodoc\ ODBCDbcFFI
       recover val PonyDriverError("ODBCFFI.set_application_name() got invalid return code: " + rv.string()) end
     end
 
-  fun connect(h: ODBCHandleDbc tag, dsn: String val): SQLReturn val =>
+  fun connect(h: ODBCHandleDbc tag, dsn: String val): _SQLReturn val =>
     """
     Opens the connection to the database on the provided DSN.
     """
@@ -109,7 +109,7 @@ primitive \nodoc\ ODBCDbcFFI
       recover val PonyDriverError("ODBCFFI.connect() got invalid return code: " + rv.string()) end
     end
 
-  fun sql_alloc_handle(h: ODBCHandleEnv tag): (SQLReturn val, ODBCHandleDbc tag) =>
+  fun sql_alloc_handle(h: ODBCHandleEnv tag): (_SQLReturn val, ODBCHandleDbc tag) =>
     var rv: ODBCHandleDbc tag = ODBCHandleDbc
     var rvv: I16 = @SQLAllocHandle(2, NullablePointer[ODBCHandleEnv tag](h), addressof rv)
     match rvv

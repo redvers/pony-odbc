@@ -17,7 +17,7 @@ use "debug"
 struct \nodoc\ ODBCHandleStmt
 
 primitive \nodoc\ ODBCStmtFFI
-  fun alloc(h: ODBCHandleDbc tag): (SQLReturn val, ODBCHandleStmt tag) =>
+  fun alloc(h: ODBCHandleDbc tag): (_SQLReturn val, ODBCHandleStmt tag) =>
     var rv: ODBCHandleStmt tag = ODBCHandleStmt
     var rvv: I16 = @SQLAllocHandle(3, NullablePointer[ODBCHandleDbc tag](h), addressof rv)
     match rvv
@@ -29,7 +29,7 @@ primitive \nodoc\ ODBCStmtFFI
       (recover val PonyDriverError("ODBCStmtFFI.alloc() got invalid return code: " + rvv.string()) end, rv)
     end
 
-  fun get_data(h: ODBCHandleStmt tag, col: U16, v: CBoxedArray): SQLReturn val =>
+  fun get_data(h: ODBCHandleStmt tag, col: U16, v: CBoxedArray): _SQLReturn val =>
     var rv: I16 = @SQLGetData[I16](
       NullablePointer[ODBCHandleStmt tag](h),
       col,
@@ -49,7 +49,7 @@ primitive \nodoc\ ODBCStmtFFI
       recover val PonyDriverError("ODBCEnvFFI.fetch_scroll() got invalid return code: " + rv.string()) end
     end
 
-  fun fetch_scroll(h: ODBCHandleStmt tag, d: SqlFetchOrientation, offset: I64 = 0): SQLReturn val =>
+  fun fetch_scroll(h: ODBCHandleStmt tag, d: SqlFetchOrientation, offset: I64 = 0): _SQLReturn val =>
     """
     SQLFetchScroll fetches the specified rowset of data from the result set and returns data for all bound columns. Rowsets can be specified at an absolute or relative position or by bookmark.
     """
@@ -65,7 +65,7 @@ primitive \nodoc\ ODBCStmtFFI
       recover val PonyDriverError("ODBCEnvFFI.fetch_scroll() got invalid return code: " + rv.string()) end
     end
 
-  fun prepare(h: ODBCHandleStmt tag, str: String val): SQLReturn val =>
+  fun prepare(h: ODBCHandleStmt tag, str: String val): _SQLReturn val =>
     """
     Prepares the provided SQL Statement.
     """
@@ -81,7 +81,7 @@ primitive \nodoc\ ODBCStmtFFI
     end
 
 // use @SQLExecDirect[I16](StatementHandle: Pointer[None] tag, StatementText: Pointer[U8] tag, TextLength: I32)
-  fun exec_direct(h: ODBCHandleStmt tag, query: String val): SQLReturn val =>
+  fun exec_direct(h: ODBCHandleStmt tag, query: String val): _SQLReturn val =>
     var rv: I16 =  @SQLExecDirect[I16](NullablePointer[ODBCHandleStmt tag](h), query.cstring(), query.size().i32())
     match rv
     | 0 => return SQLSuccess
@@ -96,7 +96,7 @@ primitive \nodoc\ ODBCStmtFFI
 
 
 
-  fun execute(h: ODBCHandleStmt tag): SQLReturn val =>
+  fun execute(h: ODBCHandleStmt tag): _SQLReturn val =>
     """
     Executes the provided SQL statement.
     
@@ -123,7 +123,7 @@ primitive \nodoc\ ODBCStmtFFI
     end
     recover val PonyDriverError("ODBCHandleStmt.execute() get invalid return code: " + rv.string()) end
 /*
-  fun describe_param(h: ODBCHandleStmt tag, i: SQLDescribeParamOut): SQLReturn val =>
+  fun describe_param(h: ODBCHandleStmt tag, i: SQLDescribeParamOut): _SQLReturn val =>
     """
     Used to query the parameter provided in the prepared statement so
     the database driver can validate that the correct fields have been
@@ -149,7 +149,7 @@ primitive \nodoc\ ODBCStmtFFI
     end
 
     */
-  fun bind_parameter_varchar(h: ODBCHandleStmt tag, col: U16, v: CBoxedArray): SQLReturn val => // FIXME Refactor time
+  fun bind_parameter_varchar(h: ODBCHandleStmt tag, col: U16, v: CBoxedArray): _SQLReturn val => // FIXME Refactor time
     """
     Binds a varchar, or similar variable type to a parameter.
     """
@@ -179,7 +179,7 @@ primitive \nodoc\ ODBCStmtFFI
     end
 
 /*
-  fun bind_parameter_i32(h: ODBCHandleStmt tag, desc: SQLDescribeParamOut, v: CBoxedI32): SQLReturn val => // FIXME Refactor time
+  fun bind_parameter_i32(h: ODBCHandleStmt tag, desc: SQLDescribeParamOut, v: CBoxedI32): _SQLReturn val => // FIXME Refactor time
     """
     Binds a varchar, or similar variable type to a parameter.
     """
@@ -209,7 +209,7 @@ primitive \nodoc\ ODBCStmtFFI
     end
 */
 /*
-  fun describe_column(h: ODBCHandleStmt tag, fillme: SQLDescribeColOut, colname: String val): SQLReturn val =>
+  fun describe_column(h: ODBCHandleStmt tag, fillme: SQLDescribeColOut, colname: String val): _SQLReturn val =>
 /*
   SQLHSTMT       StatementHandle,
   SQLUSMALLINT   ColumnNumber,
@@ -248,7 +248,7 @@ primitive \nodoc\ ODBCStmtFFI
       recover val PonyDriverError("ODBCHandleStmt.describe_column() get invalid return code: " + rv.string()) end
     end
 */
-  fun bind_column_varchar(h: ODBCHandleStmt tag, col: U16, v: CBoxedArray): SQLReturn val =>
+  fun bind_column_varchar(h: ODBCHandleStmt tag, col: U16, v: CBoxedArray): _SQLReturn val =>
 /*SQLRETURN SQLBindCol(
       SQLHSTMT       StatementHandle,
       SQLUSMALLINT   ColumnNumber,
@@ -277,7 +277,7 @@ primitive \nodoc\ ODBCStmtFFI
       recover val PonyDriverError("ODBCHandleStmt.bind_column_varchar() get invalid return code: " + rv.string()) end
     end
 /*
-  fun bind_column_i32(h: ODBCHandleStmt tag, desc: SQLDescribeColOut, v: CBoxedI32): SQLReturn val =>
+  fun bind_column_i32(h: ODBCHandleStmt tag, desc: SQLDescribeColOut, v: CBoxedI32): _SQLReturn val =>
 /*SQLRETURN SQLBindCol(
       SQLHSTMT       StatementHandle,
       SQLUSMALLINT   ColumnNumber,
@@ -307,7 +307,7 @@ primitive \nodoc\ ODBCStmtFFI
     end
 */
     /*
-  fun bind_column_i32(h: ODBCHandleStmt tag, desc: SQLDescribeColOut, v: CBoxedI32): SQLReturn val =>
+  fun bind_column_i32(h: ODBCHandleStmt tag, desc: SQLDescribeColOut, v: CBoxedI32): _SQLReturn val =>
 
 /*SQLRETURN SQLBindCol(
       SQLHSTMT       StatementHandle,
@@ -342,7 +342,7 @@ primitive \nodoc\ ODBCStmtFFI
 
 
 
-  fun get_type_info(h: ODBCHandleStmt tag, dt: I16): SQLReturn val =>
+  fun get_type_info(h: ODBCHandleStmt tag, dt: I16): _SQLReturn val =>
     var rv: I16 = @SQLGetTypeInfo(NullablePointer[ODBCHandleStmt tag](h), dt)
     match rv
     | 0 => return SQLSuccess
@@ -355,7 +355,7 @@ primitive \nodoc\ ODBCStmtFFI
     end
 
 
-  fun fetch(h: ODBCHandleStmt tag): SQLReturn val =>
+  fun fetch(h: ODBCHandleStmt tag): _SQLReturn val =>
     """
     SQL_SUCCESS
     SQL_SUCCESS_WITH_INFO
@@ -377,7 +377,7 @@ primitive \nodoc\ ODBCStmtFFI
     recover val PonyDriverError("ODBCHandleStmt.fetch() get invalid return code: " + rv.string()) end
 
 //use @SQLNumResultCols[I16](StatementHandle: Pointer[None] tag, ColumnCount: CBoxedI16 tag)
-  fun result_count(h: ODBCHandleStmt tag, colcnt: CBoxedI64): SQLReturn val =>
+  fun result_count(h: ODBCHandleStmt tag, colcnt: CBoxedI64): _SQLReturn val =>
     var rv: I16 = @SQLRowCount[I16](NullablePointer[ODBCHandleStmt tag](h), colcnt)
     match rv
     | 0 => return SQLSuccess
@@ -391,7 +391,7 @@ primitive \nodoc\ ODBCStmtFFI
     recover val PonyDriverError("ODBCHandleStmt.result_count() get invalid return code: " + rv.string()) end
 
     // use @SQLCloseCursor[I16](StatementHandle: Pointer[None] tag)
-  fun close_cursor(h: ODBCHandleStmt tag): SQLReturn val =>
+  fun close_cursor(h: ODBCHandleStmt tag): _SQLReturn val =>
     var rv: I16 = @SQLCloseCursor(NullablePointer[ODBCHandleStmt tag](h))
     match rv
     | 0 => return SQLSuccess
