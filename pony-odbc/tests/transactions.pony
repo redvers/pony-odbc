@@ -20,16 +20,11 @@ class \nodoc\ iso _TestTransactions is UnitTest
     h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
 
     h.assert_true(dbc.get_autocommit()?)
-    showerr(dbc.get_err())
     dbc.set_autocommit(false)
-    showerr(dbc.get_err())
     h.assert_false(dbc.get_autocommit()?)
-    showerr(dbc.get_err())
     dbc.set_autocommit(true)
-    showerr(dbc.get_err())
     h.assert_true(dbc.get_autocommit()?)
     dbc.set_autocommit(false)
-    showerr(dbc.get_err())
     h.assert_false(dbc.get_autocommit()?)
 
     create_temp_table(h, dbc)
@@ -48,12 +43,7 @@ class \nodoc\ iso _TestTransactions is UnitTest
       .>prepare("create temporary table transactiontest (i integer, s varchar(100))")?
       .>execute()?
     else
-      Debug.out("Something in there failed")
-      try
-        for f in (stm.get_err() as SQLError val).get_records().values() do
-          h.fail(f)
-        end
-      end
+      h.fail(stm.errtext)
     end
 
   fun populate_temp_table(h: TestHelper, dbc: ODBCDbc) =>
@@ -71,11 +61,7 @@ class \nodoc\ iso _TestTransactions is UnitTest
         stm.execute()?
       end
     else
-      try
-        for f in (stm.get_err() as SQLError val).get_records().values() do
-          h.fail(f)
-        end
-      end
+      h.fail(stm.errtext)
     end
 
   fun query_test_rowcounts(h: TestHelper, dbc: ODBCDbc) =>
@@ -108,13 +94,7 @@ class \nodoc\ iso _TestTransactions is UnitTest
       end
       stm.finish()?
     else
-      try
-        for f in (stm.get_err() as SQLError val).get_records().values() do
-          h.fail(f)
-        end
-      else
-        Debug.out("Got err as: " + stm.get_err().string())
-      end
+      h.fail(stm.errtext)
     end
 
   fun query_test_under_allocation(h: TestHelper, dbc: ODBCDbc) =>
@@ -142,23 +122,9 @@ class \nodoc\ iso _TestTransactions is UnitTest
         end
         stm.finish()?
       else
-        try
-          for f in (stm.get_err() as SQLSuccessWithInfo val).get_records().values() do
-            h.fail(f)
-          end
-        end
+        h.fail(stm.errtext)
       end
     else
-      try
-        for f in (stm.get_err() as SQLError val).get_records().values() do
-          h.fail(f)
-        end
-      else
-        Debug.out("Got err as: " + stm.get_err().string())
-      end
+      h.fail(stm.errtext)
     end
 
-  fun showerr(r: SQLReturn val) =>
-    match r
-    | let x: SQLError val => Debug.out(x.get_err_strings())
-    end

@@ -228,7 +228,7 @@ class ODBCStmt
     _err = ODBCStmtFFI.fetch_scroll(_sth, d, offset)
     match _err
     | let x: SQLSuccess val => true
-    | let x: SQLSuccessWithInfo val => _check_columns()? ; true
+    | let x: SQLSuccessWithInfo val => _check_and_expand_column_buffers()?; true
     | let x: SQLNoData val => false
     | let x: SQLError val => _set_error_text(x) ; error
     else
@@ -251,7 +251,7 @@ class ODBCStmt
       error
     end
 
-  fun ref _check_columns(sl: SourceLoc val = __loc) ? =>
+  fun ref _check_and_expand_column_buffers(sl: SourceLoc val = __loc) ? =>
     _call_location = sl
     for (colindex, vc) in _columns.pairs() do
       if (vc.get_boxed_array().written_size.value.usize() > vc.get_boxed_array().alloc_size) then
