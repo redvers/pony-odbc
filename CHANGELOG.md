@@ -12,12 +12,3 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Changed
 
-
-## [0.0.2] - 2025-09-15
-
-## [0.0.1] - 2025-09-15
-
-### Added
-
-- Added files required for release. ([PR #27](https://github.com/redvers/pony-odbc/pull/27))
-
