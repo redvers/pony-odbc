@@ -38,13 +38,3 @@ actor \nodoc\ Main is TestList
     test(_TestTransactions("mariadb"))
     test(_TestTransactions("sqlitedb3"))
 
-  fun show_error_dbc(dbc: ODBCDbc) =>
-    var err: SQLReturn val = recover val SQLError.create_pdbc(dbc.dbc) end
-    try
-      if (false) then error end
-      for f in (dbc.get_err() as SQLError val).get_records().values() do
-        Debug.out(f)
-      end
-      true
-    end
-

@@ -52,12 +52,7 @@ class \nodoc\ iso _TestTypeTests is UnitTest
         .>execute()?
       end
     else
-      Debug.out("Something in there failed")
-      try
-        for f in (stm.get_err() as SQLError val).get_records().values() do
-          h.fail(f)
-        end
-      end
+      h.fail(stm.errtext)
     end
 
   fun populate_temp_table(h: TestHelper, dbc: ODBCDbc) =>
@@ -85,11 +80,7 @@ class \nodoc\ iso _TestTypeTests is UnitTest
         stm.execute()?
       end
     else
-      try
-        for f in (stm.get_err() as SQLError val).get_records().values() do
-          h.fail(f)
-        end
-      end
+      h.fail(stm.errtext)
     end
 
   fun query_test_rowcounts(h: TestHelper, dbc: ODBCDbc) =>
@@ -127,13 +118,7 @@ class \nodoc\ iso _TestTypeTests is UnitTest
       end
       stm.finish()?
     else
-      try
-        for f in (stm.get_err() as SQLError val).get_records().values() do
-          h.fail(f)
-        end
-      else
-        Debug.out("Got err as: " + stm.get_err().string())
-      end
+      h.fail(stm.errtext)
     end
 
   fun query_test_under_allocation(h: TestHelper, dbc: ODBCDbc) =>
@@ -165,26 +150,12 @@ class \nodoc\ iso _TestTypeTests is UnitTest
           h.assert_eq[F32]((cntr.f32()+0.5), poutb._4.read()?)
           h.assert_eq[F64]((cntr.f64()+0.5), poutb._5.read()?)
           h.assert_eq[String](cntr.string(), poutb._6.read())
-//          h.assert_eq[USize](6, poutb._7.read().size())
-//          h.assert_eq[I32](cntr, poutb._7.read()?)
           cntr = cntr + 1
-//        pina._4.write((f.f32() * 0.332).f32())
-//        pina._5.write((f.f64() * 0.00332).f64())
         end
         stm.finish()?
       else
-        try
-          for f in (stm.get_err() as SQLSuccessWithInfo val).get_records().values() do
-            h.fail(f)
-          end
-        end
+        h.fail(stm.errtext)
       end
     else
-      try
-        for f in (stm.get_err() as SQLError val).get_records().values() do
-          h.fail(f)
-        end
-      else
-        Debug.out("Got err as: " + stm.get_err().string())
-      end
+      h.fail(stm.errtext)
     end

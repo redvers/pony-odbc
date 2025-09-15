@@ -17,13 +17,11 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
     var dbc: ODBCDbc = ODBCDbc(ODBCEnv.>set_odbc3())
 
     h.assert_true(dbc.connect(dsn))
-    h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
 
     create_temp_table(h, dbc)
     populate_temp_table(h, dbc)
     query_test_rowcounts(h, dbc)
     query_test_under_allocation(h, dbc)
-
 
   fun create_temp_table(h: TestHelper, dbc: ODBCDbc) =>
     var stm: ODBCStmt = ODBCStmt(dbc)
@@ -32,12 +30,8 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
       .>prepare("create temporary table odbthingtest (i integer, s varchar(100))")?
       .>execute()?
     else
-      Debug.out("Something in there failed")
-      try
-        for f in (stm.get_err() as SQLError val).get_records().values() do
-          h.fail(f)
-        end
-      end
+      Debug.out("create_temp_table(): " + stm.errtext)
+      h.fail(stm.errtext)
     end
 
   fun populate_temp_table(h: TestHelper, dbc: ODBCDbc) =>
@@ -55,11 +49,8 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
         stm.execute()?
       end
     else
-      try
-        for f in (stm.get_err() as SQLError val).get_records().values() do
-          h.fail(f)
-        end
-      end
+      Debug.out("populate_temp_table(): " + stm.errtext)
+      h.fail(stm.errtext)
     end
 
   fun query_test_rowcounts(h: TestHelper, dbc: ODBCDbc) =>
@@ -92,13 +83,8 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
       end
       stm.finish()?
     else
-      try
-        for f in (stm.get_err() as SQLError val).get_records().values() do
-          h.fail(f)
-        end
-      else
-        Debug.out("Got err as: " + stm.get_err().string())
-      end
+      Debug.out("query_test_rowcounts(): " + stm.errtext)
+      h.fail(stm.errtext)
     end
 
   fun query_test_under_allocation(h: TestHelper, dbc: ODBCDbc) =>
@@ -126,18 +112,10 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
         end
         stm.finish()?
       else
-        try
-          for f in (stm.get_err() as SQLSuccessWithInfo val).get_records().values() do
-            h.fail(f)
-          end
-        end
+      Debug.out("query_test_under_allocation(): " + stm.errtext)
+        h.fail(stm.errtext)
       end
     else
-      try
-        for f in (stm.get_err() as SQLError val).get_records().values() do
-          h.fail(f)
-        end
-      else
-        Debug.out("Got err as: " + stm.get_err().string())
-      end
+      Debug.out("query_test_under_allocation() the second: " + stm.errtext)
+      h.fail(stm.errtext)
     end
