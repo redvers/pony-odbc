@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Added
 
+- Enabled release notification for Zulip & LWIP ([PR #28](https://github.com/redvers/pony-odbc/pull/28))
 
 ### Changed
+
 
