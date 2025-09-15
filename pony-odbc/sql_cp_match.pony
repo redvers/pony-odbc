@@ -1,4 +1,3 @@
-use ".."
 primitive \nodoc\ SqlAttrCPMatch fun apply(): I32 => 202
   fun string(): String val => "SqlAttrCPMatch"
   fun id(i: I32): (SqlCPMatch | PonyDriverError val) =>

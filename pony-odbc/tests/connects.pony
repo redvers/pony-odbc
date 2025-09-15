@@ -2,9 +2,6 @@ use "debug"
 use "pony_test"
 use "format"
 use ".."
-use "../env"
-use "../dbc"
-use "../stmt"
 
 class \nodoc\ iso _TestConnects is UnitTest
   fun name(): String val => "_TestConnects"

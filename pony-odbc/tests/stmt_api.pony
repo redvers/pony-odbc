@@ -2,9 +2,6 @@ use "debug"
 use "lib:odbc"
 use "pony_test"
 use ".."
-use "../env"
-use "../dbc"
-use "../stmt"
 use "collections"
 
 class \nodoc\ iso _TestStmtAPI is UnitTest

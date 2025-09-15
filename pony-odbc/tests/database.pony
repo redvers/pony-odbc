@@ -1,9 +1,6 @@
 use "debug"
 use ".."
 use "pony_test"
-use "../env"
-use "../dbc"
-use "../stmt"
 
 class \nodoc\ iso _TestDatabase is UnitTest
   var dsn: String val

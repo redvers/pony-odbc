@@ -1,4 +1,3 @@
-use ".."
 primitive \nodoc\ SqlAttrOutputNts fun apply(): I32 => 10001
   fun string(): String val => "SqlAttrOutputNts"
   fun id(i: I32): (SqlBool | PonyDriverError val) =>

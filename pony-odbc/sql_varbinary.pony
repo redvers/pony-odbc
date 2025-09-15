@@ -1,5 +1,4 @@
 use "debug"
-use "stmt"
 
 class SQLVarbinary is SQLType
   """

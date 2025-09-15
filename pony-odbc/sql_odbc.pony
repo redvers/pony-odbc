@@ -1,5 +1,3 @@
-use ".."
-
 primitive \nodoc\ SqlAttrODBCVersion fun apply(): I32 => 200
   fun string(): String val => "SqlAttrODBCVersion"
   fun id(i: I32): (SqlODBC | PonyDriverError val) =>

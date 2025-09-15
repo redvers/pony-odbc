@@ -1,10 +1,7 @@
 use @SQLSetEnvAttr[I16](henv: Pointer[None] tag, attr: I32, v: I32, sl: I32)
 use @SQLGetEnvAttr[I16](EnvironmentHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength: Pointer[I32] tag)
-use @SQLAllocHandle[I16](handletype: I16, inputhandle: Pointer[None] tag, outputhandle: Pointer[ODBCHandleEnv tag] tag)
-use @SQLFreeHandle[I16](HandleType: I16, Handle: Pointer[None] tag)
 
 use "debug"
-use ".."
 
 struct \nodoc\ ODBCHandleEnv
 
