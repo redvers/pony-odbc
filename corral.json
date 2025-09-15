@@ -2,11 +2,11 @@
   "packages": [ "pony-odbc" ],
   "deps": [],
   "info": {
-    "description": "",
-    "homepage": "",
+    "description": "Pony API for ODBC",
+    "homepage": "https://github.com/redvers/pony-odbc",
     "license": "",
-    "documentation_url": "",
-    "version": "",
-    "name": ""
+    "documentation_url": "https://redvers.github.io/pony-odbc",
+    "version": "0.0.1",
+    "name": "pony-odbc"
   }
 }
