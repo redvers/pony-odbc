@@ -7,17 +7,12 @@ use @SQLFetch[I16](StatementHandle: Pointer[None] tag)
 use @SQLGetTypeInfo[I16](StatementHandle: Pointer[None] tag, DataType: I16)
 use @SQLDescribeParam[I16](hstmt: Pointer[None] tag, ipar: U16, pfSqlType: CBoxedI16 tag, pcbParamDef: CBoxedU64 tag, pibScale: CBoxedI16 tag, pfNullable: CBoxedI16 tag)
 use @SQLDescribeCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, ColumnName: Pointer[U8] tag, BufferLength: I16, NameLength: CBoxedI16, DataType: CBoxedI16 tag, ColumnSize: CBoxedU64 tag, DecimalDigits: CBoxedI16 tag, Nullable: CBoxedI16 tag)
-use @SQLBindCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, ...) //TargetValue: Pointer[U8] tag, BufferLength: I64, StrLenorInd: CBoxedI64 tag)
+use @SQLBindCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, TargetValue: Pointer[U8] tag, BufferLength: I64, StrLenorInd: CBoxedI64 tag)
 use @SQLRowCount[I16](StatementHandle: Pointer[None] tag, RowCount: CBoxedI64 tag)
 use @SQLCloseCursor[I16](StatementHandle: Pointer[None] tag)
-use @SQLAllocHandle[I16](handletype: I16, inputhandle: Pointer[None] tag, outputhandle: Pointer[ODBCHandleStmt tag] tag)
-use @SQLFreeHandle[I16](HandleType: I16, Handle: Pointer[None] tag)
 use @SQLFetchScroll[I16](StatementHandle: Pointer[None] tag, FetchOrientation: I16, FetchOffset: I64)
-use @SQLGetData[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, TargetValue: Pointer[None] tag, BufferLength: I64, StrLenorInd: CBoxedI64 tag)
 
 use "debug"
-use ".."
-use "../dbc"
 
 struct \nodoc\ ODBCHandleStmt
 

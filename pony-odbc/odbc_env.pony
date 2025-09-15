@@ -1,13 +1,28 @@
-use "env"
-
 class ODBCEnv
+  """
+  # ODBCEnv
+
+  The class that wraps our ODBC Environment handle.
+
+  ## Usage
+
+  It is currently very simple as very few of the attributes are implemented
+  as of yet.
+  
+  Currently, we only support ODBC version 3.0.
+
+  ```pony
+  var oenv: ODBCEnv = ODBCEnv
+    .> set_odbc3()
+  ```
+  """
   let odbcenv: ODBCHandleEnv tag
   var _err: SQLReturn val
   var _valid: Bool = false
 
   new create() =>
     """
-    Creates a new PostgreSQL Environment
+    Creates a new ODBC Environment
     """
     (_err, odbcenv) = ODBCEnvFFI.alloc()
     _set_valid(_err)
@@ -31,7 +46,11 @@ class ODBCEnv
       _valid = false ; return false
     end
 
-  fun get_attr(a: SqlEnvAttr): (SQLReturn val, I32) =>
+  fun \nodoc\ get_attr(a: SqlEnvAttr): (SQLReturn val, I32) =>
+    """
+    This is a primitive getter function used to retrieve i32 attributes
+    from the ODBC Handle. 
+    """
     ODBCEnvFFI.get_env_attr(odbcenv, a)
 
   fun _final() =>

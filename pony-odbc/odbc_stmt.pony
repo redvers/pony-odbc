@@ -1,90 +1,128 @@
-use "dbc"
-use "stmt"
 use "debug"
 
 class ODBCStmt
   """
   A simple API for performing SQL queries using ODBC for maximum portability.
 
-  **THIS API WILL CHANGE**
-
   This is a *synchronous* API so its use should bear that in mind. An
   asynchronous API will follow later.
 
   ## Prerequisites
 
-  This API handles queries.  Before you can execute a query, you need to
-  connect to a database.  Before you can connect to a database, you need an
-  optional Environment.
+  This API handles queries. Before you can execute a query, you need to
+  connect to a database. Before you can connect to a database, you need an
+  Environment.
 
   See the documentation of ODBCDbc and ODBCEnv for more detail one what
-  these two objects are and how they are used.  The example below is
+  these two objects are and how they are used. The example below is
   barebones for those objects.
 
   ## Usage
 
+  The simplest case is when your query doesn't take any parameters or
+  return a data set.  For example, a table creation.  In this case,
+  we can simply prepare the statement and directly execute it:
+
   ```pony
-  use "pony-odbc"
-  use "lib:odbc"
+  var stm: ODBCStmt = ODBCStmt(dbc)
 
-  actor Main
-    let env: Env
-    var inb: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(100))
-    var outb: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(100))
-
-    new create(env': Env) =>
-      env = env'
-
-      var dbc: ODBCDbc = ODBCDbc
-      if (not dbc.connect("psqlred")) then
-        env.out.print(dbc.errtext)
-      else
-        var stm: ODBCStmt = ODBCStmt(dbc)
-        try
-          // Create a demo table
-          stm
-          .> prepare("create temporary table hello_world (i integer unique, s varchar(40))")?
-          .> execute()?
-
-          // Prepare your statement to insert values
-          stm .> prepare("insert into hello_world (i, s) values (?, ?)")?
-            .> bind_parameter(inb._1)?
-            .> bind_parameter(inb._2)?
-
-          // Insert two rows
-          inb._1.write(1); if (inb._2.write("First Row"))  then stm.execute()? end
-          inb._1.write(2); if (inb._2.write("Second Row")) then stm.execute()? end
-          try
-            inb._1.write(2); if (inb._2.write("Not Unique")) then stm.execute()? end
-          end
-          try
-            inb._1.write(3); if (inb._2.write("TooLong: " + ("x"*100))) then stm.execute()? end
-          end
-
-          // Query our database
-          stm .> prepare("select * from hello_world")?
-            .> bind_column(outb._1)?
-            .> bind_column(outb._2)?
-            .> execute()?
-
-          var i: I32 = 0 ; var s: String val = "" ; var moredata: Bool = true
-          while (stm.fetch_scroll(SqlFetchNext)?) do
-            i = outb._1.read()?
-            s = outb._2.read()
-            env.out.print("Integer: " + i.string() + ", s: " + s)
-          end
-        else
-          env.out.print("An error was raised: ")
-          env.out.print(dbc.errtext)
-          env.out.print(stm.errtext)
-        end
-      end
+  stm
+    .> prepare("create table demotable (myint integer unique, mystr varchar(400))")?
+    .> execute()?
   ```
 
-  In general, please ignore the `sl: SourceLoc val` argument to all the
-  functions. They are automatically populated with the call site from
-  your application in order to enrich error reporting.
+  ### Inserting Data
 
+  In order to insert data into this table we prepare the `insert into` SQL
+  statement and provide the values (parameters) to be inserted into the
+  columns, later. In our statement, we use `?` as placeholders for these
+  values:
+
+  ```pony
+  stm
+    .> prepare("insert into demotable (myint, mystr) values (?,?)")?
+  ```
+
+  A prepared statement can be executed any number of times, but each
+  execution will likely have different values to be populated for each row.
+
+  So before we can pass values to our prepared statement, we have to
+  create pony objects to represent them. In our table above we have
+  a SQLInteger (I32), and a SQLVarchar(400). For some types we have to
+  specify the size of the buffer, for others such as SQLInteger, we
+  don't as their sizes are known.
+
+  ```pony
+  var myint: SQLInteger = SQLInteger
+  var mystr: SQLVarchar = SQLVarchar(400)
+  ```
+
+  NOTE: If your buffer is too small, your statement will fail.
+
+  Once defined we bind them to the correct parameter by adding them
+  in order:
+
+  ```pony
+  stm.bind_parameter(myint)?
+  stm.bind_parameter(mystr)?
+  ```
+
+  The prepared statement can now be executed any number of times. In this
+  example we'll execute it ten times:
+
+  ```
+  for cnt in Range[I32](1,10) do
+    myint.write(cnt)
+    mystr.write("This is a string with a number: " + cnt.string())
+
+    stm.execute()?
+  end
+  ```
+
+  ### Querying Data
+
+  In order to query data, we `prepare` and `bind_parameters` as before:
+
+  ```pony
+  var intin: SQLInteger = SQLInteger
+  stm
+    .> prepare("select myint, mystr from demotable where myint > ?")?
+    .> bind_parameter(intin)?
+  ```
+
+  But we also need to provide buffers for output:
+
+  ```pony
+  var intout: SQLInteger = SQLInteger
+  var strout: SQLVarchar = SQLVarchar(400)
+
+  stm
+    .> bind_column(intout)?
+    .> bind_column(strout)?
+  ```
+
+  Once these buffers are all allocated, we can execute our query:
+
+  ```pony
+  intin.write(8)
+  while (stm.fetch_scroll(SqlFetchNext)?) do
+    Debug.out("myint: " + intout.read()?.string() +
+              "mystr: " + strout.read())
+  end
+  ```
+
+  ## Handling Errors
+
+  In this API, we use partial functions in all our functions to indicate
+  if a call failed. If a call failed, we can determine why by examining
+  the contents of the field errtext.
+
+  ## Notes
+
+  Some rough edges:
+    - This is a synchronous API. This could cause you problems. It is however
+      a prerequisite for an asynchronous API which is better suited to pony.
+    - The API is likely to change.
   """
 
   var _dbc: ODBCDbc

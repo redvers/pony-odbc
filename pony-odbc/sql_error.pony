@@ -1,10 +1,6 @@
 use "debug"
 use "collections"
 
-use "env"
-use "dbc"
-use "stmt"
-
 class SQLError
   var _location: SourceLoc val = __loc
   var _records: Array[(I16, SQLDiagFrame)] = Array[(I16, SQLDiagFrame)]

@@ -1,4 +1,3 @@
-use ".."
 primitive \nodoc\ SqlAttrConnectionPooling fun apply(): I32 => 201
   fun string(): String val => "SqlAttrConnectionPooling"
   fun id(i: I32): (SqlCP | PonyDriverError val) =>

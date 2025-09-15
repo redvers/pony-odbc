@@ -1,5 +1,3 @@
-use "stmt"
-
 trait SQLType
   """
   The most portable implementation of ODBC when reading and writing across

@@ -1,10 +1,6 @@
 use "debug"
 use "collections"
 
-use "env"
-use "dbc"
-use "stmt"
-
 class SQLSuccessWithInfo
   var _locations: SourceLoc val = __loc
   var _records: Array[(I16, SQLDiagFrame)] = Array[(I16, SQLDiagFrame)]

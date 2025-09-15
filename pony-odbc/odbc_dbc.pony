@@ -1,7 +1,33 @@
 use "debug"
-use "dbc"
 
 class ODBCDbc
+  """
+  # ODBCDbc
+
+  The class that wraps our ODBC Database handle.
+
+  ## Usage
+
+  ```pony
+  var env: ODBCEnv = ODBCEnv .> set_odbc3()
+  var dbc: ODBCDbc = ODBCDbc(env)
+
+  // Disable autocommit, set application name, and connect to database
+  try
+    dbc
+    .> set_autocommit(false)         // Disable Autocommit
+    .> set_application_name("myapp") // Set application name
+    .> connect("mydsn")              // Connect to DSN "mydsn"
+  else
+    Debug.out("We failed, here's our errors:")
+    Debug.out(dbc.errtext)
+  end
+  ```
+
+  An example that demonstrates `.commit()` and `.rollback()` will be
+  documented in ODBCStmt as that requires an appropriate context to
+  make sense.
+  """
   let dbc: ODBCHandleDbc tag
   let _henv: ODBCEnv
   var _err: SQLReturn val
