@@ -1,5 +1,7 @@
 {
-  "packages": [ "pony-odbc" ],
+  "packages": [
+    "pony-odbc"
+  ],
   "deps": [],
   "info": {
     "description": "Pony API for ODBC",
