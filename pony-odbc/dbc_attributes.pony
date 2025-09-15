@@ -1,21 +1,21 @@
-primitive \nodoc\ SQLAttrApplicationName    fun apply(): I32 => 1051
+primitive \nodoc\ _SQLAttrApplicationName    fun apply(): I32 => 1051
 
-type SqlDbcAttrI32 is (SqlAttrAccessMode
-                     | SqlAttrAutoCommit
-                     | SqlAttrTrace
-                     | SqlAttrTraceFile)
+type _SqlDbcAttrI32 is (_SqlAttrAccessMode
+                     | _SqlAttrAutoCommit
+                     | _SqlAttrTrace
+                     | _SqlAttrTraceFile)
 
-primitive \nodoc\ SqlAttrAccessMode fun apply(): I32 => 101
-primitive \nodoc\ SqlAttrAutoCommit fun apply(): I32 => 102
-primitive \nodoc\ SqlAttrTrace fun apply(): I32 => 104
-primitive \nodoc\ SqlAttrTraceFile fun apply(): I32 => 105
+primitive \nodoc\ _SqlAttrAccessMode fun apply(): I32 => 101
+primitive \nodoc\ _SqlAttrAutoCommit fun apply(): I32 => 102
+primitive \nodoc\ _SqlAttrTrace fun apply(): I32 => 104
+primitive \nodoc\ _SqlAttrTraceFile fun apply(): I32 => 105
 
 
-primitive \nodoc\ SqlAutoCommitOff fun apply(): I32 => 0
-primitive \nodoc\ SqlAutoCommitOn fun apply(): I32 => 1
+primitive \nodoc\ _SqlAutoCommitOff fun apply(): I32 => 0
+primitive \nodoc\ _SqlAutoCommitOn fun apply(): I32 => 1
 
-primitive \nodoc\ SqlTraceOff fun apply(): I32 => 0
-primitive \nodoc\ SqlTraceOn fun apply(): I32 => 1
+primitive \nodoc\ _SqlTraceOff fun apply(): I32 => 0
+primitive \nodoc\ _SqlTraceOn fun apply(): I32 => 1
 
 
 /*

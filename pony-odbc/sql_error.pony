@@ -1,7 +1,7 @@
 use "debug"
 use "collections"
 
-class SQLError
+class \nodoc\ SQLError
   var _location: SourceLoc val = __loc
   var _records: Array[(I16, SQLDiagFrame)] = Array[(I16, SQLDiagFrame)]
 

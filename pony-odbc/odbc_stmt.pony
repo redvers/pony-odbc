@@ -127,7 +127,7 @@ class ODBCStmt
 
   var _dbc: ODBCDbc
   var _sth: ODBCHandleStmt tag
-  var _err: SQLReturn val
+  var _err: _SQLReturn val
   var _parameters: Array[SQLType] = Array[SQLType]
   var _columns:    Array[SQLType] = Array[SQLType]
 
@@ -319,5 +319,5 @@ class ODBCStmt
       "  " + sqlerr.get_err_strings()
 
   // Used to do introspection during testing
-  fun \nodoc\ get_err(): SQLReturn val => _err
+  fun \nodoc\ get_err(): _SQLReturn val => _err
 

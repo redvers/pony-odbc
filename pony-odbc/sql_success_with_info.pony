@@ -1,7 +1,7 @@
 use "debug"
 use "collections"
 
-class SQLSuccessWithInfo
+class \nodoc\ SQLSuccessWithInfo
   var _locations: SourceLoc val = __loc
   var _records: Array[(I16, SQLDiagFrame)] = Array[(I16, SQLDiagFrame)]
 

@@ -5,15 +5,15 @@ class SQLSmallInteger is SQLType
   The internal class which represents an Integer (I16)
   """
   var _v: CBoxedArray = CBoxedArray
-  var _err: SQLReturn val = SQLSuccess
+  var _err: _SQLReturn val = SQLSuccess
 
   new create() => _v.alloc(8)
 
   fun \nodoc\ ref get_boxed_array(): CBoxedArray => _v
   fun \nodoc\ ref set_boxed_array(v': CBoxedArray) => _v = v'
 
-  fun \nodoc\ ref get_err(): SQLReturn val => _err
-  fun \nodoc\ ref set_err(err': SQLReturn val) => _err = err'
+  fun \nodoc\ ref get_err(): _SQLReturn val => _err
+  fun \nodoc\ ref set_err(err': _SQLReturn val) => _err = err'
 
   fun ref write(i16: I16): Bool =>
     """

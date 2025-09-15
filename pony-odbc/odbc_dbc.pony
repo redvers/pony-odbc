@@ -30,7 +30,7 @@ class ODBCDbc
   """
   let dbc: ODBCHandleDbc tag
   let _henv: ODBCEnv
-  var _err: SQLReturn val
+  var _err: _SQLReturn val
   var _valid: Bool = true
 
   var errtext: String val = ""
@@ -48,21 +48,21 @@ class ODBCDbc
     _set_valid(_err)
 
   fun ref get_autocommit(): Bool ? =>
-    (_err, var value: I32) = ODBCDbcFFI.get_attr_i32(dbc, SqlAttrAutoCommit)
+    (_err, var value: I32) = ODBCDbcFFI.get_attr_i32(dbc, _SqlAttrAutoCommit)
     _set_valid(_err)
-    if (value == SqlAutoCommitOn()) then return true end
-    if (value == SqlAutoCommitOff()) then return false end
+    if (value == _SqlAutoCommitOn()) then return true end
+    if (value == _SqlAutoCommitOff()) then return false end
     error
 
   fun ref set_autocommit(setting: Bool) =>
     if (setting) then
-      _err = ODBCDbcFFI.set_attr_i32(dbc, SqlAttrAutoCommit, SqlAutoCommitOn())
+      _err = ODBCDbcFFI.set_attr_i32(dbc, _SqlAttrAutoCommit, _SqlAutoCommitOn())
     else
-      _err = ODBCDbcFFI.set_attr_i32(dbc, SqlAttrAutoCommit, SqlAutoCommitOff())
+      _err = ODBCDbcFFI.set_attr_i32(dbc, _SqlAttrAutoCommit, _SqlAutoCommitOff())
     end
     _set_valid(_err)
 
-  fun ref get_info(i: SQLInfoTypes, sl: SourceLoc val = __loc): (SQLReturn val, String val) =>
+  fun ref get_info(i: _SQLInfoTypes, sl: SourceLoc val = __loc): (_SQLReturn val, String val) =>
     _call_location = sl
     ODBCDbcFFI.get_info(dbc, i)
 
@@ -107,7 +107,7 @@ class ODBCDbc
 
   fun \nodoc\ is_valid(): Bool => _valid
 
-  fun \nodoc\ ref _set_valid(sqlr: SQLReturn val): Bool =>
+  fun \nodoc\ ref _set_valid(sqlr: _SQLReturn val): Bool =>
     match sqlr
     | let x: SQLSuccess val => _valid = true ; return true
     | let x: SQLSuccessWithInfo val => _valid = true ; return true
@@ -129,4 +129,4 @@ class ODBCDbc
     ODBCDbcFFI.free(dbc)
 
   // Present only for introspection during tests
-  fun \nodoc\ get_err(): SQLReturn val => _err
+  fun \nodoc\ get_err(): _SQLReturn val => _err
