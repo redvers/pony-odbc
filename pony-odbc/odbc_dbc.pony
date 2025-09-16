@@ -34,6 +34,7 @@ class ODBCDbc
   var _valid: Bool = true
 
   var errtext: String val = ""
+  var latest_sqlstate: String val = ""
 
   var _call_location: SourceLoc val = __loc
 
@@ -119,6 +120,7 @@ class ODBCDbc
     end
 
   fun \nodoc\ ref set_error_text(sqlerr: SQLError val) =>
+    latest_sqlstate = sqlerr.latest_sqlstate()
     errtext =
       "ODBCDbc API Error:\n" +
       _call_location.file() + ":" + _call_location.line().string() + ": " +

@@ -132,6 +132,7 @@ class ODBCStmt
   var _columns:    Array[SQLType] = Array[SQLType]
 
   var errtext: String val = ""
+  var latest_sqlstate: String val = ""
 
   var _call_location: SourceLoc val = __loc
 
@@ -312,6 +313,7 @@ class ODBCStmt
     end
 
   fun ref _set_error_text(sqlerr: SQLError val) =>
+    latest_sqlstate = sqlerr.latest_sqlstate()
     errtext =
       "ODBCStmt API Error:\n" +
       _call_location.file() + ":" + _call_location.line().string() + ": " +
