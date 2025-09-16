@@ -11,6 +11,8 @@ use @SQLBindCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, Targ
 use @SQLRowCount[I16](StatementHandle: Pointer[None] tag, RowCount: CBoxedI64 tag)
 use @SQLCloseCursor[I16](StatementHandle: Pointer[None] tag)
 use @SQLFetchScroll[I16](StatementHandle: Pointer[None] tag, FetchOrientation: I16, FetchOffset: I64)
+use @SQLGetStmtAttr[I16](StatementHandle: Pointer[None] tag, Attribute: I32, Value: CBoxedI32 tag, BufferLength: I32, StringLength: Pointer[I32] tag)
+use @SQLSetStmtAttr[I16](StatementHandle: Pointer[None] tag, Attribute: I32, ...) //Value: Pointer[None] tag, StringLength: I32)
 
 use "debug"
 
@@ -353,6 +355,37 @@ primitive \nodoc\ ODBCStmtFFI
     else
       recover val PonyDriverError("ODBCHandleStmt.get_type_info() get invalid return code: " + rv.string()) end
     end
+
+  fun get_attr_i32(h: ODBCHandleStmt tag, attrib: _SqlStmtAttrI32, value: CBoxedI32): _SQLReturn val =>
+    var rv: I16 = @SQLGetStmtAttr(
+      NullablePointer[ODBCHandleStmt tag](h),
+      attrib(),
+      value,
+      0,
+      Pointer[I32])
+    match rv
+    | 0 => return SQLSuccess
+    | -1 => return recover val SQLError.create_pstmt(h) end
+    | -2 => return SQLInvalidHandle
+    else
+      recover val PonyDriverError("ODBCStmtFFI.get_attr_i32() got invalid return code: " + rv.string()) end
+    end
+
+  fun set_attr_i32(h: ODBCHandleStmt tag, attrib: _SqlStmtAttrI32, value': I32): _SQLReturn val =>
+    var rv: I16 = @SQLSetStmtAttr[I16](
+      NullablePointer[ODBCHandleStmt tag](h),
+          attrib(),
+          value',
+          I32(0))
+    match rv
+    | 0 => return SQLSuccess
+    | 1 => return recover val SQLSuccessWithInfo.create_pstmt(h) end
+    | -1 => return recover val SQLError.create_pstmt(h) end
+    | -2 => return SQLInvalidHandle
+    else
+      recover val PonyDriverError("ODBCStmtFFI.set_attr_i32() got invalid return code: " + rv.string()) end
+    end
+
 
 
   fun fetch(h: ODBCHandleStmt tag): _SQLReturn val =>

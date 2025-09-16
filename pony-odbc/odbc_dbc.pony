@@ -55,11 +55,26 @@ class ODBCDbc
     if (value == _SqlAutoCommitOff()) then return false end
     error
 
+  fun ref get_async(): Bool ? =>
+    (_err, var value: I32) = ODBCDbcFFI.get_attr_i32(dbc, _SqlAttrAsyncEnable)
+    _set_valid(_err)
+    if (value == 1) then return true end
+    if (value == 0) then return false end
+    error
+
   fun ref set_autocommit(setting: Bool) =>
     if (setting) then
       _err = ODBCDbcFFI.set_attr_i32(dbc, _SqlAttrAutoCommit, _SqlAutoCommitOn())
     else
       _err = ODBCDbcFFI.set_attr_i32(dbc, _SqlAttrAutoCommit, _SqlAutoCommitOff())
+    end
+    _set_valid(_err)
+
+  fun ref set_async(setting: Bool) =>
+    if (setting) then
+      _err = ODBCDbcFFI.set_attr_i32(dbc, _SqlAttrAsyncEnable, 1)
+    else
+      _err = ODBCDbcFFI.set_attr_i32(dbc, _SqlAttrAsyncEnable, 0)
     end
     _set_valid(_err)
 

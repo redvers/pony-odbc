@@ -1,0 +1,1 @@
+type _SqlStmtAttrI32 is _SqlAttrAsyncEnable

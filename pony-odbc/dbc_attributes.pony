@@ -1,10 +1,12 @@
 primitive \nodoc\ _SQLAttrApplicationName    fun apply(): I32 => 1051
 
-type _SqlDbcAttrI32 is (_SqlAttrAccessMode
-                     | _SqlAttrAutoCommit
-                     | _SqlAttrTrace
-                     | _SqlAttrTraceFile)
+type _SqlDbcAttrI32 is ( _SqlAttrAsyncEnable
+                       | _SqlAttrAccessMode
+                       | _SqlAttrAutoCommit
+                       | _SqlAttrTrace
+                       | _SqlAttrTraceFile)
 
+primitive \nodoc\ _SqlAttrAsyncEnable fun apply(): I32 => 4
 primitive \nodoc\ _SqlAttrAccessMode fun apply(): I32 => 101
 primitive \nodoc\ _SqlAttrAutoCommit fun apply(): I32 => 102
 primitive \nodoc\ _SqlAttrTrace fun apply(): I32 => 104

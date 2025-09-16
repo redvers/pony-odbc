@@ -274,6 +274,31 @@ class ODBCStmt
       error
     end
 
+  fun ref get_async_enable(): Bool ? =>
+    var i: CBoxedI32 = CBoxedI32
+    _err = ODBCStmtFFI.get_attr_i32(_sth, _SqlAttrAsyncEnable, i)
+    match _err
+    | let x: SQLSuccess =>
+      if (i.value == 1) then return true end
+      if (i.value == 0) then return false end
+      error
+    | let x: SQLError val => _err = x
+      _set_error_text(x)
+    end
+    error
+
+  fun ref set_async(setting: Bool) ? =>
+    if (setting) then
+      _err = ODBCStmtFFI.set_attr_i32(_sth, _SqlAttrAsyncEnable, 1)
+    else
+      _err = ODBCStmtFFI.set_attr_i32(_sth, _SqlAttrAsyncEnable, 0)
+    end
+    match _err
+    | let x: SQLSuccess => None
+    | let x: SQLError val => _err = x
+      _set_error_text(x)
+    end
+    error
 
   fun ref finish(sl: SourceLoc val = __loc)? =>
     """

@@ -2,7 +2,7 @@ use "debug"
 use "collections"
 
 class \nodoc\ SQLSuccessWithInfo
-  var _locations: SourceLoc val = __loc
+  var _location: SourceLoc val = __loc
   var _records: Array[(I16, SQLDiagFrame)] = Array[(I16, SQLDiagFrame)]
 
   fun string(): String val => "SQLSuccessWithInfo"
@@ -79,4 +79,9 @@ class \nodoc\ SQLSuccessWithInfo
       rv.push(f.rec_tuple())
     end
     consume rv
+
+  fun get_err_strings(): String val =>
+//    _location.type_name() + "." +
+//    _location.method_name() + "() returned the following error from ODBC\n\n" +
+    "\n".join(get_records().values())
 

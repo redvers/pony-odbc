@@ -56,3 +56,4 @@ class ODBCEnv
   fun _final() =>
     ODBCEnvFFI.free(odbcenv)
 
+  fun get_err(): _SQLReturn val => _err
