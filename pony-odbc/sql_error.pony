@@ -34,7 +34,7 @@ class \nodoc\ SQLError
       end
     end
 
-  new \nodoc\ create_pstmt(htype: ODBCHandleStmt tag, sl: SourceLoc val = __loc) =>
+  new \nodoc\ create_pstmt(htype: ODBCHandleStmt tag, sl: SourceLoc val = __loc) => None
     _location = sl
     for num in Range[I16](1,1024) do
       try

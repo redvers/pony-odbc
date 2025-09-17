@@ -10,20 +10,26 @@ class \nodoc\ iso _TestTypeTests is UnitTest
   new create(dsn': String val) => dsn = dsn'
 
   fun apply(h: TestHelper) =>
-    var dbc: ODBCDbc = ODBCDbc(ODBCEnv.>set_odbc3())
+    var env: ODBCEnv = ODBCEnv
+    try
+      env.set_odbc3()?
+      var dbc: ODBCDbc = env.dbc()?
 
-    h.assert_true(dbc.connect(dsn))
-    h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
+      h.assert_true(dbc.connect(dsn)?)
+      h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
 
-    create_temp_table(h, dbc)
-    populate_temp_table(h, dbc)
-    query_test_rowcounts(h, dbc)
-    query_test_under_allocation(h, dbc)
+      create_temp_table(h, dbc)
+      populate_temp_table(h, dbc)
+      query_test_rowcounts(h, dbc)
+      query_test_under_allocation(h, dbc)
+    else
+      h.fail("We failed in here")
+    end
 
 
   fun create_temp_table(h: TestHelper, dbc: ODBCDbc) =>
-    var stm: ODBCStmt = ODBCStmt(dbc)
     try
+      var stm: ODBCStmt = dbc.stmt()?
       if (dsn == "psqlred") then
         stm
         .>prepare("create temporary table typetest (" +
@@ -48,13 +54,13 @@ class \nodoc\ iso _TestTypeTests is UnitTest
         .>execute()?
       end
     else
-      h.fail(stm.errtext)
+      h.fail("Failed in create_temp_table")
     end
 
   fun populate_temp_table(h: TestHelper, dbc: ODBCDbc) =>
-    var stm: ODBCStmt = ODBCStmt(dbc)
     var pina: (SQLSmallInteger, SQLInteger, SQLBigInteger, SQLFloat, SQLReal, SQLVarchar, SQLVarbinary) = (SQLSmallInteger, SQLInteger, SQLBigInteger, SQLFloat, SQLReal, SQLVarchar(100), SQLVarbinary(100))
     try
+      var stm: ODBCStmt = dbc.stmt()?
       stm
       .>prepare("insert into typetest values (?,?,?,?,?,?,?)")?
       .>bind_parameter(pina._1)?
@@ -76,14 +82,14 @@ class \nodoc\ iso _TestTypeTests is UnitTest
         stm.execute()?
       end
     else
-      h.fail(stm.errtext)
+      h.fail("Failed in populate_temp_table")
     end
 
   fun query_test_rowcounts(h: TestHelper, dbc: ODBCDbc) =>
     var pinb: SQLSmallInteger = SQLSmallInteger
     var poutb: (SQLSmallInteger, SQLInteger, SQLBigInteger, SQLFloat, SQLReal, SQLVarchar, SQLVarbinary) = (SQLSmallInteger, SQLInteger, SQLBigInteger, SQLFloat, SQLReal, SQLVarchar(100), SQLVarbinary(100))
-    var stm: ODBCStmt = ODBCStmt(dbc)
     try
+      var stm: ODBCStmt = dbc.stmt()?
       stm.prepare("select * from typetest where si >= ?")?
       stm.bind_parameter(pinb)?
       stm.bind_column(poutb._1)?
@@ -114,14 +120,14 @@ class \nodoc\ iso _TestTypeTests is UnitTest
       end
       stm.finish()?
     else
-      h.fail(stm.errtext)
+      h.fail("Failed in query_test_rowcounts")
     end
 
   fun query_test_under_allocation(h: TestHelper, dbc: ODBCDbc) =>
     var pinb: SQLInteger = SQLInteger
     var poutb: (SQLSmallInteger, SQLInteger, SQLBigInteger, SQLFloat, SQLReal, SQLVarchar, SQLVarbinary) = (SQLSmallInteger, SQLInteger, SQLBigInteger, SQLFloat, SQLReal, SQLVarchar(100), SQLVarbinary(100))
-    var stm: ODBCStmt = ODBCStmt(dbc)
     try
+      var stm: ODBCStmt = dbc.stmt()?
       stm.prepare("select * from typetest where ii >= ?")?
       stm.bind_parameter(pinb)?
       stm.bind_column(poutb._1)?
@@ -150,8 +156,8 @@ class \nodoc\ iso _TestTypeTests is UnitTest
         end
         stm.finish()?
       else
-        h.fail(stm.errtext)
+        h.fail("Failed in query_test_under_allocation (A)")
       end
     else
-      h.fail(stm.errtext)
+      h.fail("Failed in query_test_under_allocation (B)")
     end

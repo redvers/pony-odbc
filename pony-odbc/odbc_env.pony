@@ -1,4 +1,6 @@
-class ODBCEnv
+use "debug"
+
+class ODBCEnv is SqlState
   """
   # ODBCEnv
 
@@ -17,41 +19,51 @@ class ODBCEnv
   ```
   """
   let odbcenv: ODBCHandleEnv tag
+  var strict: Bool = true
   var _err: _SQLReturn val
-  var _valid: Bool = false
 
   new create() =>
     """
     Creates a new ODBC Environment
     """
     (_err, odbcenv) = ODBCEnvFFI.alloc()
-    _set_valid(_err)
 
-  fun ref set_odbc3(): Bool =>
+  fun dbc(): ODBCDbc ? =>
+    ODBCDbc(odbcenv)?
+
+  fun sqlstates(): Array[(String val, String val)] val =>
+    _from_env(odbcenv)
+
+  fun ref set_odbc3(): Bool ? =>
     """
     Enables ODBC Versiion 3 support (you should do this)
     """
     _err = ODBCEnvFFI.set_odbc3(odbcenv)
-    _set_valid(_err)
-    _valid
+    _check_valid()?
 
-  fun \nodoc\ is_valid(): Bool =>
-    _valid
-
-  fun \nodoc\ ref _set_valid(sqlr: _SQLReturn val): Bool =>
-    match sqlr
-    | let x: SQLSuccess val => _valid = true ; return true
-    | let x: SQLSuccessWithInfo val => _valid = true ; return true
+  fun \nodoc\ ref _check_valid(): Bool ? =>
+    if strict then
+      match _err
+      | let x: SQLSuccess val => return true
+      else
+        error
+      end
     else
-      _valid = false ; return false
+      match _err
+      | let x: SQLSuccess val => return true
+      | let x: SQLSuccessWithInfo val => return true
+      else
+        error
+      end
     end
 
-  fun \nodoc\ get_attr(a: _SqlEnvAttr): (_SQLReturn val, I32) =>
+  fun \nodoc\ ref get_attr(a: _SqlEnvAttr, v: CBoxedI32) ? =>
     """
     This is a primitive getter function used to retrieve i32 attributes
     from the ODBC Handle. 
     """
-    ODBCEnvFFI.get_env_attr(odbcenv, a)
+    _err = ODBCEnvFFI.get_env_attr(odbcenv, a, v)
+    _check_valid()?
 
   fun _final() =>
     ODBCEnvFFI.free(odbcenv)

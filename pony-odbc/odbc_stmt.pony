@@ -1,6 +1,6 @@
 use "debug"
 
-class ODBCStmt
+class ODBCStmt is SqlState
   """
   A simple API for performing SQL queries using ODBC for maximum portability.
 
@@ -125,29 +125,33 @@ class ODBCStmt
     - The API is likely to change.
   """
 
-  var _dbc: ODBCDbc
+  var _env: ODBCHandleEnv tag
+  var _dbh: ODBCHandleDbc tag
   var _sth: ODBCHandleStmt tag
   var _err: _SQLReturn val
   var _parameters: Array[SQLType] = Array[SQLType]
   var _columns:    Array[SQLType] = Array[SQLType]
-
-  var errtext: String val = ""
-  var latest_sqlstate: String val = ""
+  var strict: Bool = true
 
   var _call_location: SourceLoc val = __loc
 
-  new create(dbc': ODBCDbc, sl: SourceLoc val = __loc) =>
+  new create(env': ODBCHandleEnv tag, dbh': ODBCHandleDbc tag, sl: SourceLoc val = __loc) ? =>
     """
     This constructor creates a new ODBCStmt instance which represents in the
     ODBC API an abstraction of an ODBC Statement Handle.
 
     These handles can be recycled.
     """
+    _env = env'
+    _dbh = dbh'
     _call_location = sl
-    (_err, _sth) = ODBCStmtFFI.alloc(dbc'.dbc)
-    _dbc = dbc'
+    (_err, _sth) = ODBCStmtFFI.alloc(_dbh)
+    _check_valid()?
 
-  fun ref prepare(str: String val, sl: SourceLoc val = __loc)? =>
+  fun sqlstates(): Array[(String val, String val)] val =>
+    _from_stmt(_sth)
+
+  fun ref prepare(str: String val, sl: SourceLoc val = __loc) ? =>
     """
     Used to 'prepare' a SQL statement.
 
@@ -158,14 +162,9 @@ class ODBCStmt
     _parameters.clear()
     _columns.clear()
     _err = ODBCStmtFFI.prepare(_sth, str)
-    match _err
-    | let x: SQLSuccess val => None
-    | let x: SQLError val => _set_error_text(x) ; error
-    else
-      error
-    end
+    _check_valid()?
 
-  fun ref bind_parameter(i: SQLType, sl: SourceLoc val = __loc)? =>
+  fun ref bind_parameter(i: SQLType, sl: SourceLoc val = __loc) ? =>
     """
     Used to bind a parameter to a prepared query.
 
@@ -182,14 +181,9 @@ class ODBCStmt
     _parameters.push(i)
     i.bind_parameter(_sth, _parameters.size().u16())
     _err = i.get_err()
-    match _err
-    | let x: SQLSuccess val => None
-    | let x: SQLError val => _set_error_text(x) ; error
-    else
-      error
-    end
+    _check_valid()?
 
-  fun ref bind_column(i: SQLType, sl: SourceLoc val = __loc)? =>
+  fun ref bind_column(i: SQLType, sl: SourceLoc val = __loc) ? =>
     """
     Used to bind a column in a result-set for the prepared query.
 
@@ -209,13 +203,9 @@ class ODBCStmt
     _columns.push(i)
     i.bind_column(_sth, _columns.size().u16())
     _err = i.get_err()
-    match _err
-    | let x: SQLSuccess val => None
-    else
-      error
-    end
+    _check_valid()?
 
-  fun ref execute(sl: SourceLoc val = __loc)? =>
+  fun ref execute(sl: SourceLoc val = __loc) ? =>
     """
     Before executing your prepared command you should populate your
     parameters with the necessary data.
@@ -225,12 +215,7 @@ class ODBCStmt
     """
     _call_location = sl
     _err = ODBCStmtFFI.execute(_sth)
-    match _err
-    | let x: SQLSuccess val => None
-    | let x: SQLError val => _set_error_text(x) ; error
-    else
-      error
-    end
+    _check_valid()?
 
   fun ref rowcount(sl: SourceLoc val = __loc): I64 ? =>
     """
@@ -244,12 +229,8 @@ class ODBCStmt
     _call_location = sl
     var rv: CBoxedI64 = CBoxedI64
     _err = ODBCStmtFFI.result_count(_sth, rv)
-    match _err
-    | let x: SQLSuccess val => return rv.value
-    | let x: SQLError val => _set_error_text(x) ; error
-    else
-      error
-    end
+    _check_valid()?
+    rv.value
 
   fun ref fetch_scroll(d: SqlFetchOrientation = SqlFetchNext, offset: I64 = 0, sl: SourceLoc val = __loc): Bool ? =>
     """
@@ -269,13 +250,12 @@ class ODBCStmt
     | let x: SQLSuccess val => true
     | let x: SQLSuccessWithInfo val => _check_and_expand_column_buffers()?; true
     | let x: SQLNoData val => false
-    | let x: SQLError val => _set_error_text(x) ; error
     else
       error
     end
 
 
-  fun ref finish(sl: SourceLoc val = __loc)? =>
+  fun ref finish(sl: SourceLoc val = __loc) ? =>
     """
     Closes the cursor on a result-set.
 
@@ -283,43 +263,36 @@ class ODBCStmt
     """
     _call_location = sl
     _err = ODBCStmtFFI.close_cursor(_sth)
-    match _err
-    | let x: SQLSuccess val => None
-    | let x: SQLError val => _set_error_text(x) ; error
-    else
-      error
-    end
+    _check_valid()?
 
   fun ref _check_and_expand_column_buffers(sl: SourceLoc val = __loc) ? =>
     _call_location = sl
     for (colindex, vc) in _columns.pairs() do
       if (vc.get_boxed_array().written_size.value.usize() > vc.get_boxed_array().alloc_size) then
         _err = vc.realloc_column(_sth, vc.get_boxed_array().written_size.value.usize() + 10, colindex.u16() + 1)
-        match _err
-        | let x: SQLSuccess val => None
-        | let x: SQLError val => _set_error_text(x) ; error
-        else
-          error
-        end
+        _check_valid()?
 
         _err = ODBCStmtFFI.get_data(_sth, colindex.u16() + 1, vc.get_boxed_array())
-        match _err
-        | let x: SQLSuccess val => None
-        | let x: SQLError val => _set_error_text(x) ; error
-        else
-          error
-        end
+        _check_valid()?
       end
     end
 
-  fun ref _set_error_text(sqlerr: SQLError val) =>
-    latest_sqlstate = sqlerr.latest_sqlstate()
-    errtext =
-      "ODBCStmt API Error:\n" +
-      _call_location.file() + ":" + _call_location.line().string() + ": " +
-      _call_location.type_name() + "." + _call_location.method_name() + "()\n" +
-      "  " + sqlerr.get_err_strings()
-
   // Used to do introspection during testing
   fun \nodoc\ get_err(): _SQLReturn val => _err
+
+  fun \nodoc\ ref _check_valid(): Bool ? =>
+    if strict then
+      match _err
+      | let x: SQLSuccess val => return true
+      else
+        error
+      end
+    else
+      match _err
+      | let x: SQLSuccess val => return true
+      | let x: SQLSuccessWithInfo val => return true
+      else
+        error
+      end
+    end
 
