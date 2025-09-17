@@ -8,18 +8,19 @@ class \nodoc\ iso _TestDatabase is UnitTest
 
   new create(dsn': String val) => dsn = dsn'
 
-  fun apply(h: TestHelper) =>
-    var e: ODBCEnv = ODBCEnv
-    h.assert_true(e.is_valid())
-    h.assert_true(e.set_odbc3())
-    h.assert_true(e.is_valid())
+  fun apply(h: TestHelper) ? =>
+    var env: ODBCEnv = ODBCEnv
+    try
+      env.set_odbc3()?
+      var dbc: ODBCDbc = env.dbc()?
+      h.assert_true(dbc.set_application_name("TestDatabase")?)
 
-    var dbc: ODBCDbc = ODBCDbc(e)
-    h.assert_true(dbc.is_valid())
-    h.assert_true(dbc.set_application_name("TestDatabase"))
-
-    h.assert_true(dbc.connect(dsn))
-    h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
+      h.assert_true(dbc.connect(dsn)?)
+      h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
+    else
+      h.fail("Yeah - we failed")
+      error
+    end
 
     /*
     (var r: SQLReturn val, var s: String val) = dbc.get_info(SqlDBMSName)

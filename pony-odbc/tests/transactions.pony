@@ -10,43 +10,49 @@ class \nodoc\ iso _TestTransactions is UnitTest
 
   new create(dsn': String val) => dsn = dsn'
 
-  fun apply(h: TestHelper) ? =>
-    var dbc: ODBCDbc = ODBCDbc(ODBCEnv.>set_odbc3())
+  fun apply(h: TestHelper) =>
+    var env: ODBCEnv = ODBCEnv
+    try
+      env.set_odbc3()?
+      var dbc: ODBCDbc = env.dbc()?
 
-    h.assert_true(dbc.connect(dsn))
-    h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
+      h.assert_true(dbc.connect(dsn)?)
+      h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
 
-    h.assert_true(dbc.get_autocommit()?)
-    dbc.set_autocommit(false)
-    h.assert_false(dbc.get_autocommit()?)
-    dbc.set_autocommit(true)
-    h.assert_true(dbc.get_autocommit()?)
-    dbc.set_autocommit(false)
-    h.assert_false(dbc.get_autocommit()?)
+      h.assert_true(dbc.get_autocommit()?)
+      dbc.set_autocommit(false)?
+      h.assert_false(dbc.get_autocommit()?)
+      dbc.set_autocommit(true)?
+      h.assert_true(dbc.get_autocommit()?)
+      dbc.set_autocommit(false)?
+      h.assert_false(dbc.get_autocommit()?)
 
-    create_temp_table(h, dbc)
-    h.assert_true(dbc.commit())
-    populate_temp_table(h, dbc)
-    h.assert_true(dbc.rollback())
-    populate_temp_table(h, dbc)
-    query_test_rowcounts(h, dbc)
-    query_test_under_allocation(h, dbc)
+      create_temp_table(h, dbc)
+      h.assert_true(dbc.commit()?)
+      populate_temp_table(h, dbc)
+      h.assert_true(dbc.rollback()?)
+      populate_temp_table(h, dbc)
+      query_test_rowcounts(h, dbc)
+      query_test_under_allocation(h, dbc)
+    else
+      h.fail("We failed in here")
+    end
 
 
   fun create_temp_table(h: TestHelper, dbc: ODBCDbc) =>
-    var stm: ODBCStmt = ODBCStmt(dbc)
     try
+      var stm: ODBCStmt = dbc.stmt()?
       stm
       .>prepare("create temporary table transactiontest (i integer, s varchar(100))")?
       .>execute()?
     else
-      h.fail(stm.errtext)
+      h.fail("We failed in create_temp_table")
     end
 
   fun populate_temp_table(h: TestHelper, dbc: ODBCDbc) =>
-    var stm: ODBCStmt = ODBCStmt(dbc)
     var pina: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(101))
     try
+      var stm: ODBCStmt = dbc.stmt()?
       stm
       .>prepare("insert into transactiontest (i, s) values (?,?)")?
       .>bind_parameter(pina._1)?
@@ -58,14 +64,14 @@ class \nodoc\ iso _TestTransactions is UnitTest
         stm.execute()?
       end
     else
-      h.fail(stm.errtext)
+      h.fail("We failed in populate_temp_table")
     end
 
   fun query_test_rowcounts(h: TestHelper, dbc: ODBCDbc) =>
     var pinb: SQLInteger = SQLInteger
     var poutb: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(101))
-    var stm: ODBCStmt = ODBCStmt(dbc)
     try
+      var stm: ODBCStmt = dbc.stmt()?
       stm.prepare("select * from transactiontest where i >= ?")?
       stm.bind_parameter(pinb)?
       stm.bind_column(poutb._1)?
@@ -91,14 +97,14 @@ class \nodoc\ iso _TestTransactions is UnitTest
       end
       stm.finish()?
     else
-      h.fail(stm.errtext)
+      h.fail("We failed in query_test_rowcounts")
     end
 
   fun query_test_under_allocation(h: TestHelper, dbc: ODBCDbc) =>
     var pinb: SQLInteger = SQLInteger
     var poutb: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(3))
-    var stm: ODBCStmt = ODBCStmt(dbc)
     try
+      var stm: ODBCStmt = dbc.stmt()?
       stm.prepare("select * from transactiontest where i >= ?")?
       stm.bind_parameter(pinb)?
       stm.bind_column(poutb._1)?
@@ -119,9 +125,9 @@ class \nodoc\ iso _TestTransactions is UnitTest
         end
         stm.finish()?
       else
-        h.fail(stm.errtext)
+        h.fail("We failed in query_test_under_allocation (A)")
       end
     else
-      h.fail(stm.errtext)
+      h.fail("We failed in query_test_under_allocation (B)")
     end
 

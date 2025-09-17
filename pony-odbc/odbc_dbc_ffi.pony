@@ -3,6 +3,7 @@ use @SQLSetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32,
 use @SQLGetConnectAttr[I16](ConnectionHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength: Pointer[I32] tag)
 use @SQLGetInfo[I16](ConnectionHandle: Pointer[None] tag, InfoType: U16, InfoValue: Pointer[None] tag, BufferLength: I16, StringLength: Pointer[I16] tag)
 use @SQLEndTran[I16](HandleType: I16, Handle: Pointer[None] tag, CompletionType: I16)
+use @SQLDisconnect[I16](ConnectionHandle: Pointer[None] tag)
 
 use "debug"
 
@@ -119,6 +120,18 @@ primitive \nodoc\ ODBCDbcFFI
     | -2 => return (SQLInvalidHandle, rv)
     else
       (recover val PonyDriverError("ODBCFFI.sql_alloc_handle() got invalid return code: " + rvv.string()) end, rv)
+    end
+
+  fun disconnect(h: ODBCHandleDbc tag): _SQLReturn val =>
+    var rv: I16 = @SQLDisconnect(NullablePointer[ODBCHandleDbc tag](h))
+    match rv
+    | 0 => return SQLSuccess
+    | 1 => return recover val SQLSuccessWithInfo.create_pdbc(h) end
+    | 2 => return SQLStillExecuting
+    | -1 => return recover val SQLError.create_pdbc(h) end
+    | -2 => return SQLInvalidHandle
+    else
+      recover val PonyDriverError("ODBCFFI.disconnect() got invalid return code: " + rv.string()) end
     end
 
   fun free(h: ODBCHandleDbc tag) => @SQLFreeHandle(2, NullablePointer[ODBCHandleDbc tag](h))

@@ -1,4 +1,4 @@
-use @SQLGetDiagRec[I16](HandleType: I16, Handle: Pointer[None] tag, RecNumber: I16, Sqlstate: Pointer[U8] tag, NativeError: Pointer[I32] tag, MessageText: Pointer[U8] tag, BufferLength: I16, TextLength: Pointer[I16] tag)
+use @SQLGetDiagRec[I16](HandleType: I16, Handle: Pointer[None] tag, RecNumber: I16, _Sqlstate: Pointer[U8] tag, NativeError: Pointer[I32] tag, MessageText: Pointer[U8] tag, BufferLength: I16, TextLength: Pointer[I16] tag)
 
 use "debug"
 

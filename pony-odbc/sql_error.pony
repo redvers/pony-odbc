@@ -15,34 +15,34 @@ class \nodoc\ SQLError
     "\n".join(get_records().values())
 
   new \nodoc\ create_penv(htype: ODBCHandleEnv tag, sl: SourceLoc val = __loc) => None
-    _location = sl
-    for num in Range[I16](1,1024) do
-      try
-        _records.push((num, SQLDiagFrame.create_penv(htype, num)?))
-      else
-        break
-      end
-    end
+//    _location = sl
+//    for num in Range[I16](1,1024) do
+//      try
+//        _records.push((num, SQLDiagFrame.create_penv(htype, num)?))
+//      else
+//        break
+//      end
+//    end
 
   new \nodoc\ create_pdbc(htype: ODBCHandleDbc tag, sl: SourceLoc val = __loc) => None
-    _location = sl
-    for num in Range[I16](1,1024) do
-      try
-        _records.push((num, SQLDiagFrame.create_pdbc(htype, num)?))
-      else
-        break
-      end
-    end
+//    _location = sl
+//    for num in Range[I16](1,1024) do
+//      try
+//        _records.push((num, SQLDiagFrame.create_pdbc(htype, num)?))
+//      else
+//        break
+//      end
+//    end
 
-  new \nodoc\ create_pstmt(htype: ODBCHandleStmt tag, sl: SourceLoc val = __loc) =>
-    _location = sl
-    for num in Range[I16](1,1024) do
-      try
-        _records.push((num, SQLDiagFrame.create_pstmt(htype, num)?))
-      else
-        break
-      end
-    end
+  new \nodoc\ create_pstmt(htype: ODBCHandleStmt tag, sl: SourceLoc val = __loc) => None
+//    _location = sl
+//    for num in Range[I16](1,1024) do
+//      try
+//        _records.push((num, SQLDiagFrame.create_pstmt(htype, num)?))
+//      else
+//        break
+//      end
+//    end
 
   fun latest_sqlstate(): String val =>
     """

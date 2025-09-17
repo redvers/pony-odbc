@@ -7,53 +7,38 @@ class \nodoc\ iso _TestConnects is UnitTest
   fun name(): String val => "_TestConnects"
 
   fun apply(h: TestHelper) ? =>
-    var e: ODBCEnv = ODBCEnv
-    h.assert_true(e.is_valid())
-    h.assert_true(e.set_odbc3())
-    h.assert_true(e.is_valid())
+    var env: ODBCEnv = ODBCEnv
+    try
+      env.set_odbc3()?
+      var dbc: ODBCDbc = env.dbc()?
+      // Unknown ODBC Identifier
+      must_error(h, dbc, "IDontExist", "IM002")
+      // Unknown Driver .so file
+      must_error(h, dbc, "psqlred_baddriver", "01000")
+      // Unknown PostgreSQL Server
+      must_error(h, dbc, "psqlred_badserver", "08001")
+      // Unknown Postgresql User
+      must_error(h, dbc, "psqlred_baduser", "08001")
+      // Unknown Postgresql Database
+      must_error(h, dbc, "psqlred_baddatabase", "08001")
+      // Unknown MariaDB User
+      must_error(h, dbc, "mariadb_baduser", "28000")
+      // Unknown MariaDB database
+      must_error(h, dbc, "mariadb_baddatabase", "42000")
+    else
+      h.fail("Failed here")
+      error
+    end
 
-    var dbc: ODBCDbc = ODBCDbc(e)
-    h.assert_true(dbc.is_valid())
-
-    // Unknown ODBC Identifier
-    h.assert_false(dbc.connect("IDontExist"))
-    h.assert_eq[String]("SQLError", dbc.get_err().string())
-    h.assert_eq[String val]("IM002", (dbc.get_err() as SQLError val).latest_sqlstate())
-    h.assert_eq[USize](1, (dbc.get_err() as SQLError val).sqlstates().size())
-
-    // Unknown Driver .so file
-    h.assert_false(dbc.connect("psqlred_baddriver"))
-    h.assert_eq[String]("SQLError", dbc.get_err().string())
-    h.assert_eq[String val]("01000", (dbc.get_err() as SQLError val).latest_sqlstate())
-    h.assert_eq[USize](1, (dbc.get_err() as SQLError val).sqlstates().size())
-
-    // Unknown PostgreSQL Server
-    h.assert_false(dbc.connect("psqlred_badserver"))
-    h.assert_eq[String]("SQLError", dbc.get_err().string())
-    h.assert_eq[String val]("08001", (dbc.get_err() as SQLError val).latest_sqlstate())
-    h.assert_eq[USize](1, (dbc.get_err() as SQLError val).sqlstates().size())
-
-    // Unknown Postgresql User
-    h.assert_false(dbc.connect("psqlred_baduser"))
-    h.assert_eq[String]("SQLError", dbc.get_err().string())
-    h.assert_eq[String val]("08001", (dbc.get_err() as SQLError val).latest_sqlstate())
-    h.assert_eq[USize](1, (dbc.get_err() as SQLError val).sqlstates().size())
-
-    // Unknown Postgresql Database
-    h.assert_false(dbc.connect("psqlred_baddatabase"))
-    h.assert_eq[String]("SQLError", dbc.get_err().string())
-    h.assert_eq[String val]("08001", (dbc.get_err() as SQLError val).latest_sqlstate())
-    h.assert_eq[USize](1, (dbc.get_err() as SQLError val).sqlstates().size())
-
-    // Unknown MariaDB User
-    h.assert_false(dbc.connect("mariadb_baduser"))
-    h.assert_eq[String]("SQLError", dbc.get_err().string())
-    h.assert_eq[String val]("28000", (dbc.get_err() as SQLError val).latest_sqlstate())
-    h.assert_eq[USize](1, (dbc.get_err() as SQLError val).sqlstates().size())
-
-    // Unknown MariaDB database
-    h.assert_false(dbc.connect("mariadb_baddatabase"))
-    h.assert_eq[String]("SQLError", dbc.get_err().string())
-    h.assert_eq[String val]("42000", (dbc.get_err() as SQLError val).latest_sqlstate())
-    h.assert_eq[USize](1, (dbc.get_err() as SQLError val).sqlstates().size())
+  fun must_error(h: TestHelper, dbc: ODBCDbc, dsn: String val, value: String val) =>
+    try
+      dbc.connect(dsn)?
+    else
+      try
+        var a: Array[(String val, String val)] val = dbc.sqlstates()
+        h.assert_eq[String val](value, a(a.size() - 1)?._1)
+      else
+        h.fail("Did not get a DBC error for " + dsn)
+      end
+    end
 
