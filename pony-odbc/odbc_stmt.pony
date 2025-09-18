@@ -125,7 +125,8 @@ class ODBCStmt is SqlState
     - The API is likely to change.
   """
 
-  var _dbch: ODBCHandleDbc tag
+  var _env: ODBCHandleEnv tag
+  var _dbh: ODBCHandleDbc tag
   var _sth: ODBCHandleStmt tag
   var _err: _SQLReturn val
   var _parameters: Array[SQLType] = Array[SQLType]
@@ -134,16 +135,17 @@ class ODBCStmt is SqlState
 
   var _call_location: SourceLoc val = __loc
 
-  new create(dbch': ODBCHandleDbc tag, sl: SourceLoc val = __loc) ? =>
+  new create(env': ODBCHandleEnv tag, dbh': ODBCHandleDbc tag, sl: SourceLoc val = __loc) ? =>
     """
     This constructor creates a new ODBCStmt instance which represents in the
     ODBC API an abstraction of an ODBC Statement Handle.
 
     These handles can be recycled.
     """
+    _env = env'
+    _dbh = dbh'
     _call_location = sl
-    (_err, _sth) = ODBCStmtFFI.alloc(dbch')
-    _dbch = dbch'
+    (_err, _sth) = ODBCStmtFFI.alloc(_dbh)
     _check_valid()?
 
   fun sqlstates(): Array[(String val, String val)] val =>

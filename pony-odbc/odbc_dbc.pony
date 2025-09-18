@@ -46,7 +46,7 @@ class ODBCDbc is SqlState
     _check_valid()?
 
   fun ref stmt(): ODBCStmt ? =>
-    ODBCStmt.create(dbc)?
+    ODBCStmt.create(_henv, dbc)?
 
   fun sqlstates(): Array[(String val, String val)] val =>
     _from_dbc(dbc)

@@ -71,16 +71,21 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
           .> prepare("create le odbthingtest (i integer, s varchar(100))")?
       else
         h.assert_eq[USize](0, env.sqlstates().size())
-        h.assert_eq[USize](0, stm.sqlstates().size())
         h.assert_eq[USize](0, dbc.sqlstates().size())
+        h.assert_eq[USize](0, stm.sqlstates().size())
       end
       try
+        Debug.out("predbh: " + dbc.get_err().string())
+        Debug.out("presth: " + stm.get_err().string())
         stm
           .> execute()?
       else
+        Debug.out("predbh: " + dbc.get_err().string())
+        Debug.out("presth: " + stm.get_err().string())
         h.assert_eq[USize](0, env.sqlstates().size())
-        h.assert_eq[USize](1, stm.sqlstates().size())
         h.assert_eq[USize](0, dbc.sqlstates().size())
+        h.assert_eq[USize](1, stm.sqlstates().size()) //
+        Debug.out((stm.get_err() as SQLError val).get_err_strings())
         try
           h.assert_true((stm.sqlstates()(0)?._1 == "42601")  // Vendor Specific
                      or (stm.sqlstates()(0)?._1 == "42000")  // Permissions or Syntax Error
@@ -114,7 +119,7 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
       else
         h.assert_eq[USize](0, env.sqlstates().size())
         h.assert_eq[USize](0, dbc.sqlstates().size())
-        h.assert_eq[USize](1, stm.sqlstates().size())
+        h.assert_eq[USize](1, stm.sqlstates().size()) //
         try
           h.assert_true((stm.sqlstates()(0)?._1 == "HY000")
                      or (stm.sqlstates()(0)?._1 == "07002"))
