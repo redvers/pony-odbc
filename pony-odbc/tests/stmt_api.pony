@@ -33,13 +33,13 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
       h.assert_true(dbc.connect(dsn)?)
 
       // Syntax Error
-      create_temp_table_syntax_err(h, dbc)
+      create_temp_table_syntax_err(env, h, dbc)
 
       // Create Table
       create_temp_table(h, dbc)
 
       // Attempt to insert without assigning buffers
-      populate_temp_table_no_binding(h, dbc)
+      populate_temp_table_no_binding(env, h, dbc)
 
       // Populate the table with some data.
       populate_temp_table(h, dbc)
@@ -63,13 +63,14 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
       end
     end
 
-  fun create_temp_table_syntax_err(h: TestHelper, dbc: ODBCDbc) =>
+  fun create_temp_table_syntax_err(env: ODBCEnv, h: TestHelper, dbc: ODBCDbc) =>
     try
       var stm: ODBCStmt = dbc.stmt()?
       try
         stm
           .> prepare("create le odbthingtest (i integer, s varchar(100))")?
       else
+        h.assert_eq[USize](0, env.sqlstates().size())
         h.assert_eq[USize](0, stm.sqlstates().size())
         h.assert_eq[USize](0, dbc.sqlstates().size())
       end
@@ -77,9 +78,7 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
         stm
           .> execute()?
       else
-        Debug.out(dbc.get_err().string() + dbc.sqlstates().size().string())
-        Debug.out(stm.get_err().string() + stm.sqlstates().size().string())
-        Debug.out((stm.get_err() as SQLError val).get_err_strings())
+        h.assert_eq[USize](0, env.sqlstates().size())
         h.assert_eq[USize](1, stm.sqlstates().size())
         h.assert_eq[USize](0, dbc.sqlstates().size())
         try
@@ -104,7 +103,7 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
       h.fail("Failed at create_temp_table()")
     end
 
-  fun populate_temp_table_no_binding(h: TestHelper, dbc: ODBCDbc) =>
+  fun populate_temp_table_no_binding(env: ODBCEnv, h: TestHelper, dbc: ODBCDbc) =>
     var pina: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(101))
     try
       var stm: ODBCStmt = dbc.stmt()?
@@ -113,9 +112,7 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
         .>prepare("insert into odbthingtest (i, s) values (?,?)")?
           stm.execute()?
       else
-        Debug.out(dbc.get_err().string())
-        Debug.out(stm.get_err().string())
-        Debug.out((stm.get_err() as SQLError val).get_err_strings())
+        h.assert_eq[USize](0, env.sqlstates().size())
         h.assert_eq[USize](0, dbc.sqlstates().size())
         h.assert_eq[USize](1, stm.sqlstates().size())
         try
