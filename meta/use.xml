@@ -5,2075 +5,2075 @@
 <xi:include href="./t.xml"/>
                     <uses>
                       <use id="_568" name="SQLAllocConnect"
-     ponyname="SQLAllocConnect"
+     ponyname="sQLAllocConnect"
      fid="f38"
      lineno="781"
      rv="I16">
      <useargs>
-       <usearg name="EnvironmentHandle" type="Pointer[None]"/>
-       <usearg name="ConnectionHandle" type="NullablePointer[Pointer[None]Struct]"/>
+       <usearg name="pEnvironmentHandle" type="Pointer[None]"/>
+       <usearg name="pConnectionHandle" type="NullablePointer[Pointer[None]Struct]"/>
      </useargs>
   </use>
   <use id="_569" name="SQLAllocEnv"
-     ponyname="SQLAllocEnv"
+     ponyname="sQLAllocEnv"
      fid="f38"
      lineno="785"
      rv="I16">
      <useargs>
-       <usearg name="EnvironmentHandle" type="NullablePointer[Pointer[None]Struct]"/>
+       <usearg name="pEnvironmentHandle" type="NullablePointer[Pointer[None]Struct]"/>
      </useargs>
   </use>
   <use id="_570" name="SQLAllocHandle"
-     ponyname="SQLAllocHandle"
+     ponyname="sQLAllocHandle"
      fid="f38"
      lineno="789"
      rv="I16">
      <useargs>
-       <usearg name="HandleType" type="I16"/>
-       <usearg name="InputHandle" type="Pointer[None]"/>
-       <usearg name="OutputHandle" type="NullablePointer[Pointer[None]Struct]"/>
+       <usearg name="pHandleType" type="I16"/>
+       <usearg name="pInputHandle" type="Pointer[None]"/>
+       <usearg name="pOutputHandle" type="NullablePointer[Pointer[None]Struct]"/>
      </useargs>
   </use>
   <use id="_571" name="SQLAllocStmt"
-     ponyname="SQLAllocStmt"
+     ponyname="sQLAllocStmt"
      fid="f38"
      lineno="795"
      rv="I16">
      <useargs>
-       <usearg name="ConnectionHandle" type="Pointer[None]"/>
-       <usearg name="StatementHandle" type="NullablePointer[Pointer[None]Struct]"/>
+       <usearg name="pConnectionHandle" type="Pointer[None]"/>
+       <usearg name="pStatementHandle" type="NullablePointer[Pointer[None]Struct]"/>
      </useargs>
   </use>
   <use id="_572" name="SQLBindCol"
-     ponyname="SQLBindCol"
+     ponyname="sQLBindCol"
      fid="f38"
      lineno="799"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="ColumnNumber" type="U16"/>
-       <usearg name="TargetType" type="I16"/>
-       <usearg name="TargetValue" type="Pointer[None]"/>
-       <usearg name="BufferLength" type="I64"/>
-       <usearg name="StrLenorInd" type="Pointer[I64]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pColumnNumber" type="U16"/>
+       <usearg name="pTargetType" type="I16"/>
+       <usearg name="pTargetValue" type="Pointer[None]"/>
+       <usearg name="pBufferLength" type="I64"/>
+       <usearg name="pStrLenorInd" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_573" name="SQLBindParam"
-     ponyname="SQLBindParam"
+     ponyname="sQLBindParam"
      fid="f38"
      lineno="808"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="ParameterNumber" type="U16"/>
-       <usearg name="ValueType" type="I16"/>
-       <usearg name="ParameterType" type="I16"/>
-       <usearg name="LengthPrecision" type="U64"/>
-       <usearg name="ParameterScale" type="I16"/>
-       <usearg name="ParameterValue" type="Pointer[None]"/>
-       <usearg name="StrLenorInd" type="Pointer[I64]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pParameterNumber" type="U16"/>
+       <usearg name="pValueType" type="I16"/>
+       <usearg name="pParameterType" type="I16"/>
+       <usearg name="pLengthPrecision" type="U64"/>
+       <usearg name="pParameterScale" type="I16"/>
+       <usearg name="pParameterValue" type="Pointer[None]"/>
+       <usearg name="pStrLenorInd" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_574" name="SQLCancel"
-     ponyname="SQLCancel"
+     ponyname="sQLCancel"
      fid="f38"
      lineno="819"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_575" name="SQLCloseCursor"
-     ponyname="SQLCloseCursor"
+     ponyname="sQLCloseCursor"
      fid="f38"
      lineno="823"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_576" name="SQLColAttribute"
-     ponyname="SQLColAttribute"
+     ponyname="sQLColAttribute"
      fid="f38"
      lineno="831"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="ColumnNumber" type="U16"/>
-       <usearg name="FieldIdentifier" type="U16"/>
-       <usearg name="CharacterAttribute" type="Pointer[None]"/>
-       <usearg name="BufferLength" type="I16"/>
-       <usearg name="StringLength" type="Pointer[I16]"/>
-       <usearg name="NumericAttribute" type="Pointer[I64]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pColumnNumber" type="U16"/>
+       <usearg name="pFieldIdentifier" type="U16"/>
+       <usearg name="pCharacterAttribute" type="Pointer[None]"/>
+       <usearg name="pBufferLength" type="I16"/>
+       <usearg name="pStringLength" type="Pointer[I16]"/>
+       <usearg name="pNumericAttribute" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_577" name="SQLColumns"
-     ponyname="SQLColumns"
+     ponyname="sQLColumns"
      fid="f38"
      lineno="841"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="CatalogName" type="String"/>
-       <usearg name="NameLength1" type="I16"/>
-       <usearg name="SchemaName" type="String"/>
-       <usearg name="NameLength2" type="I16"/>
-       <usearg name="TableName" type="String"/>
-       <usearg name="NameLength3" type="I16"/>
-       <usearg name="ColumnName" type="String"/>
-       <usearg name="NameLength4" type="I16"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pCatalogName" type="String"/>
+       <usearg name="pNameLength1" type="I16"/>
+       <usearg name="pSchemaName" type="String"/>
+       <usearg name="pNameLength2" type="I16"/>
+       <usearg name="pTableName" type="String"/>
+       <usearg name="pNameLength3" type="I16"/>
+       <usearg name="pColumnName" type="String"/>
+       <usearg name="pNameLength4" type="I16"/>
      </useargs>
   </use>
   <use id="_578" name="SQLConnect"
-     ponyname="SQLConnect"
+     ponyname="sQLConnect"
      fid="f38"
      lineno="852"
      rv="I16">
      <useargs>
-       <usearg name="ConnectionHandle" type="Pointer[None]"/>
-       <usearg name="ServerName" type="String"/>
-       <usearg name="NameLength1" type="I16"/>
-       <usearg name="UserName" type="String"/>
-       <usearg name="NameLength2" type="I16"/>
-       <usearg name="Authentication" type="String"/>
-       <usearg name="NameLength3" type="I16"/>
+       <usearg name="pConnectionHandle" type="Pointer[None]"/>
+       <usearg name="pServerName" type="String"/>
+       <usearg name="pNameLength1" type="I16"/>
+       <usearg name="pUserName" type="String"/>
+       <usearg name="pNameLength2" type="I16"/>
+       <usearg name="pAuthentication" type="String"/>
+       <usearg name="pNameLength3" type="I16"/>
      </useargs>
   </use>
   <use id="_579" name="SQLCopyDesc"
-     ponyname="SQLCopyDesc"
+     ponyname="sQLCopyDesc"
      fid="f38"
      lineno="862"
      rv="I16">
      <useargs>
-       <usearg name="SourceDescHandle" type="Pointer[None]"/>
-       <usearg name="TargetDescHandle" type="Pointer[None]"/>
+       <usearg name="pSourceDescHandle" type="Pointer[None]"/>
+       <usearg name="pTargetDescHandle" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_580" name="SQLDataSources"
-     ponyname="SQLDataSources"
+     ponyname="sQLDataSources"
      fid="f38"
      lineno="867"
      rv="I16">
      <useargs>
-       <usearg name="EnvironmentHandle" type="Pointer[None]"/>
-       <usearg name="Direction" type="U16"/>
-       <usearg name="ServerName" type="String"/>
-       <usearg name="BufferLength1" type="I16"/>
-       <usearg name="NameLength1" type="Pointer[I16]"/>
-       <usearg name="Description" type="String"/>
-       <usearg name="BufferLength2" type="I16"/>
-       <usearg name="NameLength2" type="Pointer[I16]"/>
+       <usearg name="pEnvironmentHandle" type="Pointer[None]"/>
+       <usearg name="pDirection" type="U16"/>
+       <usearg name="pServerName" type="String"/>
+       <usearg name="pBufferLength1" type="I16"/>
+       <usearg name="pNameLength1" type="Pointer[I16]"/>
+       <usearg name="pDescription" type="String"/>
+       <usearg name="pBufferLength2" type="I16"/>
+       <usearg name="pNameLength2" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_581" name="SQLDescribeCol"
-     ponyname="SQLDescribeCol"
+     ponyname="sQLDescribeCol"
      fid="f38"
      lineno="877"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="ColumnNumber" type="U16"/>
-       <usearg name="ColumnName" type="String"/>
-       <usearg name="BufferLength" type="I16"/>
-       <usearg name="NameLength" type="Pointer[I16]"/>
-       <usearg name="DataType" type="Pointer[I16]"/>
-       <usearg name="ColumnSize" type="Pointer[U64]"/>
-       <usearg name="DecimalDigits" type="Pointer[I16]"/>
-       <usearg name="Nullable" type="Pointer[I16]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pColumnNumber" type="U16"/>
+       <usearg name="pColumnName" type="String"/>
+       <usearg name="pBufferLength" type="I16"/>
+       <usearg name="pNameLength" type="Pointer[I16]"/>
+       <usearg name="pDataType" type="Pointer[I16]"/>
+       <usearg name="pColumnSize" type="Pointer[U64]"/>
+       <usearg name="pDecimalDigits" type="Pointer[I16]"/>
+       <usearg name="pNullable" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_582" name="SQLDisconnect"
-     ponyname="SQLDisconnect"
+     ponyname="sQLDisconnect"
      fid="f38"
      lineno="888"
      rv="I16">
      <useargs>
-       <usearg name="ConnectionHandle" type="Pointer[None]"/>
+       <usearg name="pConnectionHandle" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_583" name="SQLEndTran"
-     ponyname="SQLEndTran"
+     ponyname="sQLEndTran"
      fid="f38"
      lineno="892"
      rv="I16">
      <useargs>
-       <usearg name="HandleType" type="I16"/>
-       <usearg name="Handle" type="Pointer[None]"/>
-       <usearg name="CompletionType" type="I16"/>
+       <usearg name="pHandleType" type="I16"/>
+       <usearg name="pHandle" type="Pointer[None]"/>
+       <usearg name="pCompletionType" type="I16"/>
      </useargs>
   </use>
   <use id="_584" name="SQLError"
-     ponyname="SQLError"
+     ponyname="sQLError"
      fid="f38"
      lineno="898"
      rv="I16">
      <useargs>
-       <usearg name="EnvironmentHandle" type="Pointer[None]"/>
-       <usearg name="ConnectionHandle" type="Pointer[None]"/>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="Sqlstate" type="String"/>
-       <usearg name="NativeError" type="Pointer[I32]"/>
-       <usearg name="MessageText" type="String"/>
-       <usearg name="BufferLength" type="I16"/>
-       <usearg name="TextLength" type="Pointer[I16]"/>
+       <usearg name="pEnvironmentHandle" type="Pointer[None]"/>
+       <usearg name="pConnectionHandle" type="Pointer[None]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pSqlstate" type="String"/>
+       <usearg name="pNativeError" type="Pointer[I32]"/>
+       <usearg name="pMessageText" type="String"/>
+       <usearg name="pBufferLength" type="I16"/>
+       <usearg name="pTextLength" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_585" name="SQLExecDirect"
-     ponyname="SQLExecDirect"
+     ponyname="sQLExecDirect"
      fid="f38"
      lineno="908"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="StatementText" type="String"/>
-       <usearg name="TextLength" type="I32"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pStatementText" type="String"/>
+       <usearg name="pTextLength" type="I32"/>
      </useargs>
   </use>
   <use id="_586" name="SQLExecute"
-     ponyname="SQLExecute"
+     ponyname="sQLExecute"
      fid="f38"
      lineno="913"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_587" name="SQLFetch"
-     ponyname="SQLFetch"
+     ponyname="sQLFetch"
      fid="f38"
      lineno="916"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_588" name="SQLFetchScroll"
-     ponyname="SQLFetchScroll"
+     ponyname="sQLFetchScroll"
      fid="f38"
      lineno="920"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="FetchOrientation" type="I16"/>
-       <usearg name="FetchOffset" type="I64"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pFetchOrientation" type="I16"/>
+       <usearg name="pFetchOffset" type="I64"/>
      </useargs>
   </use>
   <use id="_589" name="SQLFreeConnect"
-     ponyname="SQLFreeConnect"
+     ponyname="sQLFreeConnect"
      fid="f38"
      lineno="926"
      rv="I16">
      <useargs>
-       <usearg name="ConnectionHandle" type="Pointer[None]"/>
+       <usearg name="pConnectionHandle" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_590" name="SQLFreeEnv"
-     ponyname="SQLFreeEnv"
+     ponyname="sQLFreeEnv"
      fid="f38"
      lineno="929"
      rv="I16">
      <useargs>
-       <usearg name="EnvironmentHandle" type="Pointer[None]"/>
+       <usearg name="pEnvironmentHandle" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_591" name="SQLFreeHandle"
-     ponyname="SQLFreeHandle"
+     ponyname="sQLFreeHandle"
      fid="f38"
      lineno="933"
      rv="I16">
      <useargs>
-       <usearg name="HandleType" type="I16"/>
-       <usearg name="Handle" type="Pointer[None]"/>
+       <usearg name="pHandleType" type="I16"/>
+       <usearg name="pHandle" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_592" name="SQLFreeStmt"
-     ponyname="SQLFreeStmt"
+     ponyname="sQLFreeStmt"
      fid="f38"
      lineno="938"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="Option" type="U16"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pOption" type="U16"/>
      </useargs>
   </use>
   <use id="_593" name="SQLGetConnectAttr"
-     ponyname="SQLGetConnectAttr"
+     ponyname="sQLGetConnectAttr"
      fid="f38"
      lineno="943"
      rv="I16">
      <useargs>
-       <usearg name="ConnectionHandle" type="Pointer[None]"/>
-       <usearg name="Attribute" type="I32"/>
-       <usearg name="Value" type="Pointer[None]"/>
-       <usearg name="BufferLength" type="I32"/>
-       <usearg name="StringLength" type="Pointer[I32]"/>
+       <usearg name="pConnectionHandle" type="Pointer[None]"/>
+       <usearg name="pAttribute" type="I32"/>
+       <usearg name="pValue" type="Pointer[None]"/>
+       <usearg name="pBufferLength" type="I32"/>
+       <usearg name="pStringLength" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_594" name="SQLGetConnectOption"
-     ponyname="SQLGetConnectOption"
+     ponyname="sQLGetConnectOption"
      fid="f38"
      lineno="951"
      rv="I16">
      <useargs>
-       <usearg name="ConnectionHandle" type="Pointer[None]"/>
-       <usearg name="Option" type="U16"/>
-       <usearg name="Value" type="Pointer[None]"/>
+       <usearg name="pConnectionHandle" type="Pointer[None]"/>
+       <usearg name="pOption" type="U16"/>
+       <usearg name="pValue" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_595" name="SQLGetCursorName"
-     ponyname="SQLGetCursorName"
+     ponyname="sQLGetCursorName"
      fid="f38"
      lineno="956"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="CursorName" type="String"/>
-       <usearg name="BufferLength" type="I16"/>
-       <usearg name="NameLength" type="Pointer[I16]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pCursorName" type="String"/>
+       <usearg name="pBufferLength" type="I16"/>
+       <usearg name="pNameLength" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_596" name="SQLGetData"
-     ponyname="SQLGetData"
+     ponyname="sQLGetData"
      fid="f38"
      lineno="962"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="ColumnNumber" type="U16"/>
-       <usearg name="TargetType" type="I16"/>
-       <usearg name="TargetValue" type="Pointer[None]"/>
-       <usearg name="BufferLength" type="I64"/>
-       <usearg name="StrLenorInd" type="Pointer[I64]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pColumnNumber" type="U16"/>
+       <usearg name="pTargetType" type="I16"/>
+       <usearg name="pTargetValue" type="Pointer[None]"/>
+       <usearg name="pBufferLength" type="I64"/>
+       <usearg name="pStrLenorInd" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_597" name="SQLGetDescField"
-     ponyname="SQLGetDescField"
+     ponyname="sQLGetDescField"
      fid="f38"
      lineno="971"
      rv="I16">
      <useargs>
-       <usearg name="DescriptorHandle" type="Pointer[None]"/>
-       <usearg name="RecNumber" type="I16"/>
-       <usearg name="FieldIdentifier" type="I16"/>
-       <usearg name="Value" type="Pointer[None]"/>
-       <usearg name="BufferLength" type="I32"/>
-       <usearg name="StringLength" type="Pointer[I32]"/>
+       <usearg name="pDescriptorHandle" type="Pointer[None]"/>
+       <usearg name="pRecNumber" type="I16"/>
+       <usearg name="pFieldIdentifier" type="I16"/>
+       <usearg name="pValue" type="Pointer[None]"/>
+       <usearg name="pBufferLength" type="I32"/>
+       <usearg name="pStringLength" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_598" name="SQLGetDescRec"
-     ponyname="SQLGetDescRec"
+     ponyname="sQLGetDescRec"
      fid="f38"
      lineno="979"
      rv="I16">
      <useargs>
-       <usearg name="DescriptorHandle" type="Pointer[None]"/>
-       <usearg name="RecNumber" type="I16"/>
-       <usearg name="Name" type="String"/>
-       <usearg name="BufferLength" type="I16"/>
-       <usearg name="StringLength" type="Pointer[I16]"/>
-       <usearg name="Type" type="Pointer[I16]"/>
-       <usearg name="SubType" type="Pointer[I16]"/>
-       <usearg name="Length" type="Pointer[I64]"/>
-       <usearg name="Precision" type="Pointer[I16]"/>
-       <usearg name="Scale" type="Pointer[I16]"/>
-       <usearg name="Nullable" type="Pointer[I16]"/>
+       <usearg name="pDescriptorHandle" type="Pointer[None]"/>
+       <usearg name="pRecNumber" type="I16"/>
+       <usearg name="pName" type="String"/>
+       <usearg name="pBufferLength" type="I16"/>
+       <usearg name="pStringLength" type="Pointer[I16]"/>
+       <usearg name="pType" type="Pointer[I16]"/>
+       <usearg name="pSubType" type="Pointer[I16]"/>
+       <usearg name="pLength" type="Pointer[I64]"/>
+       <usearg name="pPrecision" type="Pointer[I16]"/>
+       <usearg name="pScale" type="Pointer[I16]"/>
+       <usearg name="pNullable" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_599" name="SQLGetDiagField"
-     ponyname="SQLGetDiagField"
+     ponyname="sQLGetDiagField"
      fid="f38"
      lineno="992"
      rv="I16">
      <useargs>
-       <usearg name="HandleType" type="I16"/>
-       <usearg name="Handle" type="Pointer[None]"/>
-       <usearg name="RecNumber" type="I16"/>
-       <usearg name="DiagIdentifier" type="I16"/>
-       <usearg name="DiagInfo" type="Pointer[None]"/>
-       <usearg name="BufferLength" type="I16"/>
-       <usearg name="StringLength" type="Pointer[I16]"/>
+       <usearg name="pHandleType" type="I16"/>
+       <usearg name="pHandle" type="Pointer[None]"/>
+       <usearg name="pRecNumber" type="I16"/>
+       <usearg name="pDiagIdentifier" type="I16"/>
+       <usearg name="pDiagInfo" type="Pointer[None]"/>
+       <usearg name="pBufferLength" type="I16"/>
+       <usearg name="pStringLength" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_600" name="SQLGetDiagRec"
-     ponyname="SQLGetDiagRec"
+     ponyname="sQLGetDiagRec"
      fid="f38"
      lineno="1001"
      rv="I16">
      <useargs>
-       <usearg name="HandleType" type="I16"/>
-       <usearg name="Handle" type="Pointer[None]"/>
-       <usearg name="RecNumber" type="I16"/>
-       <usearg name="Sqlstate" type="String"/>
-       <usearg name="NativeError" type="Pointer[I32]"/>
-       <usearg name="MessageText" type="String"/>
-       <usearg name="BufferLength" type="I16"/>
-       <usearg name="TextLength" type="Pointer[I16]"/>
+       <usearg name="pHandleType" type="I16"/>
+       <usearg name="pHandle" type="Pointer[None]"/>
+       <usearg name="pRecNumber" type="I16"/>
+       <usearg name="pSqlstate" type="String"/>
+       <usearg name="pNativeError" type="Pointer[I32]"/>
+       <usearg name="pMessageText" type="String"/>
+       <usearg name="pBufferLength" type="I16"/>
+       <usearg name="pTextLength" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_601" name="SQLGetEnvAttr"
-     ponyname="SQLGetEnvAttr"
+     ponyname="sQLGetEnvAttr"
      fid="f38"
      lineno="1011"
      rv="I16">
      <useargs>
-       <usearg name="EnvironmentHandle" type="Pointer[None]"/>
-       <usearg name="Attribute" type="I32"/>
-       <usearg name="Value" type="Pointer[None]"/>
-       <usearg name="BufferLength" type="I32"/>
-       <usearg name="StringLength" type="Pointer[I32]"/>
+       <usearg name="pEnvironmentHandle" type="Pointer[None]"/>
+       <usearg name="pAttribute" type="I32"/>
+       <usearg name="pValue" type="Pointer[None]"/>
+       <usearg name="pBufferLength" type="I32"/>
+       <usearg name="pStringLength" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_602" name="SQLGetFunctions"
-     ponyname="SQLGetFunctions"
+     ponyname="sQLGetFunctions"
      fid="f38"
      lineno="1019"
      rv="I16">
      <useargs>
-       <usearg name="ConnectionHandle" type="Pointer[None]"/>
-       <usearg name="FunctionId" type="U16"/>
-       <usearg name="Supported" type="Pointer[U16]"/>
+       <usearg name="pConnectionHandle" type="Pointer[None]"/>
+       <usearg name="pFunctionId" type="U16"/>
+       <usearg name="pSupported" type="Pointer[U16]"/>
      </useargs>
   </use>
   <use id="_603" name="SQLGetInfo"
-     ponyname="SQLGetInfo"
+     ponyname="sQLGetInfo"
      fid="f38"
      lineno="1024"
      rv="I16">
      <useargs>
-       <usearg name="ConnectionHandle" type="Pointer[None]"/>
-       <usearg name="InfoType" type="U16"/>
-       <usearg name="InfoValue" type="Pointer[None]"/>
-       <usearg name="BufferLength" type="I16"/>
-       <usearg name="StringLength" type="Pointer[I16]"/>
+       <usearg name="pConnectionHandle" type="Pointer[None]"/>
+       <usearg name="pInfoType" type="U16"/>
+       <usearg name="pInfoValue" type="Pointer[None]"/>
+       <usearg name="pBufferLength" type="I16"/>
+       <usearg name="pStringLength" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_604" name="SQLGetStmtAttr"
-     ponyname="SQLGetStmtAttr"
+     ponyname="sQLGetStmtAttr"
      fid="f38"
      lineno="1032"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="Attribute" type="I32"/>
-       <usearg name="Value" type="Pointer[None]"/>
-       <usearg name="BufferLength" type="I32"/>
-       <usearg name="StringLength" type="Pointer[I32]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pAttribute" type="I32"/>
+       <usearg name="pValue" type="Pointer[None]"/>
+       <usearg name="pBufferLength" type="I32"/>
+       <usearg name="pStringLength" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_605" name="SQLGetStmtOption"
-     ponyname="SQLGetStmtOption"
+     ponyname="sQLGetStmtOption"
      fid="f38"
      lineno="1040"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="Option" type="U16"/>
-       <usearg name="Value" type="Pointer[None]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pOption" type="U16"/>
+       <usearg name="pValue" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_606" name="SQLGetTypeInfo"
-     ponyname="SQLGetTypeInfo"
+     ponyname="sQLGetTypeInfo"
      fid="f38"
      lineno="1045"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="DataType" type="I16"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pDataType" type="I16"/>
      </useargs>
   </use>
   <use id="_607" name="SQLNumResultCols"
-     ponyname="SQLNumResultCols"
+     ponyname="sQLNumResultCols"
      fid="f38"
      lineno="1049"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="ColumnCount" type="Pointer[I16]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pColumnCount" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_608" name="SQLParamData"
-     ponyname="SQLParamData"
+     ponyname="sQLParamData"
      fid="f38"
      lineno="1053"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="Value" type="NullablePointer[Pointer[None]Struct]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pValue" type="NullablePointer[Pointer[None]Struct]"/>
      </useargs>
   </use>
   <use id="_609" name="SQLPrepare"
-     ponyname="SQLPrepare"
+     ponyname="sQLPrepare"
      fid="f38"
      lineno="1057"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="StatementText" type="String"/>
-       <usearg name="TextLength" type="I32"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pStatementText" type="String"/>
+       <usearg name="pTextLength" type="I32"/>
      </useargs>
   </use>
   <use id="_610" name="SQLPutData"
-     ponyname="SQLPutData"
+     ponyname="sQLPutData"
      fid="f38"
      lineno="1062"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="Data" type="Pointer[None]"/>
-       <usearg name="StrLenorInd" type="I64"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pData" type="Pointer[None]"/>
+       <usearg name="pStrLenorInd" type="I64"/>
      </useargs>
   </use>
   <use id="_611" name="SQLRowCount"
-     ponyname="SQLRowCount"
+     ponyname="sQLRowCount"
      fid="f38"
      lineno="1067"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="RowCount" type="Pointer[I64]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pRowCount" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_612" name="SQLSetConnectAttr"
-     ponyname="SQLSetConnectAttr"
+     ponyname="sQLSetConnectAttr"
      fid="f38"
      lineno="1072"
      rv="I16">
      <useargs>
-       <usearg name="ConnectionHandle" type="Pointer[None]"/>
-       <usearg name="Attribute" type="I32"/>
-       <usearg name="Value" type="Pointer[None]"/>
-       <usearg name="StringLength" type="I32"/>
+       <usearg name="pConnectionHandle" type="Pointer[None]"/>
+       <usearg name="pAttribute" type="I32"/>
+       <usearg name="pValue" type="Pointer[None]"/>
+       <usearg name="pStringLength" type="I32"/>
      </useargs>
   </use>
   <use id="_613" name="SQLSetConnectOption"
-     ponyname="SQLSetConnectOption"
+     ponyname="sQLSetConnectOption"
      fid="f38"
      lineno="1079"
      rv="I16">
      <useargs>
-       <usearg name="ConnectionHandle" type="Pointer[None]"/>
-       <usearg name="Option" type="U16"/>
-       <usearg name="Value" type="U64"/>
+       <usearg name="pConnectionHandle" type="Pointer[None]"/>
+       <usearg name="pOption" type="U16"/>
+       <usearg name="pValue" type="U64"/>
      </useargs>
   </use>
   <use id="_614" name="SQLSetCursorName"
-     ponyname="SQLSetCursorName"
+     ponyname="sQLSetCursorName"
      fid="f38"
      lineno="1084"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="CursorName" type="String"/>
-       <usearg name="NameLength" type="I16"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pCursorName" type="String"/>
+       <usearg name="pNameLength" type="I16"/>
      </useargs>
   </use>
   <use id="_615" name="SQLSetDescField"
-     ponyname="SQLSetDescField"
+     ponyname="sQLSetDescField"
      fid="f38"
      lineno="1090"
      rv="I16">
      <useargs>
-       <usearg name="DescriptorHandle" type="Pointer[None]"/>
-       <usearg name="RecNumber" type="I16"/>
-       <usearg name="FieldIdentifier" type="I16"/>
-       <usearg name="Value" type="Pointer[None]"/>
-       <usearg name="BufferLength" type="I32"/>
+       <usearg name="pDescriptorHandle" type="Pointer[None]"/>
+       <usearg name="pRecNumber" type="I16"/>
+       <usearg name="pFieldIdentifier" type="I16"/>
+       <usearg name="pValue" type="Pointer[None]"/>
+       <usearg name="pBufferLength" type="I32"/>
      </useargs>
   </use>
   <use id="_616" name="SQLSetDescRec"
-     ponyname="SQLSetDescRec"
+     ponyname="sQLSetDescRec"
      fid="f38"
      lineno="1097"
      rv="I16">
      <useargs>
-       <usearg name="DescriptorHandle" type="Pointer[None]"/>
-       <usearg name="RecNumber" type="I16"/>
-       <usearg name="Type" type="I16"/>
-       <usearg name="SubType" type="I16"/>
-       <usearg name="Length" type="I64"/>
-       <usearg name="Precision" type="I16"/>
-       <usearg name="Scale" type="I16"/>
-       <usearg name="Data" type="Pointer[None]"/>
-       <usearg name="StringLength" type="Pointer[I64]"/>
-       <usearg name="Indicator" type="Pointer[I64]"/>
+       <usearg name="pDescriptorHandle" type="Pointer[None]"/>
+       <usearg name="pRecNumber" type="I16"/>
+       <usearg name="pType" type="I16"/>
+       <usearg name="pSubType" type="I16"/>
+       <usearg name="pLength" type="I64"/>
+       <usearg name="pPrecision" type="I16"/>
+       <usearg name="pScale" type="I16"/>
+       <usearg name="pData" type="Pointer[None]"/>
+       <usearg name="pStringLength" type="Pointer[I64]"/>
+       <usearg name="pIndicator" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_617" name="SQLSetEnvAttr"
-     ponyname="SQLSetEnvAttr"
+     ponyname="sQLSetEnvAttr"
      fid="f38"
      lineno="1109"
      rv="I16">
      <useargs>
-       <usearg name="EnvironmentHandle" type="Pointer[None]"/>
-       <usearg name="Attribute" type="I32"/>
-       <usearg name="Value" type="Pointer[None]"/>
-       <usearg name="StringLength" type="I32"/>
+       <usearg name="pEnvironmentHandle" type="Pointer[None]"/>
+       <usearg name="pAttribute" type="I32"/>
+       <usearg name="pValue" type="Pointer[None]"/>
+       <usearg name="pStringLength" type="I32"/>
      </useargs>
   </use>
   <use id="_618" name="SQLSetStmtAttr"
-     ponyname="SQLSetStmtAttr"
+     ponyname="sQLSetStmtAttr"
      fid="f38"
      lineno="1118"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="Attribute" type="I32"/>
-       <usearg name="Value" type="Pointer[None]"/>
-       <usearg name="StringLength" type="I32"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pAttribute" type="I32"/>
+       <usearg name="pValue" type="Pointer[None]"/>
+       <usearg name="pStringLength" type="I32"/>
      </useargs>
   </use>
   <use id="_619" name="SQLSetStmtOption"
-     ponyname="SQLSetStmtOption"
+     ponyname="sQLSetStmtOption"
      fid="f38"
      lineno="1125"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="Option" type="U16"/>
-       <usearg name="Value" type="U64"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pOption" type="U16"/>
+       <usearg name="pValue" type="U64"/>
      </useargs>
   </use>
   <use id="_620" name="SQLSpecialColumns"
-     ponyname="SQLSpecialColumns"
+     ponyname="sQLSpecialColumns"
      fid="f38"
      lineno="1130"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="IdentifierType" type="U16"/>
-       <usearg name="CatalogName" type="String"/>
-       <usearg name="NameLength1" type="I16"/>
-       <usearg name="SchemaName" type="String"/>
-       <usearg name="NameLength2" type="I16"/>
-       <usearg name="TableName" type="String"/>
-       <usearg name="NameLength3" type="I16"/>
-       <usearg name="Scope" type="U16"/>
-       <usearg name="Nullable" type="U16"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pIdentifierType" type="U16"/>
+       <usearg name="pCatalogName" type="String"/>
+       <usearg name="pNameLength1" type="I16"/>
+       <usearg name="pSchemaName" type="String"/>
+       <usearg name="pNameLength2" type="I16"/>
+       <usearg name="pTableName" type="String"/>
+       <usearg name="pNameLength3" type="I16"/>
+       <usearg name="pScope" type="U16"/>
+       <usearg name="pNullable" type="U16"/>
      </useargs>
   </use>
   <use id="_621" name="SQLStatistics"
-     ponyname="SQLStatistics"
+     ponyname="sQLStatistics"
      fid="f38"
      lineno="1142"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="CatalogName" type="String"/>
-       <usearg name="NameLength1" type="I16"/>
-       <usearg name="SchemaName" type="String"/>
-       <usearg name="NameLength2" type="I16"/>
-       <usearg name="TableName" type="String"/>
-       <usearg name="NameLength3" type="I16"/>
-       <usearg name="Unique" type="U16"/>
-       <usearg name="Reserved" type="U16"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pCatalogName" type="String"/>
+       <usearg name="pNameLength1" type="I16"/>
+       <usearg name="pSchemaName" type="String"/>
+       <usearg name="pNameLength2" type="I16"/>
+       <usearg name="pTableName" type="String"/>
+       <usearg name="pNameLength3" type="I16"/>
+       <usearg name="pUnique" type="U16"/>
+       <usearg name="pReserved" type="U16"/>
      </useargs>
   </use>
   <use id="_622" name="SQLTables"
-     ponyname="SQLTables"
+     ponyname="sQLTables"
      fid="f38"
      lineno="1153"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="CatalogName" type="String"/>
-       <usearg name="NameLength1" type="I16"/>
-       <usearg name="SchemaName" type="String"/>
-       <usearg name="NameLength2" type="I16"/>
-       <usearg name="TableName" type="String"/>
-       <usearg name="NameLength3" type="I16"/>
-       <usearg name="TableType" type="String"/>
-       <usearg name="NameLength4" type="I16"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pCatalogName" type="String"/>
+       <usearg name="pNameLength1" type="I16"/>
+       <usearg name="pSchemaName" type="String"/>
+       <usearg name="pNameLength2" type="I16"/>
+       <usearg name="pTableName" type="String"/>
+       <usearg name="pNameLength3" type="I16"/>
+       <usearg name="pTableType" type="String"/>
+       <usearg name="pNameLength4" type="I16"/>
      </useargs>
   </use>
   <use id="_623" name="SQLTransact"
-     ponyname="SQLTransact"
+     ponyname="sQLTransact"
      fid="f38"
      lineno="1164"
      rv="I16">
      <useargs>
-       <usearg name="EnvironmentHandle" type="Pointer[None]"/>
-       <usearg name="ConnectionHandle" type="Pointer[None]"/>
-       <usearg name="CompletionType" type="U16"/>
+       <usearg name="pEnvironmentHandle" type="Pointer[None]"/>
+       <usearg name="pConnectionHandle" type="Pointer[None]"/>
+       <usearg name="pCompletionType" type="U16"/>
      </useargs>
   </use>
   <use id="_624" name="SQLSetParam"
-     ponyname="SQLSetParam"
+     ponyname="sQLSetParam"
      fid="f38"
      lineno="1173"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="ParameterNumber" type="U16"/>
-       <usearg name="ValueType" type="I16"/>
-       <usearg name="ParameterType" type="I16"/>
-       <usearg name="LengthPrecision" type="U64"/>
-       <usearg name="ParameterScale" type="I16"/>
-       <usearg name="ParameterValue" type="Pointer[None]"/>
-       <usearg name="StrLenorInd" type="Pointer[I64]"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pParameterNumber" type="U16"/>
+       <usearg name="pValueType" type="I16"/>
+       <usearg name="pParameterType" type="I16"/>
+       <usearg name="pLengthPrecision" type="U64"/>
+       <usearg name="pParameterScale" type="I16"/>
+       <usearg name="pParameterValue" type="Pointer[None]"/>
+       <usearg name="pStrLenorInd" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_625" name="SQLDriverConnect"
-     ponyname="SQLDriverConnect"
+     ponyname="sQLDriverConnect"
      fid="f39"
      lineno="2357"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="hwnd" type="Pointer[None]"/>
-       <usearg name="szConnStrIn" type="String"/>
-       <usearg name="cbConnStrIn" type="I16"/>
-       <usearg name="szConnStrOut" type="String"/>
-       <usearg name="cbConnStrOutMax" type="I16"/>
-       <usearg name="pcbConnStrOut" type="Pointer[I16]"/>
-       <usearg name="fDriverCompletion" type="U16"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="phwnd" type="Pointer[None]"/>
+       <usearg name="pszConnStrIn" type="String"/>
+       <usearg name="pcbConnStrIn" type="I16"/>
+       <usearg name="pszConnStrOut" type="String"/>
+       <usearg name="pcbConnStrOutMax" type="I16"/>
+       <usearg name="ppcbConnStrOut" type="Pointer[I16]"/>
+       <usearg name="pfDriverCompletion" type="U16"/>
      </useargs>
   </use>
   <use id="_626" name="SQLBrowseConnect"
-     ponyname="SQLBrowseConnect"
+     ponyname="sQLBrowseConnect"
      fid="f39"
      lineno="2371"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="szConnStrIn" type="String"/>
-       <usearg name="cbConnStrIn" type="I16"/>
-       <usearg name="szConnStrOut" type="String"/>
-       <usearg name="cbConnStrOutMax" type="I16"/>
-       <usearg name="pcbConnStrOut" type="Pointer[I16]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pszConnStrIn" type="String"/>
+       <usearg name="pcbConnStrIn" type="I16"/>
+       <usearg name="pszConnStrOut" type="String"/>
+       <usearg name="pcbConnStrOutMax" type="I16"/>
+       <usearg name="ppcbConnStrOut" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_627" name="SQLBulkOperations"
-     ponyname="SQLBulkOperations"
+     ponyname="sQLBulkOperations"
      fid="f39"
      lineno="2380"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="Operation" type="I16"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pOperation" type="I16"/>
      </useargs>
   </use>
   <use id="_628" name="SQLColAttributes"
-     ponyname="SQLColAttributes"
+     ponyname="sQLColAttributes"
      fid="f39"
      lineno="2385"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="icol" type="U16"/>
-       <usearg name="fDescType" type="U16"/>
-       <usearg name="rgbDesc" type="Pointer[None]"/>
-       <usearg name="cbDescMax" type="I16"/>
-       <usearg name="pcbDesc" type="Pointer[I16]"/>
-       <usearg name="pfDesc" type="Pointer[I64]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="picol" type="U16"/>
+       <usearg name="pfDescType" type="U16"/>
+       <usearg name="prgbDesc" type="Pointer[None]"/>
+       <usearg name="pcbDescMax" type="I16"/>
+       <usearg name="ppcbDesc" type="Pointer[I16]"/>
+       <usearg name="ppfDesc" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_629" name="SQLColumnPrivileges"
-     ponyname="SQLColumnPrivileges"
+     ponyname="sQLColumnPrivileges"
      fid="f39"
      lineno="2394"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="String"/>
-       <usearg name="cbTableName" type="I16"/>
-       <usearg name="szColumnName" type="String"/>
-       <usearg name="cbColumnName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="String"/>
+       <usearg name="pcbTableName" type="I16"/>
+       <usearg name="pszColumnName" type="String"/>
+       <usearg name="pcbColumnName" type="I16"/>
      </useargs>
   </use>
   <use id="_630" name="SQLDescribeParam"
-     ponyname="SQLDescribeParam"
+     ponyname="sQLDescribeParam"
      fid="f39"
      lineno="2405"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="ipar" type="U16"/>
-       <usearg name="pfSqlType" type="Pointer[I16]"/>
-       <usearg name="pcbParamDef" type="Pointer[U64]"/>
-       <usearg name="pibScale" type="Pointer[I16]"/>
-       <usearg name="pfNullable" type="Pointer[I16]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pipar" type="U16"/>
+       <usearg name="ppfSqlType" type="Pointer[I16]"/>
+       <usearg name="ppcbParamDef" type="Pointer[U64]"/>
+       <usearg name="ppibScale" type="Pointer[I16]"/>
+       <usearg name="ppfNullable" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_631" name="SQLExtendedFetch"
-     ponyname="SQLExtendedFetch"
+     ponyname="sQLExtendedFetch"
      fid="f39"
      lineno="2413"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="fFetchType" type="U16"/>
-       <usearg name="irow" type="I64"/>
-       <usearg name="pcrow" type="Pointer[U64]"/>
-       <usearg name="rgfRowStatus" type="Pointer[U16]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pfFetchType" type="U16"/>
+       <usearg name="pirow" type="I64"/>
+       <usearg name="ppcrow" type="Pointer[U64]"/>
+       <usearg name="prgfRowStatus" type="Pointer[U16]"/>
      </useargs>
   </use>
   <use id="_632" name="SQLForeignKeys"
-     ponyname="SQLForeignKeys"
+     ponyname="sQLForeignKeys"
      fid="f39"
      lineno="2420"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szPkCatalogName" type="String"/>
-       <usearg name="cbPkCatalogName" type="I16"/>
-       <usearg name="szPkSchemaName" type="String"/>
-       <usearg name="cbPkSchemaName" type="I16"/>
-       <usearg name="szPkTableName" type="String"/>
-       <usearg name="cbPkTableName" type="I16"/>
-       <usearg name="szFkCatalogName" type="String"/>
-       <usearg name="cbFkCatalogName" type="I16"/>
-       <usearg name="szFkSchemaName" type="String"/>
-       <usearg name="cbFkSchemaName" type="I16"/>
-       <usearg name="szFkTableName" type="String"/>
-       <usearg name="cbFkTableName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszPkCatalogName" type="String"/>
+       <usearg name="pcbPkCatalogName" type="I16"/>
+       <usearg name="pszPkSchemaName" type="String"/>
+       <usearg name="pcbPkSchemaName" type="I16"/>
+       <usearg name="pszPkTableName" type="String"/>
+       <usearg name="pcbPkTableName" type="I16"/>
+       <usearg name="pszFkCatalogName" type="String"/>
+       <usearg name="pcbFkCatalogName" type="I16"/>
+       <usearg name="pszFkSchemaName" type="String"/>
+       <usearg name="pcbFkSchemaName" type="I16"/>
+       <usearg name="pszFkTableName" type="String"/>
+       <usearg name="pcbFkTableName" type="I16"/>
      </useargs>
   </use>
   <use id="_633" name="SQLMoreResults"
-     ponyname="SQLMoreResults"
+     ponyname="sQLMoreResults"
      fid="f39"
      lineno="2435"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_634" name="SQLNativeSql"
-     ponyname="SQLNativeSql"
+     ponyname="sQLNativeSql"
      fid="f39"
      lineno="2438"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="szSqlStrIn" type="String"/>
-       <usearg name="cbSqlStrIn" type="I32"/>
-       <usearg name="szSqlStr" type="String"/>
-       <usearg name="cbSqlStrMax" type="I32"/>
-       <usearg name="pcbSqlStr" type="Pointer[I32]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pszSqlStrIn" type="String"/>
+       <usearg name="pcbSqlStrIn" type="I32"/>
+       <usearg name="pszSqlStr" type="String"/>
+       <usearg name="pcbSqlStrMax" type="I32"/>
+       <usearg name="ppcbSqlStr" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_635" name="SQLNumParams"
-     ponyname="SQLNumParams"
+     ponyname="sQLNumParams"
      fid="f39"
      lineno="2446"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="pcpar" type="Pointer[I16]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="ppcpar" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_636" name="SQLParamOptions"
-     ponyname="SQLParamOptions"
+     ponyname="sQLParamOptions"
      fid="f39"
      lineno="2450"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="crow" type="U64"/>
-       <usearg name="pirow" type="Pointer[U64]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pcrow" type="U64"/>
+       <usearg name="ppirow" type="Pointer[U64]"/>
      </useargs>
   </use>
   <use id="_637" name="SQLPrimaryKeys"
-     ponyname="SQLPrimaryKeys"
+     ponyname="sQLPrimaryKeys"
      fid="f39"
      lineno="2455"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="String"/>
-       <usearg name="cbTableName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="String"/>
+       <usearg name="pcbTableName" type="I16"/>
      </useargs>
   </use>
   <use id="_638" name="SQLProcedureColumns"
-     ponyname="SQLProcedureColumns"
+     ponyname="sQLProcedureColumns"
      fid="f39"
      lineno="2464"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szProcName" type="String"/>
-       <usearg name="cbProcName" type="I16"/>
-       <usearg name="szColumnName" type="String"/>
-       <usearg name="cbColumnName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszProcName" type="String"/>
+       <usearg name="pcbProcName" type="I16"/>
+       <usearg name="pszColumnName" type="String"/>
+       <usearg name="pcbColumnName" type="I16"/>
      </useargs>
   </use>
   <use id="_639" name="SQLProcedures"
-     ponyname="SQLProcedures"
+     ponyname="sQLProcedures"
      fid="f39"
      lineno="2475"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szProcName" type="String"/>
-       <usearg name="cbProcName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszProcName" type="String"/>
+       <usearg name="pcbProcName" type="I16"/>
      </useargs>
   </use>
   <use id="_640" name="SQLSetPos"
-     ponyname="SQLSetPos"
+     ponyname="sQLSetPos"
      fid="f39"
      lineno="2484"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="irow" type="U16"/>
-       <usearg name="fOption" type="U16"/>
-       <usearg name="fLock" type="U16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pirow" type="U16"/>
+       <usearg name="pfOption" type="U16"/>
+       <usearg name="pfLock" type="U16"/>
      </useargs>
   </use>
   <use id="_641" name="SQLTablePrivileges"
-     ponyname="SQLTablePrivileges"
+     ponyname="sQLTablePrivileges"
      fid="f39"
      lineno="2490"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="String"/>
-       <usearg name="cbTableName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="String"/>
+       <usearg name="pcbTableName" type="I16"/>
      </useargs>
   </use>
   <use id="_642" name="SQLDrivers"
-     ponyname="SQLDrivers"
+     ponyname="sQLDrivers"
      fid="f39"
      lineno="2499"
      rv="I16">
      <useargs>
-       <usearg name="henv" type="Pointer[None]"/>
-       <usearg name="fDirection" type="U16"/>
-       <usearg name="szDriverDesc" type="String"/>
-       <usearg name="cbDriverDescMax" type="I16"/>
-       <usearg name="pcbDriverDesc" type="Pointer[I16]"/>
-       <usearg name="szDriverAttributes" type="String"/>
-       <usearg name="cbDrvrAttrMax" type="I16"/>
-       <usearg name="pcbDrvrAttr" type="Pointer[I16]"/>
+       <usearg name="phenv" type="Pointer[None]"/>
+       <usearg name="pfDirection" type="U16"/>
+       <usearg name="pszDriverDesc" type="String"/>
+       <usearg name="pcbDriverDescMax" type="I16"/>
+       <usearg name="ppcbDriverDesc" type="Pointer[I16]"/>
+       <usearg name="pszDriverAttributes" type="String"/>
+       <usearg name="pcbDrvrAttrMax" type="I16"/>
+       <usearg name="ppcbDrvrAttr" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_643" name="SQLBindParameter"
-     ponyname="SQLBindParameter"
+     ponyname="sQLBindParameter"
      fid="f39"
      lineno="2509"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="ipar" type="U16"/>
-       <usearg name="fParamType" type="I16"/>
-       <usearg name="fCType" type="I16"/>
-       <usearg name="fSqlType" type="I16"/>
-       <usearg name="cbColDef" type="U64"/>
-       <usearg name="ibScale" type="I16"/>
-       <usearg name="rgbValue" type="Pointer[None]"/>
-       <usearg name="cbValueMax" type="I64"/>
-       <usearg name="pcbValue" type="Pointer[I64]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pipar" type="U16"/>
+       <usearg name="pfParamType" type="I16"/>
+       <usearg name="pfCType" type="I16"/>
+       <usearg name="pfSqlType" type="I16"/>
+       <usearg name="pcbColDef" type="U64"/>
+       <usearg name="pibScale" type="I16"/>
+       <usearg name="prgbValue" type="Pointer[None]"/>
+       <usearg name="pcbValueMax" type="I64"/>
+       <usearg name="ppcbValue" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_644" name="SQLSetScrollOptions"
-     ponyname="SQLSetScrollOptions"
+     ponyname="sQLSetScrollOptions"
      fid="f39"
      lineno="2524"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="fConcurrency" type="U16"/>
-       <usearg name="crowKeyset" type="I64"/>
-       <usearg name="crowRowset" type="U16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pfConcurrency" type="U16"/>
+       <usearg name="pcrowKeyset" type="I64"/>
+       <usearg name="pcrowRowset" type="U16"/>
      </useargs>
   </use>
   <use id="_645" name="SQLColAttributeW"
-     ponyname="SQLColAttributeW"
+     ponyname="sQLColAttributeW"
      fid="f40"
      lineno="121"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="iCol" type="U16"/>
-       <usearg name="iField" type="U16"/>
-       <usearg name="pCharAttr" type="Pointer[None]"/>
-       <usearg name="cbCharAttrMax" type="I16"/>
-       <usearg name="pcbCharAttr" type="Pointer[I16]"/>
-       <usearg name="pNumAttr" type="Pointer[I64]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="piCol" type="U16"/>
+       <usearg name="piField" type="U16"/>
+       <usearg name="ppCharAttr" type="Pointer[None]"/>
+       <usearg name="pcbCharAttrMax" type="I16"/>
+       <usearg name="ppcbCharAttr" type="Pointer[I16]"/>
+       <usearg name="ppNumAttr" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_646" name="SQLColAttributesW"
-     ponyname="SQLColAttributesW"
+     ponyname="sQLColAttributesW"
      fid="f40"
      lineno="130"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="icol" type="U16"/>
-       <usearg name="fDescType" type="U16"/>
-       <usearg name="rgbDesc" type="Pointer[None]"/>
-       <usearg name="cbDescMax" type="I16"/>
-       <usearg name="pcbDesc" type="Pointer[I16]"/>
-       <usearg name="pfDesc" type="Pointer[I64]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="picol" type="U16"/>
+       <usearg name="pfDescType" type="U16"/>
+       <usearg name="prgbDesc" type="Pointer[None]"/>
+       <usearg name="pcbDescMax" type="I16"/>
+       <usearg name="ppcbDesc" type="Pointer[I16]"/>
+       <usearg name="ppfDesc" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_647" name="SQLConnectW"
-     ponyname="SQLConnectW"
+     ponyname="sQLConnectW"
      fid="f40"
      lineno="139"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="szDSN" type="Pointer[I32]"/>
-       <usearg name="cbDSN" type="I16"/>
-       <usearg name="szUID" type="Pointer[I32]"/>
-       <usearg name="cbUID" type="I16"/>
-       <usearg name="szAuthStr" type="Pointer[I32]"/>
-       <usearg name="cbAuthStr" type="I16"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pszDSN" type="Pointer[I32]"/>
+       <usearg name="pcbDSN" type="I16"/>
+       <usearg name="pszUID" type="Pointer[I32]"/>
+       <usearg name="pcbUID" type="I16"/>
+       <usearg name="pszAuthStr" type="Pointer[I32]"/>
+       <usearg name="pcbAuthStr" type="I16"/>
      </useargs>
   </use>
   <use id="_648" name="SQLDescribeColW"
-     ponyname="SQLDescribeColW"
+     ponyname="sQLDescribeColW"
      fid="f40"
      lineno="148"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="icol" type="U16"/>
-       <usearg name="szColName" type="Pointer[I32]"/>
-       <usearg name="cbColNameMax" type="I16"/>
-       <usearg name="pcbColName" type="Pointer[I16]"/>
-       <usearg name="pfSqlType" type="Pointer[I16]"/>
-       <usearg name="pcbColDef" type="Pointer[U64]"/>
-       <usearg name="pibScale" type="Pointer[I16]"/>
-       <usearg name="pfNullable" type="Pointer[I16]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="picol" type="U16"/>
+       <usearg name="pszColName" type="Pointer[I32]"/>
+       <usearg name="pcbColNameMax" type="I16"/>
+       <usearg name="ppcbColName" type="Pointer[I16]"/>
+       <usearg name="ppfSqlType" type="Pointer[I16]"/>
+       <usearg name="ppcbColDef" type="Pointer[U64]"/>
+       <usearg name="ppibScale" type="Pointer[I16]"/>
+       <usearg name="ppfNullable" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_649" name="SQLErrorW"
-     ponyname="SQLErrorW"
+     ponyname="sQLErrorW"
      fid="f40"
      lineno="159"
      rv="I16">
      <useargs>
-       <usearg name="henv" type="Pointer[None]"/>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szSqlState" type="Pointer[I32]"/>
-       <usearg name="pfNativeError" type="Pointer[I32]"/>
-       <usearg name="szErrorMsg" type="Pointer[I32]"/>
-       <usearg name="cbErrorMsgMax" type="I16"/>
-       <usearg name="pcbErrorMsg" type="Pointer[I16]"/>
+       <usearg name="phenv" type="Pointer[None]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszSqlState" type="Pointer[I32]"/>
+       <usearg name="ppfNativeError" type="Pointer[I32]"/>
+       <usearg name="pszErrorMsg" type="Pointer[I32]"/>
+       <usearg name="pcbErrorMsgMax" type="I16"/>
+       <usearg name="ppcbErrorMsg" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_650" name="SQLExecDirectW"
-     ponyname="SQLExecDirectW"
+     ponyname="sQLExecDirectW"
      fid="f40"
      lineno="169"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szSqlStr" type="Pointer[I32]"/>
-       <usearg name="cbSqlStr" type="I32"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszSqlStr" type="Pointer[I32]"/>
+       <usearg name="pcbSqlStr" type="I32"/>
      </useargs>
   </use>
   <use id="_651" name="SQLGetConnectAttrW"
-     ponyname="SQLGetConnectAttrW"
+     ponyname="sQLGetConnectAttrW"
      fid="f40"
      lineno="174"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="fAttribute" type="I32"/>
-       <usearg name="rgbValue" type="Pointer[None]"/>
-       <usearg name="cbValueMax" type="I32"/>
-       <usearg name="pcbValue" type="Pointer[I32]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pfAttribute" type="I32"/>
+       <usearg name="prgbValue" type="Pointer[None]"/>
+       <usearg name="pcbValueMax" type="I32"/>
+       <usearg name="ppcbValue" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_652" name="SQLGetCursorNameW"
-     ponyname="SQLGetCursorNameW"
+     ponyname="sQLGetCursorNameW"
      fid="f40"
      lineno="181"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCursor" type="Pointer[I32]"/>
-       <usearg name="cbCursorMax" type="I16"/>
-       <usearg name="pcbCursor" type="Pointer[I16]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCursor" type="Pointer[I32]"/>
+       <usearg name="pcbCursorMax" type="I16"/>
+       <usearg name="ppcbCursor" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_653" name="SQLSetDescFieldW"
-     ponyname="SQLSetDescFieldW"
+     ponyname="sQLSetDescFieldW"
      fid="f40"
      lineno="188"
      rv="I16">
      <useargs>
-       <usearg name="DescriptorHandle" type="Pointer[None]"/>
-       <usearg name="RecNumber" type="I16"/>
-       <usearg name="FieldIdentifier" type="I16"/>
-       <usearg name="Value" type="Pointer[None]"/>
-       <usearg name="BufferLength" type="I32"/>
+       <usearg name="pDescriptorHandle" type="Pointer[None]"/>
+       <usearg name="pRecNumber" type="I16"/>
+       <usearg name="pFieldIdentifier" type="I16"/>
+       <usearg name="pValue" type="Pointer[None]"/>
+       <usearg name="pBufferLength" type="I32"/>
      </useargs>
   </use>
   <use id="_654" name="SQLGetDescFieldW"
-     ponyname="SQLGetDescFieldW"
+     ponyname="sQLGetDescFieldW"
      fid="f40"
      lineno="195"
      rv="I16">
      <useargs>
-       <usearg name="hdesc" type="Pointer[None]"/>
-       <usearg name="iRecord" type="I16"/>
-       <usearg name="iField" type="I16"/>
-       <usearg name="rgbValue" type="Pointer[None]"/>
-       <usearg name="cbValueMax" type="I32"/>
-       <usearg name="pcbValue" type="Pointer[I32]"/>
+       <usearg name="phdesc" type="Pointer[None]"/>
+       <usearg name="piRecord" type="I16"/>
+       <usearg name="piField" type="I16"/>
+       <usearg name="prgbValue" type="Pointer[None]"/>
+       <usearg name="pcbValueMax" type="I32"/>
+       <usearg name="ppcbValue" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_655" name="SQLGetDescRecW"
-     ponyname="SQLGetDescRecW"
+     ponyname="sQLGetDescRecW"
      fid="f40"
      lineno="203"
      rv="I16">
      <useargs>
-       <usearg name="hdesc" type="Pointer[None]"/>
-       <usearg name="iRecord" type="I16"/>
-       <usearg name="szName" type="Pointer[I32]"/>
-       <usearg name="cbNameMax" type="I16"/>
-       <usearg name="pcbName" type="Pointer[I16]"/>
-       <usearg name="pfType" type="Pointer[I16]"/>
-       <usearg name="pfSubType" type="Pointer[I16]"/>
-       <usearg name="pLength" type="Pointer[I64]"/>
-       <usearg name="pPrecision" type="Pointer[I16]"/>
-       <usearg name="pScale" type="Pointer[I16]"/>
-       <usearg name="pNullable" type="Pointer[I16]"/>
+       <usearg name="phdesc" type="Pointer[None]"/>
+       <usearg name="piRecord" type="I16"/>
+       <usearg name="pszName" type="Pointer[I32]"/>
+       <usearg name="pcbNameMax" type="I16"/>
+       <usearg name="ppcbName" type="Pointer[I16]"/>
+       <usearg name="ppfType" type="Pointer[I16]"/>
+       <usearg name="ppfSubType" type="Pointer[I16]"/>
+       <usearg name="ppLength" type="Pointer[I64]"/>
+       <usearg name="ppPrecision" type="Pointer[I16]"/>
+       <usearg name="ppScale" type="Pointer[I16]"/>
+       <usearg name="ppNullable" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_656" name="SQLGetDiagFieldW"
-     ponyname="SQLGetDiagFieldW"
+     ponyname="sQLGetDiagFieldW"
      fid="f40"
      lineno="216"
      rv="I16">
      <useargs>
-       <usearg name="fHandleType" type="I16"/>
-       <usearg name="handle" type="Pointer[None]"/>
-       <usearg name="iRecord" type="I16"/>
-       <usearg name="fDiagField" type="I16"/>
-       <usearg name="rgbDiagInfo" type="Pointer[None]"/>
-       <usearg name="cbDiagInfoMax" type="I16"/>
-       <usearg name="pcbDiagInfo" type="Pointer[I16]"/>
+       <usearg name="pfHandleType" type="I16"/>
+       <usearg name="phandle" type="Pointer[None]"/>
+       <usearg name="piRecord" type="I16"/>
+       <usearg name="pfDiagField" type="I16"/>
+       <usearg name="prgbDiagInfo" type="Pointer[None]"/>
+       <usearg name="pcbDiagInfoMax" type="I16"/>
+       <usearg name="ppcbDiagInfo" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_657" name="SQLGetDiagRecW"
-     ponyname="SQLGetDiagRecW"
+     ponyname="sQLGetDiagRecW"
      fid="f40"
      lineno="225"
      rv="I16">
      <useargs>
-       <usearg name="fHandleType" type="I16"/>
-       <usearg name="handle" type="Pointer[None]"/>
-       <usearg name="iRecord" type="I16"/>
-       <usearg name="szSqlState" type="Pointer[I32]"/>
-       <usearg name="pfNativeError" type="Pointer[I32]"/>
-       <usearg name="szErrorMsg" type="Pointer[I32]"/>
-       <usearg name="cbErrorMsgMax" type="I16"/>
-       <usearg name="pcbErrorMsg" type="Pointer[I16]"/>
+       <usearg name="pfHandleType" type="I16"/>
+       <usearg name="phandle" type="Pointer[None]"/>
+       <usearg name="piRecord" type="I16"/>
+       <usearg name="pszSqlState" type="Pointer[I32]"/>
+       <usearg name="ppfNativeError" type="Pointer[I32]"/>
+       <usearg name="pszErrorMsg" type="Pointer[I32]"/>
+       <usearg name="pcbErrorMsgMax" type="I16"/>
+       <usearg name="ppcbErrorMsg" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_658" name="SQLPrepareW"
-     ponyname="SQLPrepareW"
+     ponyname="sQLPrepareW"
      fid="f40"
      lineno="236"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szSqlStr" type="Pointer[I32]"/>
-       <usearg name="cbSqlStr" type="I32"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszSqlStr" type="Pointer[I32]"/>
+       <usearg name="pcbSqlStr" type="I32"/>
      </useargs>
   </use>
   <use id="_659" name="SQLSetConnectAttrW"
-     ponyname="SQLSetConnectAttrW"
+     ponyname="sQLSetConnectAttrW"
      fid="f40"
      lineno="241"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="fAttribute" type="I32"/>
-       <usearg name="rgbValue" type="Pointer[None]"/>
-       <usearg name="cbValue" type="I32"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pfAttribute" type="I32"/>
+       <usearg name="prgbValue" type="Pointer[None]"/>
+       <usearg name="pcbValue" type="I32"/>
      </useargs>
   </use>
   <use id="_660" name="SQLSetCursorNameW"
-     ponyname="SQLSetCursorNameW"
+     ponyname="sQLSetCursorNameW"
      fid="f40"
      lineno="247"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCursor" type="Pointer[I32]"/>
-       <usearg name="cbCursor" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCursor" type="Pointer[I32]"/>
+       <usearg name="pcbCursor" type="I16"/>
      </useargs>
   </use>
   <use id="_661" name="SQLColumnsW"
-     ponyname="SQLColumnsW"
+     ponyname="sQLColumnsW"
      fid="f40"
      lineno="252"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="Pointer[I32]"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="Pointer[I32]"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="Pointer[I32]"/>
-       <usearg name="cbTableName" type="I16"/>
-       <usearg name="szColumnName" type="Pointer[I32]"/>
-       <usearg name="cbColumnName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="Pointer[I32]"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="Pointer[I32]"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="Pointer[I32]"/>
+       <usearg name="pcbTableName" type="I16"/>
+       <usearg name="pszColumnName" type="Pointer[I32]"/>
+       <usearg name="pcbColumnName" type="I16"/>
      </useargs>
   </use>
   <use id="_662" name="SQLGetConnectOptionW"
-     ponyname="SQLGetConnectOptionW"
+     ponyname="sQLGetConnectOptionW"
      fid="f40"
      lineno="263"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="fOption" type="U16"/>
-       <usearg name="pvParam" type="Pointer[None]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pfOption" type="U16"/>
+       <usearg name="ppvParam" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_663" name="SQLGetInfoW"
-     ponyname="SQLGetInfoW"
+     ponyname="sQLGetInfoW"
      fid="f40"
      lineno="268"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="fInfoType" type="U16"/>
-       <usearg name="rgbInfoValue" type="Pointer[None]"/>
-       <usearg name="cbInfoValueMax" type="I16"/>
-       <usearg name="pcbInfoValue" type="Pointer[I16]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pfInfoType" type="U16"/>
+       <usearg name="prgbInfoValue" type="Pointer[None]"/>
+       <usearg name="pcbInfoValueMax" type="I16"/>
+       <usearg name="ppcbInfoValue" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_664" name="SQLGetTypeInfoW"
-     ponyname="SQLGetTypeInfoW"
+     ponyname="sQLGetTypeInfoW"
      fid="f40"
      lineno="275"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="DataType" type="I16"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pDataType" type="I16"/>
      </useargs>
   </use>
   <use id="_665" name="SQLSetConnectOptionW"
-     ponyname="SQLSetConnectOptionW"
+     ponyname="sQLSetConnectOptionW"
      fid="f40"
      lineno="279"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="fOption" type="U16"/>
-       <usearg name="vParam" type="U64"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pfOption" type="U16"/>
+       <usearg name="pvParam" type="U64"/>
      </useargs>
   </use>
   <use id="_666" name="SQLSpecialColumnsW"
-     ponyname="SQLSpecialColumnsW"
+     ponyname="sQLSpecialColumnsW"
      fid="f40"
      lineno="284"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="fColType" type="U16"/>
-       <usearg name="szCatalogName" type="Pointer[I32]"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="Pointer[I32]"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="Pointer[I32]"/>
-       <usearg name="cbTableName" type="I16"/>
-       <usearg name="fScope" type="U16"/>
-       <usearg name="fNullable" type="U16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pfColType" type="U16"/>
+       <usearg name="pszCatalogName" type="Pointer[I32]"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="Pointer[I32]"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="Pointer[I32]"/>
+       <usearg name="pcbTableName" type="I16"/>
+       <usearg name="pfScope" type="U16"/>
+       <usearg name="pfNullable" type="U16"/>
      </useargs>
   </use>
   <use id="_667" name="SQLStatisticsW"
-     ponyname="SQLStatisticsW"
+     ponyname="sQLStatisticsW"
      fid="f40"
      lineno="296"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="Pointer[I32]"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="Pointer[I32]"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="Pointer[I32]"/>
-       <usearg name="cbTableName" type="I16"/>
-       <usearg name="fUnique" type="U16"/>
-       <usearg name="fAccuracy" type="U16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="Pointer[I32]"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="Pointer[I32]"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="Pointer[I32]"/>
+       <usearg name="pcbTableName" type="I16"/>
+       <usearg name="pfUnique" type="U16"/>
+       <usearg name="pfAccuracy" type="U16"/>
      </useargs>
   </use>
   <use id="_668" name="SQLTablesW"
-     ponyname="SQLTablesW"
+     ponyname="sQLTablesW"
      fid="f40"
      lineno="307"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="Pointer[I32]"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="Pointer[I32]"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="Pointer[I32]"/>
-       <usearg name="cbTableName" type="I16"/>
-       <usearg name="szTableType" type="Pointer[I32]"/>
-       <usearg name="cbTableType" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="Pointer[I32]"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="Pointer[I32]"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="Pointer[I32]"/>
+       <usearg name="pcbTableName" type="I16"/>
+       <usearg name="pszTableType" type="Pointer[I32]"/>
+       <usearg name="pcbTableType" type="I16"/>
      </useargs>
   </use>
   <use id="_669" name="SQLDataSourcesW"
-     ponyname="SQLDataSourcesW"
+     ponyname="sQLDataSourcesW"
      fid="f40"
      lineno="318"
      rv="I16">
      <useargs>
-       <usearg name="henv" type="Pointer[None]"/>
-       <usearg name="fDirection" type="U16"/>
-       <usearg name="szDSN" type="Pointer[I32]"/>
-       <usearg name="cbDSNMax" type="I16"/>
-       <usearg name="pcbDSN" type="Pointer[I16]"/>
-       <usearg name="szDescription" type="Pointer[I32]"/>
-       <usearg name="cbDescriptionMax" type="I16"/>
-       <usearg name="pcbDescription" type="Pointer[I16]"/>
+       <usearg name="phenv" type="Pointer[None]"/>
+       <usearg name="pfDirection" type="U16"/>
+       <usearg name="pszDSN" type="Pointer[I32]"/>
+       <usearg name="pcbDSNMax" type="I16"/>
+       <usearg name="ppcbDSN" type="Pointer[I16]"/>
+       <usearg name="pszDescription" type="Pointer[I32]"/>
+       <usearg name="pcbDescriptionMax" type="I16"/>
+       <usearg name="ppcbDescription" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_670" name="SQLDriverConnectW"
-     ponyname="SQLDriverConnectW"
+     ponyname="sQLDriverConnectW"
      fid="f40"
      lineno="328"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="hwnd" type="Pointer[None]"/>
-       <usearg name="szConnStrIn" type="Pointer[I32]"/>
-       <usearg name="cbConnStrIn" type="I16"/>
-       <usearg name="szConnStrOut" type="Pointer[I32]"/>
-       <usearg name="cbConnStrOutMax" type="I16"/>
-       <usearg name="pcbConnStrOut" type="Pointer[I16]"/>
-       <usearg name="fDriverCompletion" type="U16"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="phwnd" type="Pointer[None]"/>
+       <usearg name="pszConnStrIn" type="Pointer[I32]"/>
+       <usearg name="pcbConnStrIn" type="I16"/>
+       <usearg name="pszConnStrOut" type="Pointer[I32]"/>
+       <usearg name="pcbConnStrOutMax" type="I16"/>
+       <usearg name="ppcbConnStrOut" type="Pointer[I16]"/>
+       <usearg name="pfDriverCompletion" type="U16"/>
      </useargs>
   </use>
   <use id="_671" name="SQLBrowseConnectW"
-     ponyname="SQLBrowseConnectW"
+     ponyname="sQLBrowseConnectW"
      fid="f40"
      lineno="338"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="szConnStrIn" type="Pointer[I32]"/>
-       <usearg name="cbConnStrIn" type="I16"/>
-       <usearg name="szConnStrOut" type="Pointer[I32]"/>
-       <usearg name="cbConnStrOutMax" type="I16"/>
-       <usearg name="pcbConnStrOut" type="Pointer[I16]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pszConnStrIn" type="Pointer[I32]"/>
+       <usearg name="pcbConnStrIn" type="I16"/>
+       <usearg name="pszConnStrOut" type="Pointer[I32]"/>
+       <usearg name="pcbConnStrOutMax" type="I16"/>
+       <usearg name="ppcbConnStrOut" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_672" name="SQLColumnPrivilegesW"
-     ponyname="SQLColumnPrivilegesW"
+     ponyname="sQLColumnPrivilegesW"
      fid="f40"
      lineno="346"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="Pointer[I32]"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="Pointer[I32]"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="Pointer[I32]"/>
-       <usearg name="cbTableName" type="I16"/>
-       <usearg name="szColumnName" type="Pointer[I32]"/>
-       <usearg name="cbColumnName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="Pointer[I32]"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="Pointer[I32]"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="Pointer[I32]"/>
+       <usearg name="pcbTableName" type="I16"/>
+       <usearg name="pszColumnName" type="Pointer[I32]"/>
+       <usearg name="pcbColumnName" type="I16"/>
      </useargs>
   </use>
   <use id="_673" name="SQLGetStmtAttrW"
-     ponyname="SQLGetStmtAttrW"
+     ponyname="sQLGetStmtAttrW"
      fid="f40"
      lineno="357"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="fAttribute" type="I32"/>
-       <usearg name="rgbValue" type="Pointer[None]"/>
-       <usearg name="cbValueMax" type="I32"/>
-       <usearg name="pcbValue" type="Pointer[I32]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pfAttribute" type="I32"/>
+       <usearg name="prgbValue" type="Pointer[None]"/>
+       <usearg name="pcbValueMax" type="I32"/>
+       <usearg name="ppcbValue" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_674" name="SQLSetStmtAttrW"
-     ponyname="SQLSetStmtAttrW"
+     ponyname="sQLSetStmtAttrW"
      fid="f40"
      lineno="364"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="fAttribute" type="I32"/>
-       <usearg name="rgbValue" type="Pointer[None]"/>
-       <usearg name="cbValueMax" type="I32"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pfAttribute" type="I32"/>
+       <usearg name="prgbValue" type="Pointer[None]"/>
+       <usearg name="pcbValueMax" type="I32"/>
      </useargs>
   </use>
   <use id="_675" name="SQLForeignKeysW"
-     ponyname="SQLForeignKeysW"
+     ponyname="sQLForeignKeysW"
      fid="f40"
      lineno="370"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szPkCatalogName" type="Pointer[I32]"/>
-       <usearg name="cbPkCatalogName" type="I16"/>
-       <usearg name="szPkSchemaName" type="Pointer[I32]"/>
-       <usearg name="cbPkSchemaName" type="I16"/>
-       <usearg name="szPkTableName" type="Pointer[I32]"/>
-       <usearg name="cbPkTableName" type="I16"/>
-       <usearg name="szFkCatalogName" type="Pointer[I32]"/>
-       <usearg name="cbFkCatalogName" type="I16"/>
-       <usearg name="szFkSchemaName" type="Pointer[I32]"/>
-       <usearg name="cbFkSchemaName" type="I16"/>
-       <usearg name="szFkTableName" type="Pointer[I32]"/>
-       <usearg name="cbFkTableName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszPkCatalogName" type="Pointer[I32]"/>
+       <usearg name="pcbPkCatalogName" type="I16"/>
+       <usearg name="pszPkSchemaName" type="Pointer[I32]"/>
+       <usearg name="pcbPkSchemaName" type="I16"/>
+       <usearg name="pszPkTableName" type="Pointer[I32]"/>
+       <usearg name="pcbPkTableName" type="I16"/>
+       <usearg name="pszFkCatalogName" type="Pointer[I32]"/>
+       <usearg name="pcbFkCatalogName" type="I16"/>
+       <usearg name="pszFkSchemaName" type="Pointer[I32]"/>
+       <usearg name="pcbFkSchemaName" type="I16"/>
+       <usearg name="pszFkTableName" type="Pointer[I32]"/>
+       <usearg name="pcbFkTableName" type="I16"/>
      </useargs>
   </use>
   <use id="_676" name="SQLNativeSqlW"
-     ponyname="SQLNativeSqlW"
+     ponyname="sQLNativeSqlW"
      fid="f40"
      lineno="385"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="szSqlStrIn" type="Pointer[I32]"/>
-       <usearg name="cbSqlStrIn" type="I32"/>
-       <usearg name="szSqlStr" type="Pointer[I32]"/>
-       <usearg name="cbSqlStrMax" type="I32"/>
-       <usearg name="pcbSqlStr" type="Pointer[I32]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pszSqlStrIn" type="Pointer[I32]"/>
+       <usearg name="pcbSqlStrIn" type="I32"/>
+       <usearg name="pszSqlStr" type="Pointer[I32]"/>
+       <usearg name="pcbSqlStrMax" type="I32"/>
+       <usearg name="ppcbSqlStr" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_677" name="SQLPrimaryKeysW"
-     ponyname="SQLPrimaryKeysW"
+     ponyname="sQLPrimaryKeysW"
      fid="f40"
      lineno="393"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="Pointer[I32]"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="Pointer[I32]"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="Pointer[I32]"/>
-       <usearg name="cbTableName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="Pointer[I32]"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="Pointer[I32]"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="Pointer[I32]"/>
+       <usearg name="pcbTableName" type="I16"/>
      </useargs>
   </use>
   <use id="_678" name="SQLProcedureColumnsW"
-     ponyname="SQLProcedureColumnsW"
+     ponyname="sQLProcedureColumnsW"
      fid="f40"
      lineno="402"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="Pointer[I32]"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="Pointer[I32]"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szProcName" type="Pointer[I32]"/>
-       <usearg name="cbProcName" type="I16"/>
-       <usearg name="szColumnName" type="Pointer[I32]"/>
-       <usearg name="cbColumnName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="Pointer[I32]"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="Pointer[I32]"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszProcName" type="Pointer[I32]"/>
+       <usearg name="pcbProcName" type="I16"/>
+       <usearg name="pszColumnName" type="Pointer[I32]"/>
+       <usearg name="pcbColumnName" type="I16"/>
      </useargs>
   </use>
   <use id="_679" name="SQLProceduresW"
-     ponyname="SQLProceduresW"
+     ponyname="sQLProceduresW"
      fid="f40"
      lineno="413"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="Pointer[I32]"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="Pointer[I32]"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szProcName" type="Pointer[I32]"/>
-       <usearg name="cbProcName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="Pointer[I32]"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="Pointer[I32]"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszProcName" type="Pointer[I32]"/>
+       <usearg name="pcbProcName" type="I16"/>
      </useargs>
   </use>
   <use id="_680" name="SQLTablePrivilegesW"
-     ponyname="SQLTablePrivilegesW"
+     ponyname="sQLTablePrivilegesW"
      fid="f40"
      lineno="422"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="Pointer[I32]"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="Pointer[I32]"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="Pointer[I32]"/>
-       <usearg name="cbTableName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="Pointer[I32]"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="Pointer[I32]"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="Pointer[I32]"/>
+       <usearg name="pcbTableName" type="I16"/>
      </useargs>
   </use>
   <use id="_681" name="SQLDriversW"
-     ponyname="SQLDriversW"
+     ponyname="sQLDriversW"
      fid="f40"
      lineno="431"
      rv="I16">
      <useargs>
-       <usearg name="henv" type="Pointer[None]"/>
-       <usearg name="fDirection" type="U16"/>
-       <usearg name="szDriverDesc" type="Pointer[I32]"/>
-       <usearg name="cbDriverDescMax" type="I16"/>
-       <usearg name="pcbDriverDesc" type="Pointer[I16]"/>
-       <usearg name="szDriverAttributes" type="Pointer[I32]"/>
-       <usearg name="cbDrvrAttrMax" type="I16"/>
-       <usearg name="pcbDrvrAttr" type="Pointer[I16]"/>
+       <usearg name="phenv" type="Pointer[None]"/>
+       <usearg name="pfDirection" type="U16"/>
+       <usearg name="pszDriverDesc" type="Pointer[I32]"/>
+       <usearg name="pcbDriverDescMax" type="I16"/>
+       <usearg name="ppcbDriverDesc" type="Pointer[I16]"/>
+       <usearg name="pszDriverAttributes" type="Pointer[I32]"/>
+       <usearg name="pcbDrvrAttrMax" type="I16"/>
+       <usearg name="ppcbDrvrAttr" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_682" name="SQLColAttributeA"
-     ponyname="SQLColAttributeA"
+     ponyname="sQLColAttributeA"
      fid="f40"
      lineno="446"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="iCol" type="U16"/>
-       <usearg name="iField" type="U16"/>
-       <usearg name="pCharAttr" type="Pointer[None]"/>
-       <usearg name="cbCharAttrMax" type="I16"/>
-       <usearg name="pcbCharAttr" type="Pointer[I16]"/>
-       <usearg name="pNumAttr" type="Pointer[I64]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="piCol" type="U16"/>
+       <usearg name="piField" type="U16"/>
+       <usearg name="ppCharAttr" type="Pointer[None]"/>
+       <usearg name="pcbCharAttrMax" type="I16"/>
+       <usearg name="ppcbCharAttr" type="Pointer[I16]"/>
+       <usearg name="ppNumAttr" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_683" name="SQLColAttributesA"
-     ponyname="SQLColAttributesA"
+     ponyname="sQLColAttributesA"
      fid="f40"
      lineno="455"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="icol" type="U16"/>
-       <usearg name="fDescType" type="U16"/>
-       <usearg name="rgbDesc" type="Pointer[None]"/>
-       <usearg name="cbDescMax" type="I16"/>
-       <usearg name="pcbDesc" type="Pointer[I16]"/>
-       <usearg name="pfDesc" type="Pointer[I64]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="picol" type="U16"/>
+       <usearg name="pfDescType" type="U16"/>
+       <usearg name="prgbDesc" type="Pointer[None]"/>
+       <usearg name="pcbDescMax" type="I16"/>
+       <usearg name="ppcbDesc" type="Pointer[I16]"/>
+       <usearg name="ppfDesc" type="Pointer[I64]"/>
      </useargs>
   </use>
   <use id="_684" name="SQLConnectA"
-     ponyname="SQLConnectA"
+     ponyname="sQLConnectA"
      fid="f40"
      lineno="464"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="szDSN" type="String"/>
-       <usearg name="cbDSN" type="I16"/>
-       <usearg name="szUID" type="String"/>
-       <usearg name="cbUID" type="I16"/>
-       <usearg name="szAuthStr" type="String"/>
-       <usearg name="cbAuthStr" type="I16"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pszDSN" type="String"/>
+       <usearg name="pcbDSN" type="I16"/>
+       <usearg name="pszUID" type="String"/>
+       <usearg name="pcbUID" type="I16"/>
+       <usearg name="pszAuthStr" type="String"/>
+       <usearg name="pcbAuthStr" type="I16"/>
      </useargs>
   </use>
   <use id="_685" name="SQLDescribeColA"
-     ponyname="SQLDescribeColA"
+     ponyname="sQLDescribeColA"
      fid="f40"
      lineno="473"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="icol" type="U16"/>
-       <usearg name="szColName" type="String"/>
-       <usearg name="cbColNameMax" type="I16"/>
-       <usearg name="pcbColName" type="Pointer[I16]"/>
-       <usearg name="pfSqlType" type="Pointer[I16]"/>
-       <usearg name="pcbColDef" type="Pointer[U64]"/>
-       <usearg name="pibScale" type="Pointer[I16]"/>
-       <usearg name="pfNullable" type="Pointer[I16]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="picol" type="U16"/>
+       <usearg name="pszColName" type="String"/>
+       <usearg name="pcbColNameMax" type="I16"/>
+       <usearg name="ppcbColName" type="Pointer[I16]"/>
+       <usearg name="ppfSqlType" type="Pointer[I16]"/>
+       <usearg name="ppcbColDef" type="Pointer[U64]"/>
+       <usearg name="ppibScale" type="Pointer[I16]"/>
+       <usearg name="ppfNullable" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_686" name="SQLErrorA"
-     ponyname="SQLErrorA"
+     ponyname="sQLErrorA"
      fid="f40"
      lineno="484"
      rv="I16">
      <useargs>
-       <usearg name="henv" type="Pointer[None]"/>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szSqlState" type="String"/>
-       <usearg name="pfNativeError" type="Pointer[I32]"/>
-       <usearg name="szErrorMsg" type="String"/>
-       <usearg name="cbErrorMsgMax" type="I16"/>
-       <usearg name="pcbErrorMsg" type="Pointer[I16]"/>
+       <usearg name="phenv" type="Pointer[None]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszSqlState" type="String"/>
+       <usearg name="ppfNativeError" type="Pointer[I32]"/>
+       <usearg name="pszErrorMsg" type="String"/>
+       <usearg name="pcbErrorMsgMax" type="I16"/>
+       <usearg name="ppcbErrorMsg" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_687" name="SQLExecDirectA"
-     ponyname="SQLExecDirectA"
+     ponyname="sQLExecDirectA"
      fid="f40"
      lineno="494"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szSqlStr" type="String"/>
-       <usearg name="cbSqlStr" type="I32"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszSqlStr" type="String"/>
+       <usearg name="pcbSqlStr" type="I32"/>
      </useargs>
   </use>
   <use id="_688" name="SQLGetConnectAttrA"
-     ponyname="SQLGetConnectAttrA"
+     ponyname="sQLGetConnectAttrA"
      fid="f40"
      lineno="499"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="fAttribute" type="I32"/>
-       <usearg name="rgbValue" type="Pointer[None]"/>
-       <usearg name="cbValueMax" type="I32"/>
-       <usearg name="pcbValue" type="Pointer[I32]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pfAttribute" type="I32"/>
+       <usearg name="prgbValue" type="Pointer[None]"/>
+       <usearg name="pcbValueMax" type="I32"/>
+       <usearg name="ppcbValue" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_689" name="SQLGetCursorNameA"
-     ponyname="SQLGetCursorNameA"
+     ponyname="sQLGetCursorNameA"
      fid="f40"
      lineno="506"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCursor" type="String"/>
-       <usearg name="cbCursorMax" type="I16"/>
-       <usearg name="pcbCursor" type="Pointer[I16]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCursor" type="String"/>
+       <usearg name="pcbCursorMax" type="I16"/>
+       <usearg name="ppcbCursor" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_690" name="SQLSetDescFieldA"
-     ponyname="SQLSetDescFieldA"
+     ponyname="sQLSetDescFieldA"
      fid="f40"
      lineno="513"
      rv="I16">
      <useargs>
-       <usearg name="DescriptorHandle" type="Pointer[None]"/>
-       <usearg name="RecNumber" type="I16"/>
-       <usearg name="FieldIdentifier" type="I16"/>
-       <usearg name="Value" type="Pointer[None]"/>
-       <usearg name="BufferLength" type="I32"/>
+       <usearg name="pDescriptorHandle" type="Pointer[None]"/>
+       <usearg name="pRecNumber" type="I16"/>
+       <usearg name="pFieldIdentifier" type="I16"/>
+       <usearg name="pValue" type="Pointer[None]"/>
+       <usearg name="pBufferLength" type="I32"/>
      </useargs>
   </use>
   <use id="_691" name="SQLGetDescFieldA"
-     ponyname="SQLGetDescFieldA"
+     ponyname="sQLGetDescFieldA"
      fid="f40"
      lineno="520"
      rv="I16">
      <useargs>
-       <usearg name="hdesc" type="Pointer[None]"/>
-       <usearg name="iRecord" type="I16"/>
-       <usearg name="iField" type="I16"/>
-       <usearg name="rgbValue" type="Pointer[None]"/>
-       <usearg name="cbValueMax" type="I32"/>
-       <usearg name="pcbValue" type="Pointer[I32]"/>
+       <usearg name="phdesc" type="Pointer[None]"/>
+       <usearg name="piRecord" type="I16"/>
+       <usearg name="piField" type="I16"/>
+       <usearg name="prgbValue" type="Pointer[None]"/>
+       <usearg name="pcbValueMax" type="I32"/>
+       <usearg name="ppcbValue" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_692" name="SQLGetDescRecA"
-     ponyname="SQLGetDescRecA"
+     ponyname="sQLGetDescRecA"
      fid="f40"
      lineno="528"
      rv="I16">
      <useargs>
-       <usearg name="hdesc" type="Pointer[None]"/>
-       <usearg name="iRecord" type="I16"/>
-       <usearg name="szName" type="String"/>
-       <usearg name="cbNameMax" type="I16"/>
-       <usearg name="pcbName" type="Pointer[I16]"/>
-       <usearg name="pfType" type="Pointer[I16]"/>
-       <usearg name="pfSubType" type="Pointer[I16]"/>
-       <usearg name="pLength" type="Pointer[I64]"/>
-       <usearg name="pPrecision" type="Pointer[I16]"/>
-       <usearg name="pScale" type="Pointer[I16]"/>
-       <usearg name="pNullable" type="Pointer[I16]"/>
+       <usearg name="phdesc" type="Pointer[None]"/>
+       <usearg name="piRecord" type="I16"/>
+       <usearg name="pszName" type="String"/>
+       <usearg name="pcbNameMax" type="I16"/>
+       <usearg name="ppcbName" type="Pointer[I16]"/>
+       <usearg name="ppfType" type="Pointer[I16]"/>
+       <usearg name="ppfSubType" type="Pointer[I16]"/>
+       <usearg name="ppLength" type="Pointer[I64]"/>
+       <usearg name="ppPrecision" type="Pointer[I16]"/>
+       <usearg name="ppScale" type="Pointer[I16]"/>
+       <usearg name="ppNullable" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_693" name="SQLGetDiagFieldA"
-     ponyname="SQLGetDiagFieldA"
+     ponyname="sQLGetDiagFieldA"
      fid="f40"
      lineno="541"
      rv="I16">
      <useargs>
-       <usearg name="fHandleType" type="I16"/>
-       <usearg name="handle" type="Pointer[None]"/>
-       <usearg name="iRecord" type="I16"/>
-       <usearg name="fDiagField" type="I16"/>
-       <usearg name="rgbDiagInfo" type="Pointer[None]"/>
-       <usearg name="cbDiagInfoMax" type="I16"/>
-       <usearg name="pcbDiagInfo" type="Pointer[I16]"/>
+       <usearg name="pfHandleType" type="I16"/>
+       <usearg name="phandle" type="Pointer[None]"/>
+       <usearg name="piRecord" type="I16"/>
+       <usearg name="pfDiagField" type="I16"/>
+       <usearg name="prgbDiagInfo" type="Pointer[None]"/>
+       <usearg name="pcbDiagInfoMax" type="I16"/>
+       <usearg name="ppcbDiagInfo" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_694" name="SQLGetDiagRecA"
-     ponyname="SQLGetDiagRecA"
+     ponyname="sQLGetDiagRecA"
      fid="f40"
      lineno="550"
      rv="I16">
      <useargs>
-       <usearg name="fHandleType" type="I16"/>
-       <usearg name="handle" type="Pointer[None]"/>
-       <usearg name="iRecord" type="I16"/>
-       <usearg name="szSqlState" type="String"/>
-       <usearg name="pfNativeError" type="Pointer[I32]"/>
-       <usearg name="szErrorMsg" type="String"/>
-       <usearg name="cbErrorMsgMax" type="I16"/>
-       <usearg name="pcbErrorMsg" type="Pointer[I16]"/>
+       <usearg name="pfHandleType" type="I16"/>
+       <usearg name="phandle" type="Pointer[None]"/>
+       <usearg name="piRecord" type="I16"/>
+       <usearg name="pszSqlState" type="String"/>
+       <usearg name="ppfNativeError" type="Pointer[I32]"/>
+       <usearg name="pszErrorMsg" type="String"/>
+       <usearg name="pcbErrorMsgMax" type="I16"/>
+       <usearg name="ppcbErrorMsg" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_695" name="SQLPrepareA"
-     ponyname="SQLPrepareA"
+     ponyname="sQLPrepareA"
      fid="f40"
      lineno="561"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szSqlStr" type="String"/>
-       <usearg name="cbSqlStr" type="I32"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszSqlStr" type="String"/>
+       <usearg name="pcbSqlStr" type="I32"/>
      </useargs>
   </use>
   <use id="_696" name="SQLSetConnectAttrA"
-     ponyname="SQLSetConnectAttrA"
+     ponyname="sQLSetConnectAttrA"
      fid="f40"
      lineno="566"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="fAttribute" type="I32"/>
-       <usearg name="rgbValue" type="Pointer[None]"/>
-       <usearg name="cbValue" type="I32"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pfAttribute" type="I32"/>
+       <usearg name="prgbValue" type="Pointer[None]"/>
+       <usearg name="pcbValue" type="I32"/>
      </useargs>
   </use>
   <use id="_697" name="SQLSetCursorNameA"
-     ponyname="SQLSetCursorNameA"
+     ponyname="sQLSetCursorNameA"
      fid="f40"
      lineno="572"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCursor" type="String"/>
-       <usearg name="cbCursor" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCursor" type="String"/>
+       <usearg name="pcbCursor" type="I16"/>
      </useargs>
   </use>
   <use id="_698" name="SQLColumnsA"
-     ponyname="SQLColumnsA"
+     ponyname="sQLColumnsA"
      fid="f40"
      lineno="577"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="String"/>
-       <usearg name="cbTableName" type="I16"/>
-       <usearg name="szColumnName" type="String"/>
-       <usearg name="cbColumnName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="String"/>
+       <usearg name="pcbTableName" type="I16"/>
+       <usearg name="pszColumnName" type="String"/>
+       <usearg name="pcbColumnName" type="I16"/>
      </useargs>
   </use>
   <use id="_699" name="SQLGetConnectOptionA"
-     ponyname="SQLGetConnectOptionA"
+     ponyname="sQLGetConnectOptionA"
      fid="f40"
      lineno="588"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="fOption" type="U16"/>
-       <usearg name="pvParam" type="Pointer[None]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pfOption" type="U16"/>
+       <usearg name="ppvParam" type="Pointer[None]"/>
      </useargs>
   </use>
   <use id="_700" name="SQLGetInfoA"
-     ponyname="SQLGetInfoA"
+     ponyname="sQLGetInfoA"
      fid="f40"
      lineno="593"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="fInfoType" type="U16"/>
-       <usearg name="rgbInfoValue" type="Pointer[None]"/>
-       <usearg name="cbInfoValueMax" type="I16"/>
-       <usearg name="pcbInfoValue" type="Pointer[I16]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pfInfoType" type="U16"/>
+       <usearg name="prgbInfoValue" type="Pointer[None]"/>
+       <usearg name="pcbInfoValueMax" type="I16"/>
+       <usearg name="ppcbInfoValue" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_701" name="SQLGetTypeInfoA"
-     ponyname="SQLGetTypeInfoA"
+     ponyname="sQLGetTypeInfoA"
      fid="f40"
      lineno="600"
      rv="I16">
      <useargs>
-       <usearg name="StatementHandle" type="Pointer[None]"/>
-       <usearg name="DataType" type="I16"/>
+       <usearg name="pStatementHandle" type="Pointer[None]"/>
+       <usearg name="pDataType" type="I16"/>
      </useargs>
   </use>
   <use id="_702" name="SQLSetConnectOptionA"
-     ponyname="SQLSetConnectOptionA"
+     ponyname="sQLSetConnectOptionA"
      fid="f40"
      lineno="604"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="fOption" type="U16"/>
-       <usearg name="vParam" type="U64"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pfOption" type="U16"/>
+       <usearg name="pvParam" type="U64"/>
      </useargs>
   </use>
   <use id="_703" name="SQLSpecialColumnsA"
-     ponyname="SQLSpecialColumnsA"
+     ponyname="sQLSpecialColumnsA"
      fid="f40"
      lineno="609"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="fColType" type="U16"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="String"/>
-       <usearg name="cbTableName" type="I16"/>
-       <usearg name="fScope" type="U16"/>
-       <usearg name="fNullable" type="U16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pfColType" type="U16"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="String"/>
+       <usearg name="pcbTableName" type="I16"/>
+       <usearg name="pfScope" type="U16"/>
+       <usearg name="pfNullable" type="U16"/>
      </useargs>
   </use>
   <use id="_704" name="SQLStatisticsA"
-     ponyname="SQLStatisticsA"
+     ponyname="sQLStatisticsA"
      fid="f40"
      lineno="621"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="String"/>
-       <usearg name="cbTableName" type="I16"/>
-       <usearg name="fUnique" type="U16"/>
-       <usearg name="fAccuracy" type="U16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="String"/>
+       <usearg name="pcbTableName" type="I16"/>
+       <usearg name="pfUnique" type="U16"/>
+       <usearg name="pfAccuracy" type="U16"/>
      </useargs>
   </use>
   <use id="_705" name="SQLTablesA"
-     ponyname="SQLTablesA"
+     ponyname="sQLTablesA"
      fid="f40"
      lineno="632"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="String"/>
-       <usearg name="cbTableName" type="I16"/>
-       <usearg name="szTableType" type="String"/>
-       <usearg name="cbTableType" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="String"/>
+       <usearg name="pcbTableName" type="I16"/>
+       <usearg name="pszTableType" type="String"/>
+       <usearg name="pcbTableType" type="I16"/>
      </useargs>
   </use>
   <use id="_706" name="SQLDataSourcesA"
-     ponyname="SQLDataSourcesA"
+     ponyname="sQLDataSourcesA"
      fid="f40"
      lineno="643"
      rv="I16">
      <useargs>
-       <usearg name="henv" type="Pointer[None]"/>
-       <usearg name="fDirection" type="U16"/>
-       <usearg name="szDSN" type="String"/>
-       <usearg name="cbDSNMax" type="I16"/>
-       <usearg name="pcbDSN" type="Pointer[I16]"/>
-       <usearg name="szDescription" type="String"/>
-       <usearg name="cbDescriptionMax" type="I16"/>
-       <usearg name="pcbDescription" type="Pointer[I16]"/>
+       <usearg name="phenv" type="Pointer[None]"/>
+       <usearg name="pfDirection" type="U16"/>
+       <usearg name="pszDSN" type="String"/>
+       <usearg name="pcbDSNMax" type="I16"/>
+       <usearg name="ppcbDSN" type="Pointer[I16]"/>
+       <usearg name="pszDescription" type="String"/>
+       <usearg name="pcbDescriptionMax" type="I16"/>
+       <usearg name="ppcbDescription" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_707" name="SQLDriverConnectA"
-     ponyname="SQLDriverConnectA"
+     ponyname="sQLDriverConnectA"
      fid="f40"
      lineno="653"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="hwnd" type="Pointer[None]"/>
-       <usearg name="szConnStrIn" type="String"/>
-       <usearg name="cbConnStrIn" type="I16"/>
-       <usearg name="szConnStrOut" type="String"/>
-       <usearg name="cbConnStrOutMax" type="I16"/>
-       <usearg name="pcbConnStrOut" type="Pointer[I16]"/>
-       <usearg name="fDriverCompletion" type="U16"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="phwnd" type="Pointer[None]"/>
+       <usearg name="pszConnStrIn" type="String"/>
+       <usearg name="pcbConnStrIn" type="I16"/>
+       <usearg name="pszConnStrOut" type="String"/>
+       <usearg name="pcbConnStrOutMax" type="I16"/>
+       <usearg name="ppcbConnStrOut" type="Pointer[I16]"/>
+       <usearg name="pfDriverCompletion" type="U16"/>
      </useargs>
   </use>
   <use id="_708" name="SQLBrowseConnectA"
-     ponyname="SQLBrowseConnectA"
+     ponyname="sQLBrowseConnectA"
      fid="f40"
      lineno="663"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="szConnStrIn" type="String"/>
-       <usearg name="cbConnStrIn" type="I16"/>
-       <usearg name="szConnStrOut" type="String"/>
-       <usearg name="cbConnStrOutMax" type="I16"/>
-       <usearg name="pcbConnStrOut" type="Pointer[I16]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pszConnStrIn" type="String"/>
+       <usearg name="pcbConnStrIn" type="I16"/>
+       <usearg name="pszConnStrOut" type="String"/>
+       <usearg name="pcbConnStrOutMax" type="I16"/>
+       <usearg name="ppcbConnStrOut" type="Pointer[I16]"/>
      </useargs>
   </use>
   <use id="_709" name="SQLColumnPrivilegesA"
-     ponyname="SQLColumnPrivilegesA"
+     ponyname="sQLColumnPrivilegesA"
      fid="f40"
      lineno="671"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="String"/>
-       <usearg name="cbTableName" type="I16"/>
-       <usearg name="szColumnName" type="String"/>
-       <usearg name="cbColumnName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="String"/>
+       <usearg name="pcbTableName" type="I16"/>
+       <usearg name="pszColumnName" type="String"/>
+       <usearg name="pcbColumnName" type="I16"/>
      </useargs>
   </use>
   <use id="_710" name="SQLGetStmtAttrA"
-     ponyname="SQLGetStmtAttrA"
+     ponyname="sQLGetStmtAttrA"
      fid="f40"
      lineno="682"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="fAttribute" type="I32"/>
-       <usearg name="rgbValue" type="Pointer[None]"/>
-       <usearg name="cbValueMax" type="I32"/>
-       <usearg name="pcbValue" type="Pointer[I32]"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pfAttribute" type="I32"/>
+       <usearg name="prgbValue" type="Pointer[None]"/>
+       <usearg name="pcbValueMax" type="I32"/>
+       <usearg name="ppcbValue" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_711" name="SQLSetStmtAttrA"
-     ponyname="SQLSetStmtAttrA"
+     ponyname="sQLSetStmtAttrA"
      fid="f40"
      lineno="689"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="fAttribute" type="I32"/>
-       <usearg name="rgbValue" type="Pointer[None]"/>
-       <usearg name="cbValueMax" type="I32"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pfAttribute" type="I32"/>
+       <usearg name="prgbValue" type="Pointer[None]"/>
+       <usearg name="pcbValueMax" type="I32"/>
      </useargs>
   </use>
   <use id="_712" name="SQLForeignKeysA"
-     ponyname="SQLForeignKeysA"
+     ponyname="sQLForeignKeysA"
      fid="f40"
      lineno="695"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szPkCatalogName" type="String"/>
-       <usearg name="cbPkCatalogName" type="I16"/>
-       <usearg name="szPkSchemaName" type="String"/>
-       <usearg name="cbPkSchemaName" type="I16"/>
-       <usearg name="szPkTableName" type="String"/>
-       <usearg name="cbPkTableName" type="I16"/>
-       <usearg name="szFkCatalogName" type="String"/>
-       <usearg name="cbFkCatalogName" type="I16"/>
-       <usearg name="szFkSchemaName" type="String"/>
-       <usearg name="cbFkSchemaName" type="I16"/>
-       <usearg name="szFkTableName" type="String"/>
-       <usearg name="cbFkTableName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszPkCatalogName" type="String"/>
+       <usearg name="pcbPkCatalogName" type="I16"/>
+       <usearg name="pszPkSchemaName" type="String"/>
+       <usearg name="pcbPkSchemaName" type="I16"/>
+       <usearg name="pszPkTableName" type="String"/>
+       <usearg name="pcbPkTableName" type="I16"/>
+       <usearg name="pszFkCatalogName" type="String"/>
+       <usearg name="pcbFkCatalogName" type="I16"/>
+       <usearg name="pszFkSchemaName" type="String"/>
+       <usearg name="pcbFkSchemaName" type="I16"/>
+       <usearg name="pszFkTableName" type="String"/>
+       <usearg name="pcbFkTableName" type="I16"/>
      </useargs>
   </use>
   <use id="_713" name="SQLNativeSqlA"
-     ponyname="SQLNativeSqlA"
+     ponyname="sQLNativeSqlA"
      fid="f40"
      lineno="710"
      rv="I16">
      <useargs>
-       <usearg name="hdbc" type="Pointer[None]"/>
-       <usearg name="szSqlStrIn" type="String"/>
-       <usearg name="cbSqlStrIn" type="I32"/>
-       <usearg name="szSqlStr" type="String"/>
-       <usearg name="cbSqlStrMax" type="I32"/>
-       <usearg name="pcbSqlStr" type="Pointer[I32]"/>
+       <usearg name="phdbc" type="Pointer[None]"/>
+       <usearg name="pszSqlStrIn" type="String"/>
+       <usearg name="pcbSqlStrIn" type="I32"/>
+       <usearg name="pszSqlStr" type="String"/>
+       <usearg name="pcbSqlStrMax" type="I32"/>
+       <usearg name="ppcbSqlStr" type="Pointer[I32]"/>
      </useargs>
   </use>
   <use id="_714" name="SQLPrimaryKeysA"
-     ponyname="SQLPrimaryKeysA"
+     ponyname="sQLPrimaryKeysA"
      fid="f40"
      lineno="718"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="String"/>
-       <usearg name="cbTableName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="String"/>
+       <usearg name="pcbTableName" type="I16"/>
      </useargs>
   </use>
   <use id="_715" name="SQLProcedureColumnsA"
-     ponyname="SQLProcedureColumnsA"
+     ponyname="sQLProcedureColumnsA"
      fid="f40"
      lineno="727"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szProcName" type="String"/>
-       <usearg name="cbProcName" type="I16"/>
-       <usearg name="szColumnName" type="String"/>
-       <usearg name="cbColumnName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszProcName" type="String"/>
+       <usearg name="pcbProcName" type="I16"/>
+       <usearg name="pszColumnName" type="String"/>
+       <usearg name="pcbColumnName" type="I16"/>
      </useargs>
   </use>
   <use id="_716" name="SQLProceduresA"
-     ponyname="SQLProceduresA"
+     ponyname="sQLProceduresA"
      fid="f40"
      lineno="738"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szProcName" type="String"/>
-       <usearg name="cbProcName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszProcName" type="String"/>
+       <usearg name="pcbProcName" type="I16"/>
      </useargs>
   </use>
   <use id="_717" name="SQLTablePrivilegesA"
-     ponyname="SQLTablePrivilegesA"
+     ponyname="sQLTablePrivilegesA"
      fid="f40"
      lineno="747"
      rv="I16">
      <useargs>
-       <usearg name="hstmt" type="Pointer[None]"/>
-       <usearg name="szCatalogName" type="String"/>
-       <usearg name="cbCatalogName" type="I16"/>
-       <usearg name="szSchemaName" type="String"/>
-       <usearg name="cbSchemaName" type="I16"/>
-       <usearg name="szTableName" type="String"/>
-       <usearg name="cbTableName" type="I16"/>
+       <usearg name="phstmt" type="Pointer[None]"/>
+       <usearg name="pszCatalogName" type="String"/>
+       <usearg name="pcbCatalogName" type="I16"/>
+       <usearg name="pszSchemaName" type="String"/>
+       <usearg name="pcbSchemaName" type="I16"/>
+       <usearg name="pszTableName" type="String"/>
+       <usearg name="pcbTableName" type="I16"/>
      </useargs>
   </use>
   <use id="_718" name="SQLDriversA"
-     ponyname="SQLDriversA"
+     ponyname="sQLDriversA"
      fid="f40"
      lineno="756"
      rv="I16">
      <useargs>
-       <usearg name="henv" type="Pointer[None]"/>
-       <usearg name="fDirection" type="U16"/>
-       <usearg name="szDriverDesc" type="String"/>
-       <usearg name="cbDriverDescMax" type="I16"/>
-       <usearg name="pcbDriverDesc" type="Pointer[I16]"/>
-       <usearg name="szDriverAttributes" type="String"/>
-       <usearg name="cbDrvrAttrMax" type="I16"/>
-       <usearg name="pcbDrvrAttr" type="Pointer[I16]"/>
+       <usearg name="phenv" type="Pointer[None]"/>
+       <usearg name="pfDirection" type="U16"/>
+       <usearg name="pszDriverDesc" type="String"/>
+       <usearg name="pcbDriverDescMax" type="I16"/>
+       <usearg name="ppcbDriverDesc" type="Pointer[I16]"/>
+       <usearg name="pszDriverAttributes" type="String"/>
+       <usearg name="pcbDrvrAttrMax" type="I16"/>
+       <usearg name="ppcbDrvrAttr" type="Pointer[I16]"/>
      </useargs>
   </use></uses>
 </castxml2pony>
