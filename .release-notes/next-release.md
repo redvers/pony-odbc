@@ -11,3 +11,8 @@ Differences in versions required the following changes:
 * ODBCDbc will no longer apply SQL\_AUTOCOMMIT after a connection is made
   in more recent versions.
 
+## Add native FFI interface
+
+This interface is 95% auto-generated and designed to follow the ODBC API
+directly.
+
