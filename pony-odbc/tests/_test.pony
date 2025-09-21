@@ -34,4 +34,3 @@ actor \nodoc\ Main is TestList
     test(_TestTransactions("psqlred"))
     test(_TestTransactions("mariadb"))
     test(_TestTransactions("sqlitedb3"))
-

@@ -265,7 +265,6 @@ primitive \nodoc\ ODBCStmtFFI
       v.ptr,
       v.alloc_size.i64(),
       v.written_size)
-//use @SQLBindCol[I16](StatementHandle: Pointer[None] tag, ColumnNumber: U16, TargetType: I16, TargetValue: Pointer[U8] tag, BufferLength: I64, StrLenorInd: Pointer[I64] tag)
 
     match rv
     | 0 => return SQLSuccess

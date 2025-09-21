@@ -72,27 +72,37 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
       else
         h.assert_eq[USize](0, env.sqlstates().size())
         h.assert_eq[USize](0, dbc.sqlstates().size())
-        h.assert_eq[USize](0, stm.sqlstates().size())
+        h.assert_eq[USize](1, stm.sqlstates().size())
+        try
+          h.assert_eq[String val]("42000", stm.sqlstates()(0)?._1)
+        else
+          h.fail("Unable to locate sqlstate for create_table_temp_syntax_err")
+        end
+
+
       end
       try
-        Debug.out("predbh: " + dbc.get_err().string())
-        Debug.out("presth: " + stm.get_err().string())
         stm
           .> execute()?
       else
-        Debug.out("predbh: " + dbc.get_err().string())
-        Debug.out("presth: " + stm.get_err().string())
         h.assert_eq[USize](0, env.sqlstates().size())
         h.assert_eq[USize](0, dbc.sqlstates().size())
-//        h.assert_eq[USize](1, stm.sqlstates().size()) //
-        Debug.out((stm.get_err() as SQLError val).get_err_strings())
+
+/*
+ * A change in behaviour in how mariadb's connector mean we have to gate
+ * this test.
+ */
+        if (dsn != "mariadb") then
+          h.assert_eq[USize](1, stm.sqlstates().size())
+        end
         try
-          h.assert_true((stm.sqlstates()(0)?._1 == "42601")  // Vendor Specific
-                     or (stm.sqlstates()(0)?._1 == "42000")  // Permissions or Syntax Error
+          if (dsn != "mariadb") then
+            h.assert_true((stm.sqlstates()(0)?._1 == "42601")// Vendor Specific
+                     or (stm.sqlstates()(0)?._1 == "HY010")  // MariaDB already b0rked
                      or (stm.sqlstates()(0)?._1 == "HY000")) // General Error
+          end
         else
-          None
-//          h.fail("Unable to locate sqlstate for create_table_temp_syntax_err")
+          h.fail("Unable to locate sqlstate for create_table_temp_syntax_err")
         end
       end
     else
