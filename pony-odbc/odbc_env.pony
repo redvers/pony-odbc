@@ -29,6 +29,9 @@ class ODBCEnv is SqlState
     (_err, odbcenv) = ODBCEnvFFI.alloc()
 
   fun dbc(): ODBCDbc ? =>
+    """
+    Used to create an ODBCDbc object from this ODBCEnv.
+    """
     ODBCDbc(odbcenv)?
 
   fun sqlstates(): Array[(String val, String val)] val =>

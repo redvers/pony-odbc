@@ -10,14 +10,14 @@ class ODBCDbc is SqlState
 
   ```pony
   var env: ODBCEnv = ODBCEnv .> set_odbc3()
-  var dbc: ODBCDbc = ODBCDbc(env)
+  var dbc: ODBCDbc = env.dbc()?
 
   // Disable autocommit, set application name, and connect to database
   try
     dbc
-    .> set_autocommit(false)         // Disable Autocommit
-    .> set_application_name("myapp") // Set application name
-    .> connect("mydsn")              // Connect to DSN "mydsn"
+    .> set_autocommit(false)?         // Disable Autocommit
+    .> set_application_name("myapp")? // Set application name
+    .> connect("mydsn")?              // Connect to DSN "mydsn"
   else
     Debug.out("We failed, here's our errors:")
     Debug.out(dbc.errtext)
@@ -35,10 +35,7 @@ class ODBCDbc is SqlState
 
   var _call_location: SourceLoc val = __loc
 
-  new create(henv': ODBCHandleEnv tag, sl: SourceLoc val = __loc) ? =>
-    """
-    Creates a new PostgresSQL Database Object.
-    """
+  new \nodoc\ create(henv': ODBCHandleEnv tag, sl: SourceLoc val = __loc) ? =>
     _henv = henv'
     _call_location = sl
 
@@ -46,6 +43,9 @@ class ODBCDbc is SqlState
     _check_valid()?
 
   fun ref stmt(): ODBCStmt ? =>
+    """
+    Used to create an ODBCStmt object from this ODBCDbc connection.
+    """
     ODBCStmt.create(_henv, dbc)?
 
   fun sqlstates(): Array[(String val, String val)] val =>
