@@ -12,7 +12,7 @@ Please don't assume that this current API is stable.
 ## Installation
 
 * Install [corral](https://github.com/ponylang/corral)
-* `corral add github.com/redvers/pony-odbc.git --version 0.1.0`
+* `corral add github.com/redvers/pony-odbc.git --version 0.2.0`
 * `corral fetch` to fetch your dependencies
 * `use "pony-odbc"` to include it in your application
 * `use "lib:odbc"` or `use "lib:iodbc"` for unixODBC or iODBC respectively
