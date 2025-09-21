@@ -1,4 +1,0 @@
-## First Release
-
-This is the first working and documented release for pony-odbc.
-

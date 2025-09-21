@@ -24,7 +24,7 @@ class ODBCStmt is SqlState
   we can simply prepare the statement and directly execute it:
 
   ```pony
-  var stm: ODBCStmt = ODBCStmt(dbc)
+  var stm: ODBCStmt = dbc.stmt()?
 
   stm
     .> prepare("create table demotable (myint integer unique, mystr varchar(400))")?
@@ -135,13 +135,7 @@ class ODBCStmt is SqlState
 
   var _call_location: SourceLoc val = __loc
 
-  new create(env': ODBCHandleEnv tag, dbh': ODBCHandleDbc tag, sl: SourceLoc val = __loc) ? =>
-    """
-    This constructor creates a new ODBCStmt instance which represents in the
-    ODBC API an abstraction of an ODBC Statement Handle.
-
-    These handles can be recycled.
-    """
+  new \nodoc\ create(env': ODBCHandleEnv tag, dbh': ODBCHandleDbc tag, sl: SourceLoc val = __loc) ? =>
     _env = env'
     _dbh = dbh'
     _call_location = sl
