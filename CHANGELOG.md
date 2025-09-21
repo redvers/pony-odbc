@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Added
 
+- Adds native FFI interface ([PR #33](https://github.com/redvers/pony-odbc/pull/33))
 
 ### Changed
 
