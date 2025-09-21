@@ -1,0 +1,13 @@
+## Misc bugfixes specific to mariadb.
+
+Differences in versions required the following changes:
+
+* SQLExecute execution returns SQLSuccess in newer versions instead of
+  SQLSuccessWithInfo. We now need to validate the buffers for every both
+  SQLSucess and SQLSuccessWithInfo.
+* When providing syntactically invalid SQL to SQLPrepare, newer versions
+  throw a SQLError on SQLPrepare, older versions on the SQLExecute (like
+  all other tested connectors).
+* ODBCDbc will no longer apply SQL\_AUTOCOMMIT after a connection is made
+  in more recent versions.
+
