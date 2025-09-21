@@ -1,4 +1,5 @@
 use "debug"
+use "ffi"
 
 class ODBCEnv is SqlState
   """
@@ -20,13 +21,15 @@ class ODBCEnv is SqlState
   """
   let odbcenv: ODBCHandleEnv tag
   var strict: Bool = true
-  var _err: _SQLReturn val
+  var _err: _SQLReturn val = SQLSuccess
 
-  new create() =>
+  new create() => None
     """
     Creates a new ODBC Environment
     """
-    (_err, odbcenv) = ODBCEnvFFI.alloc()
+    var envwrapper: EnvWrapper = EnvWrapper
+    ODBCFFI.pSQLAllocHandle_env(envwrapper)
+    odbcenv = envwrapper.value
 
   fun dbc(): ODBCDbc ? =>
     """

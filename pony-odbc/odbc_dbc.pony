@@ -1,3 +1,4 @@
+use "ffi"
 use "debug"
 
 class ODBCDbc is SqlState
@@ -30,7 +31,7 @@ class ODBCDbc is SqlState
   """
   let dbc: ODBCHandleDbc tag
   let _henv: ODBCHandleEnv tag
-  var _err: _SQLReturn val
+  var _err: _SQLReturn val = SQLSuccess
   var strict: Bool = true
 
   var _call_location: SourceLoc val = __loc

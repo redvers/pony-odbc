@@ -1,3 +1,4 @@
+use "ffi"
 use @SQLSetEnvAttr[I16](henv: Pointer[None] tag, attr: I32, v: I32, sl: I32)
 use @SQLGetEnvAttr[I16](EnvironmentHandle: Pointer[None] tag, Attribute: I32, Value: CBoxedI32 tag, BufferLength: I32, StringLength: Pointer[I32] tag)
 

@@ -27,16 +27,16 @@
     argtype="Pointer[Pointer[U8]] tag"
     rvtype="Pointer[Pointer[U8]]"/>
 
-<typedef name="Pointer[U64]" ponytypein="Pointer[U64] tag" ponytypeinconv="" ponytypeout="Pointer[U64]" structtype="Pointer[U64]" structdef="Pointer[U64]" argtype="Pointer[U64] tag" rvtype="Pointer[U64]" decl="  var "/>
+<typedef name="Pointer[U64]" ponytypein="CBoxedU64" ponytypeinconv="" ponytypeout="CBoxedU64" structtype="CBoxedU64" structdef="CBoxedU64" argtype="CBoxedU64 tag" rvtype="CBoxedU64" decl="  var "/>
 <typedef name="Pointer[None]" ponytypein="Pointer[None] tag" ponytypeinconv="" ponytypeout="Pointer[None]" structtype="Pointer[None]" structdef="Pointer[None]" argtype="Pointer[None] tag" rvtype="Pointer[None]" decl="  var "/>
 <typedef name="I32" ponytypein="I32" ponytypeinconv="" ponytypeout="I32" structtype="I32" structdef="I32(0)" argtype="I32" rvtype="I32" decl="  var "/>
-<typedef name="Pointer[U16]" ponytypein="Pointer[U16] tag" ponytypeinconv="" ponytypeout="Pointer[U16]" structtype="Pointer[U16]" structdef="Pointer[U16]" argtype="Pointer[U16] tag" rvtype="Pointer[U16]" decl="  var "/>
-<typedef name="NullablePointer[Pointer[None]Struct]" ponytypein="NullablePointer[Pointer[None]Struct] tag" ponytypeinconv="" ponytypeout="NullablePointer[Pointer[None]Struct]" structtype="NullablePointer[Pointer[None]Struct]" structdef="NullablePointer[Pointer[None]Struct].none()" argtype="NullablePointer[Pointer[None]Struct] tag" rvtype="NullablePointer[Pointer[None]Struct]" decl="  var "/>
-<typedef name="Pointer[I64]" ponytypein="Pointer[I64] tag" ponytypeinconv="" ponytypeout="Pointer[I64]" structtype="Pointer[I64]" structdef="Pointer[I64]" argtype="Pointer[I64] tag" rvtype="Pointer[I64]" decl="  var "/>
+<typedef name="Pointer[U16]" ponytypein="CBoxedU16" ponytypeinconv="" ponytypeout="CBoxedU16" structtype="CBoxedU16" structdef="CBoxedU16" argtype="CBoxedU16 tag" rvtype="CBoxedU16" decl="  var "/>
+<typedef name="NullablePointer[Pointer[None]Struct]" ponytypein="Pointer[None] tag" ponytypeinconv="" ponytypeout="Pointer[None]" structtype="structtype" structdef="stuctdef" argtype="Pointer[None] tag" rvtype="rvtype" decl="  var "/>
+<typedef name="Pointer[I64]" ponytypein="CBoxedI64" ponytypeinconv="" ponytypeout="CBoxedI64" structtype="CBoxedI64" structdef="CBoxedI64" argtype="CBoxedI64 tag" rvtype="CBoxedI64" decl="  var "/>
 <typedef name="I64" ponytypein="I64" ponytypeinconv="" ponytypeout="I64" structtype="I64" structdef="I64(0)" argtype="I64" rvtype="I64" decl="  var "/>
 <typedef name="U64" ponytypein="U64" ponytypeinconv="" ponytypeout="U64" structtype="U64" structdef="U64(0)" argtype="U64" rvtype="U64" decl="  var "/>
 <typedef name="I16" ponytypein="I16" ponytypeinconv="" ponytypeout="I16" structtype="I16" structdef="I16(0)" argtype="I16" rvtype="I16" decl="  var "/>
-<typedef name="Pointer[I32]" ponytypein="Pointer[I32] tag" ponytypeinconv="" ponytypeout="Pointer[I32]" structtype="Pointer[I32]" structdef="Pointer[I32]" argtype="Pointer[I32] tag" rvtype="Pointer[I32]" decl="  var "/>
+<typedef name="Pointer[I32]" ponytypein="CBoxedI32" ponytypeinconv="" ponytypeout="CBoxedI32" structtype="CBoxedI32" structdef="CBoxedI32" argtype="CBoxedI32 tag" rvtype="CBoxedI32" decl="  var "/>
 <typedef name="U16" ponytypein="U16" ponytypeinconv="" ponytypeout="U16" structtype="U16" structdef="U16(0)" argtype="U16" rvtype="U16" decl="  var "/>
-<typedef name="Pointer[I16]" ponytypein="Pointer[I16] tag" ponytypeinconv="" ponytypeout="Pointer[I16]" structtype="Pointer[I16]" structdef="Pointer[I16]" argtype="Pointer[I16] tag" rvtype="Pointer[I16]" decl="  var "/></typedefs>
+<typedef name="Pointer[I16]" ponytypein="CBoxedI16" ponytypeinconv="" ponytypeout="CBoxedI16" structtype="CBoxedI16" structdef="CBoxedI16" argtype="CBoxedI16 tag" rvtype="CBoxedI16" decl="  var "/></typedefs>
 
