@@ -240,8 +240,9 @@ class ODBCStmt is SqlState
     """
     _call_location = sl
     _err = ODBCStmtFFI.fetch_scroll(_sth, d, offset)
+
     match _err
-    | let x: SQLSuccess val => true
+    | let x: SQLSuccess val => _check_and_expand_column_buffers()?; true
     | let x: SQLSuccessWithInfo val => _check_and_expand_column_buffers()?; true
     | let x: SQLNoData val => false
     else

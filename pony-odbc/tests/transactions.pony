@@ -16,8 +16,6 @@ class \nodoc\ iso _TestTransactions is UnitTest
       env.set_odbc3()?
       var dbc: ODBCDbc = env.dbc()?
 
-      h.assert_true(dbc.connect(dsn)?)
-      h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
 
       h.assert_true(dbc.get_autocommit()?)
       dbc.set_autocommit(false)?
@@ -26,6 +24,9 @@ class \nodoc\ iso _TestTransactions is UnitTest
       h.assert_true(dbc.get_autocommit()?)
       dbc.set_autocommit(false)?
       h.assert_false(dbc.get_autocommit()?)
+
+      h.assert_true(dbc.connect(dsn)?)
+      h.assert_eq[String]("SQLSuccess", dbc.get_err().string())
 
       create_temp_table(h, dbc)
       h.assert_true(dbc.commit()?)
