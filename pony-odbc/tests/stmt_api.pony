@@ -11,30 +11,129 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
   new create(dsn': String val) => dsn = dsn'
 
   fun apply(h: TestHelper) =>
-    var dbc: ODBCDbc = ODBCDbc(ODBCEnv.>set_odbc3())
+    var env: ODBCEnv = ODBCEnv
+    try
+      env.set_odbc3()?
+      var dbc: ODBCDbc = env.dbc()?
 
-    h.assert_true(dbc.connect(dsn))
+      // This should fail
+      create_table_before_connection(h, dbc)
+      h.assert_true(dbc.connect(dsn)?)
 
-    create_temp_table(h, dbc)
-    populate_temp_table(h, dbc)
-    query_test_rowcounts(h, dbc)
-    query_test_under_allocation(h, dbc)
+      // Create our temporary table
+      create_temp_table(h, dbc)
+
+      // Drop connection here, temp table should disappear
+      h.assert_true(dbc.disconnect()?)
+
+      // Fail to create table again due to no connection
+      create_table_before_connection(h, dbc)
+
+      // Reconnect
+      h.assert_true(dbc.connect(dsn)?)
+
+      // Syntax Error
+      create_temp_table_syntax_err(env, h, dbc)
+
+      // Create Table
+      create_temp_table(h, dbc)
+
+      // Attempt to insert without assigning buffers
+      populate_temp_table_no_binding(env, h, dbc)
+
+      // Populate the table with some data.
+      populate_temp_table(h, dbc)
+
+      // Query rowcount (borked on sqlite)
+      query_test_rowcounts(h, dbc)
+
+      query_test_under_allocation(h, dbc)
+    else
+      h.fail("We failed in here")
+    end
+
+  fun create_table_before_connection(h: TestHelper, dbc: ODBCDbc) =>
+    try
+      var stm: ODBCStmt = dbc.stmt()?
+    else
+      try
+        h.assert_eq[String val]("08003", dbc.sqlstates()(0)?._1)
+      else
+        h.fail("Statement creation should have failed, it didn't")
+      end
+    end
+
+  fun create_temp_table_syntax_err(env: ODBCEnv, h: TestHelper, dbc: ODBCDbc) =>
+    try
+      var stm: ODBCStmt = dbc.stmt()?
+      try
+        stm
+          .> prepare("create le odbthingtest (i integer, s varchar(100))")?
+      else
+        h.assert_eq[USize](0, env.sqlstates().size())
+        h.assert_eq[USize](0, dbc.sqlstates().size())
+        h.assert_eq[USize](0, stm.sqlstates().size())
+      end
+      try
+        Debug.out("predbh: " + dbc.get_err().string())
+        Debug.out("presth: " + stm.get_err().string())
+        stm
+          .> execute()?
+      else
+        Debug.out("predbh: " + dbc.get_err().string())
+        Debug.out("presth: " + stm.get_err().string())
+        h.assert_eq[USize](0, env.sqlstates().size())
+        h.assert_eq[USize](0, dbc.sqlstates().size())
+//        h.assert_eq[USize](1, stm.sqlstates().size()) //
+        Debug.out((stm.get_err() as SQLError val).get_err_strings())
+        try
+          h.assert_true((stm.sqlstates()(0)?._1 == "42601")  // Vendor Specific
+                     or (stm.sqlstates()(0)?._1 == "42000")  // Permissions or Syntax Error
+                     or (stm.sqlstates()(0)?._1 == "HY000")) // General Error
+        else
+          None
+//          h.fail("Unable to locate sqlstate for create_table_temp_syntax_err")
+        end
+      end
+    else
+      h.fail("Failed at create_table_temp_syntax_err")
+    end
 
   fun create_temp_table(h: TestHelper, dbc: ODBCDbc) =>
-    var stm: ODBCStmt = ODBCStmt(dbc)
     try
+      var stm: ODBCStmt = dbc.stmt()?
       stm
       .>prepare("create temporary table odbthingtest (i integer, s varchar(100))")?
       .>execute()?
     else
-      Debug.out("create_temp_table(): " + stm.errtext)
-      h.fail(stm.errtext)
+      h.fail("Failed at create_temp_table()")
+    end
+
+  fun populate_temp_table_no_binding(env: ODBCEnv, h: TestHelper, dbc: ODBCDbc) =>
+    var pina: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(101))
+    try
+      var stm: ODBCStmt = dbc.stmt()?
+      try
+        stm
+        .>prepare("insert into odbthingtest (i, s) values (?,?)")?
+          stm.execute()?
+      else
+        h.assert_eq[USize](0, env.sqlstates().size())
+        h.assert_eq[USize](0, dbc.sqlstates().size())
+//        h.assert_eq[USize](1, stm.sqlstates().size()) //
+        try
+          h.assert_true((stm.sqlstates()(0)?._1 == "HY000")
+                     or (stm.sqlstates()(0)?._1 == "07002"))
+        end
+      end
+    else
+      h.fail("Failed at populate_temp_table_no_binding")
     end
 
   fun populate_temp_table(h: TestHelper, dbc: ODBCDbc) =>
-    var stm: ODBCStmt = ODBCStmt(dbc)
     var pina: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(101))
     try
+      var stm: ODBCStmt = dbc.stmt()?
       stm
       .>prepare("insert into odbthingtest (i, s) values (?,?)")?
       .>bind_parameter(pina._1)?
@@ -46,15 +145,14 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
         stm.execute()?
       end
     else
-      Debug.out("populate_temp_table(): " + stm.errtext)
-      h.fail(stm.errtext)
+      h.fail("populate_temp_table errored out")
     end
 
   fun query_test_rowcounts(h: TestHelper, dbc: ODBCDbc) =>
     var pinb: SQLInteger = SQLInteger
     var poutb: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(101))
-    var stm: ODBCStmt = ODBCStmt(dbc)
     try
+      var stm: ODBCStmt = dbc.stmt()?
       stm.prepare("select * from odbthingtest where i >= ?")?
       stm.bind_parameter(pinb)?
       stm.bind_column(poutb._1)?
@@ -80,15 +178,14 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
       end
       stm.finish()?
     else
-      Debug.out("query_test_rowcounts(): " + stm.errtext)
-      h.fail(stm.errtext)
+      h.fail("query_row_counts has failed")
     end
 
   fun query_test_under_allocation(h: TestHelper, dbc: ODBCDbc) =>
     var pinb: SQLInteger = SQLInteger
     var poutb: (SQLInteger, SQLVarchar) = (SQLInteger, SQLVarchar(3))
-    var stm: ODBCStmt = ODBCStmt(dbc)
     try
+      var stm: ODBCStmt = dbc.stmt()?
       stm.prepare("select * from odbthingtest where i >= ?")?
       stm.bind_parameter(pinb)?
       stm.bind_column(poutb._1)?
@@ -109,10 +206,8 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
         end
         stm.finish()?
       else
-      Debug.out("query_test_under_allocation(): " + stm.errtext)
-        h.fail(stm.errtext)
+        h.fail("Underallocation failed (part A)")
       end
     else
-      Debug.out("query_test_under_allocation() the second: " + stm.errtext)
-      h.fail(stm.errtext)
+      h.fail("Underallocation failed (part B)")
     end

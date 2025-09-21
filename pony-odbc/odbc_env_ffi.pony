@@ -1,5 +1,5 @@
 use @SQLSetEnvAttr[I16](henv: Pointer[None] tag, attr: I32, v: I32, sl: I32)
-use @SQLGetEnvAttr[I16](EnvironmentHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength: Pointer[I32] tag)
+use @SQLGetEnvAttr[I16](EnvironmentHandle: Pointer[None] tag, Attribute: I32, Value: CBoxedI32 tag, BufferLength: I32, StringLength: Pointer[I32] tag)
 
 use "debug"
 
@@ -31,17 +31,15 @@ primitive \nodoc\ ODBCEnvFFI
       (recover val PonyDriverError("ODBCEnvFFI.set_odbc2() got invalid return code: " + rvv.string()) end, rv)
     end
 
-//use @SQLGetEnvAttr[I16](EnvironmentHandle: Pointer[None] tag, Attribute: I32, Value: Pointer[None] tag, BufferLength: I32, StringLength: CBoxedI32 tag)
-  fun get_env_attr(h: ODBCHandleEnv tag, a: _SqlEnvAttr): (_SQLReturn val, I32) =>
-    var value: I32 = 76
-    var rv: I16 = @SQLGetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), a(), addressof value, 0, Pointer[I32])
+  fun get_env_attr(h: ODBCHandleEnv tag, a: _SqlEnvAttr, v: CBoxedI32): _SQLReturn val =>
+    var rv: I16 = @SQLGetEnvAttr(NullablePointer[ODBCHandleEnv tag](h), a(), v, 0, Pointer[I32])
     match rv
-    | 0  => return (SQLSuccess, value)
-    | 1  => return (recover val SQLSuccessWithInfo.create_penv(h) end, value)
-    | -1 => return (recover val SQLError.create_penv(h) end, value)
-    | -2 => return (SQLInvalidHandle, value)
+    | 0  => return SQLSuccess
+    | 1  => return recover val SQLSuccessWithInfo.create_penv(h) end
+    | -1 => return recover val SQLError.create_penv(h) end
+    | -2 => return SQLInvalidHandle
     else
-      (recover val PonyDriverError("ODBCEnvFFI.get_env_attr() got invalid return code: " + rv.string()) end, value)
+      recover val PonyDriverError("ODBCEnvFFI.get_env_attr() got invalid return code: " + rv.string()) end
     end
 
   fun set_odbc2(h: ODBCHandleEnv tag): _SQLReturn val =>

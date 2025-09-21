@@ -7,12 +7,13 @@ actor Main
   new create(env': Env) =>
     env = env'
 
-    var dbc: ODBCDbc = ODBCDbc
-    if (not dbc.connect("psqlred")) then
-      env.out.print(dbc.errtext)
-    else
-      var stm: ODBCStmt = ODBCStmt(dbc)
+    var henv: ODBCEnv = ODBCEnv
+    try
+      henv.set_odbc3()?
+      var dbc: ODBCDbc = henv.dbc()?
+      dbc.connect("psqlred")?
       try
+        var stm: ODBCStmt = dbc.stmt()?
         // Create a demo table
         stm
         .> prepare("create temporary table hello_world (i integer unique, s varchar(40))")?
@@ -51,9 +52,12 @@ actor Main
           env.out.print("Integer: " + i.string() + ", s: " + s)
         end
       else
-        env.out.print("An error was raised: ")
-        env.out.print(dbc.errtext)
-        env.out.print(stm.errtext)
+        env.out.print("Failed doing stuff")
+        env.out.print("dbc: " + dbc.sqlstates()(0)?._1 + ": " + dbc.sqlstates()(0)?._2)
       end
+      try
+        env.out.print("dbc: " + dbc.sqlstates()(0)?._1 + ": " + dbc.sqlstates()(0)?._2)
+      end
+    else
+      env.out.print("It all failed")
     end
-
