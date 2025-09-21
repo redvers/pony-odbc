@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Added
 
+- Update documentation. ([PR #31](https://github.com/redvers/pony-odbc/pull/31))
 
 ### Changed
 
