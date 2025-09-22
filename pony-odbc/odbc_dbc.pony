@@ -31,7 +31,7 @@ class ODBCDbc is SqlState
   """
   let dbc: ODBCHandleDbc tag
   let _henv: ODBCHandleEnv tag
-  var _err: _SQLReturn val = SQLSuccess
+  var _err: SQLReturn val = SQLSuccess
   var strict: Bool = true
 
   var _call_location: SourceLoc val = __loc
@@ -67,7 +67,7 @@ class ODBCDbc is SqlState
     end
     _check_valid()?
 
-//  fun ref get_info(i: _SQLInfoTypes, sl: SourceLoc val = __loc): (_SQLReturn val, String val) =>
+//  fun ref get_info(i: _SQLInfoTypes, sl: SourceLoc val = __loc): (SQLReturn val, String val) =>
 //    _call_location = sl
 //    ODBCDbcFFI.get_info(dbc, i)
 
@@ -131,4 +131,4 @@ class ODBCDbc is SqlState
     ODBCDbcFFI.free(dbc)
 
   // Present only for introspection during tests
-  fun \nodoc\ get_err(): _SQLReturn val => _err
+  fun \nodoc\ get_err(): SQLReturn val => _err
