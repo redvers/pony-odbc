@@ -34,11 +34,14 @@ class ODBCEnv is SqlState
     odbcenv = envwrapper.value
     ODBCFFI.pSQLSetEnvAttr(odbcenv, _SqlAttrODBCVersion(), _SqlODBC3(), _SQLIsInteger())
 
-  fun dbc(): ODBCDbc ? =>
+  fun ref dbc(): ODBCDbc ? =>
     """
     Used to create an ODBCDbc object from this ODBCEnv.
     """
-    ODBCDbc(odbcenv)?
+    var dbh: ODBCDbc = ODBCDbc(odbcenv)
+    _err = dbh.alloc()
+    _check_valid()?
+    dbh
 
   fun sqlstates(): Array[(String val, String val)] val =>
     _from_env(odbcenv)

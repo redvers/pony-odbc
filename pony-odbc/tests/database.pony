@@ -13,7 +13,7 @@ class \nodoc\ iso _TestDatabase is UnitTest
     try
       env.set_odbc3()?
       var dbc: ODBCDbc = env.dbc()?
-      h.assert_true(dbc.set_application_name("TestDatabase")?)
+//      h.assert_true(dbc.set_application_name("TestDatabase")?)
 
       h.assert_true(dbc.connect(dsn)?)
       h.assert_eq[String]("SQLSuccess", dbc.get_err().string())

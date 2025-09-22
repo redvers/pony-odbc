@@ -1,6 +1,8 @@
 use "ffi"
 use "debug"
 
+struct \nodoc\ ODBCHandleDbc
+
 class ODBCDbc is SqlState
   """
   # ODBCDbc
@@ -29,19 +31,23 @@ class ODBCDbc is SqlState
   documented in ODBCStmt as that requires an appropriate context to
   make sense.
   """
-  let dbc: ODBCHandleDbc tag
+  var dbc: ODBCHandleDbc tag = ODBCHandleDbc
   let _henv: ODBCHandleEnv tag
   var _err: SQLReturn val = SQLSuccess
   var strict: Bool = true
 
   var _call_location: SourceLoc val = __loc
 
-  new \nodoc\ create(henv': ODBCHandleEnv tag, sl: SourceLoc val = __loc) ? =>
+  new \nodoc\ create(henv': ODBCHandleEnv tag, sl: SourceLoc val = __loc) =>
     _henv = henv'
     _call_location = sl
 
-    (_err, dbc) = ODBCDbcFFI.alloc(_henv)
-    _check_valid()?
+  fun \nodoc\ ref alloc(): SQLReturn val =>
+    var dbcwrapper: DbcWrapper = DbcWrapper
+    _err = ODBCFFI.resolve(
+      ODBCFFI.pSQLAllocHandle_dbc(_henv, dbcwrapper))
+    dbc = dbcwrapper.value
+    _err
 
   fun ref stmt(): ODBCStmt ? =>
     """
@@ -53,30 +59,29 @@ class ODBCDbc is SqlState
     _from_dbc(dbc)
 
   fun ref get_autocommit(): Bool ? =>
-    (_err, var value: I32) = ODBCDbcFFI.get_attr_i32(dbc, _SqlAttrAutoCommit)
+    var value: CBoxedI32 = CBoxedI32
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLGetConnectAttr_i32(dbc, _SqlAttrAutoCommit(), value, 4, CBoxedI32))
     _check_valid()?
-    if (value == _SqlAutoCommitOn()) then return true end
-    if (value == _SqlAutoCommitOff()) then return false end
+    if (value.value == _SqlAutoCommitOn()) then return true end
+    if (value.value == _SqlAutoCommitOff()) then return false end
     error
 
   fun ref set_autocommit(setting: Bool) ? =>
     if (setting) then
-      _err = ODBCDbcFFI.set_attr_i32(dbc, _SqlAttrAutoCommit, _SqlAutoCommitOn())
+      _err = ODBCFFI.resolve(
+        ODBCFFI.pSQLSetConnectAttr_i32(dbc, _SqlAttrAutoCommit(), _SqlAutoCommitOn(), 9))
     else
-      _err = ODBCDbcFFI.set_attr_i32(dbc, _SqlAttrAutoCommit, _SqlAutoCommitOff())
+      _err = ODBCFFI.resolve(
+        ODBCFFI.pSQLSetConnectAttr_i32(dbc, _SqlAttrAutoCommit(), _SqlAutoCommitOff(), 9))
     end
     _check_valid()?
-
-//  fun ref get_info(i: _SQLInfoTypes, sl: SourceLoc val = __loc): (SQLReturn val, String val) =>
-//    _call_location = sl
-//    ODBCDbcFFI.get_info(dbc, i)
 
   fun ref commit(sl: SourceLoc val = __loc): Bool ? =>
     """
     Instructs the database to commit your transaction and open a new one.
     """
     _call_location = sl
-    _err = ODBCDbcFFI.commit(dbc)
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLEndTran_dbc(2, dbc, 0))
     _check_valid()?
 
   fun ref rollback(sl: SourceLoc val = __loc): Bool ? =>
@@ -84,17 +89,7 @@ class ODBCDbc is SqlState
     Instructs the database to rollback your transaction and open a new one.
     """
     _call_location = sl
-    _err = ODBCDbcFFI.rollback(dbc)
-    _check_valid()?
-
-
-  fun ref set_application_name(appname: String val, sl: SourceLoc val = __loc): Bool ? =>
-    """
-    Notifies the database of your application's name. (It does not
-    appear in pg_settings, is this a bug? if so where?
-    """
-    _call_location = sl
-    _err = ODBCDbcFFI.set_application_name(dbc, appname)
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLEndTran_dbc(2, dbc, 1))
     _check_valid()?
 
   fun ref connect(dsn: String val, sl: SourceLoc val = __loc): Bool ? =>
@@ -103,7 +98,7 @@ class ODBCDbc is SqlState
     defined by the DSN.
     """
     _call_location = sl
-    _err = ODBCDbcFFI.connect(dbc, dsn)
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLConnect(dbc, dsn, dsn.size().i16(), "", 0, "", 0))
     _check_valid()?
 
   fun \nodoc\ ref _check_valid(): Bool ? =>
@@ -123,12 +118,13 @@ class ODBCDbc is SqlState
     end
 
   fun ref disconnect(): Bool ? =>
-    _err = ODBCDbcFFI.disconnect(dbc)
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLDisconnect(dbc))
+//    _err = ODBCDbcFFI.disconnect(dbc)
     _check_valid()?
 
 
-  fun _final() =>
-    ODBCDbcFFI.free(dbc)
+ // fun _final() =>
+ //   ODBCDbcFFI.free(dbc)
 
   // Present only for introspection during tests
   fun \nodoc\ get_err(): SQLReturn val => _err

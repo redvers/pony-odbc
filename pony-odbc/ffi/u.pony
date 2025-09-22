@@ -405,7 +405,7 @@ use @SQLFreeStmt[I16](pStatementHandle: Pointer[None] tag, pOption: U16)
     [FundamentalType(int) size=32]
     [PointerType size=64]->[FundamentalType(int) size=32]
 */
-use @SQLGetConnectAttr[I16](pConnectionHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pBufferLength: I32, pStringLength: CBoxedI32 tag)
+use @SQLGetConnectAttr[I16](pConnectionHandle: Pointer[None] tag, pAttribute: I32, pValue: CBoxedI32 tag, pBufferLength: I32, pStringLength: CBoxedI32 tag)
 
 
 
@@ -717,7 +717,7 @@ use @SQLRowCount[I16](pStatementHandle: Pointer[None] tag, pRowCount: CBoxedI64 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(int) size=32]
 */
-use @SQLSetConnectAttr[I16](pConnectionHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pStringLength: I32)
+use @SQLSetConnectAttr[I16](pConnectionHandle: Pointer[None] tag, pAttribute: I32, pValue: I32, pStringLength: I32)
 
 
 
