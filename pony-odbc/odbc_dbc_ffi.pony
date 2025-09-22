@@ -21,9 +21,9 @@ primitive \nodoc\ ODBCDbcFFI
     var rv: I16 = @SQLEndTran(2, NullablePointer[ODBCHandleDbc tag](h), 0)
     match rv
     | 0 => return SQLSuccess
-    | 1 => return recover val SQLSuccessWithInfo.create_pdbc(h) end
+    | 1 => return SQLSuccessWithInfo
     | 2 => return SQLStillExecuting
-    | -1 => return recover val SQLError.create_pdbc(h) end
+    | -1 => return SQLError
     | -2 => return SQLInvalidHandle
     else
       return recover val PonyDriverError("ODBCFFI.commit() got invalid return code: " + rv.string()) end
@@ -33,9 +33,9 @@ primitive \nodoc\ ODBCDbcFFI
     var rv: I16 = @SQLEndTran(2, NullablePointer[ODBCHandleDbc tag](h), 1)
     match rv
     | 0 => return SQLSuccess
-    | 1 => return recover val SQLSuccessWithInfo.create_pdbc(h) end
+    | 1 => return SQLSuccessWithInfo
     | 2 => return SQLStillExecuting
-    | -1 => return recover val SQLError.create_pdbc(h) end
+    | -1 => return SQLError
     | -2 => return SQLInvalidHandle
     else
       return recover val PonyDriverError("ODBCFFI.commit() got invalid return code: " + rv.string()) end
@@ -50,8 +50,8 @@ primitive \nodoc\ ODBCDbcFFI
                               Pointer[I16])
     match rv
     | 0 => return (SQLSuccess, buffer.string())
-    | 1 => return (recover val SQLSuccessWithInfo.create_pdbc(h) end, "")
-    | -1 => return (recover val SQLError.create_pdbc(h) end, "")
+    | 1 => return (SQLSuccessWithInfo, "")
+    | -1 => return (SQLError, "")
     | -2 => return (SQLInvalidHandle, "")
     else
       return (recover val PonyDriverError("ODBCFFI.get_info() got invalid return code: " + rv.string()) end, "")
@@ -66,7 +66,7 @@ primitive \nodoc\ ODBCDbcFFI
                                      Pointer[I32])
     match rv
     | 0 => return (SQLSuccess, value)
-    | -1 => return (recover val SQLError.create_pdbc(h) end, value)
+    | -1 => return (SQLError, value)
     | -2 => return (SQLInvalidHandle, value)
     else
       (recover val PonyDriverError("ODBCFFI.get_attr() got invalid return code: " + rv.string()) end, value)
@@ -76,7 +76,7 @@ primitive \nodoc\ ODBCDbcFFI
     var rv: I16 = @SQLSetConnectAttr[I16](NullablePointer[ODBCHandleDbc tag](h), attrib(), value', I32(0))
     match rv
     | 0 => return SQLSuccess
-    | -1 => return recover val SQLError.create_pdbc(h) end
+    | -1 => return SQLError
     | -2 => return SQLInvalidHandle
     else
       recover val PonyDriverError("ODBCFFI.set_attr_i32() got invalid return code: " + rv.string()) end
@@ -90,7 +90,7 @@ primitive \nodoc\ ODBCDbcFFI
     var rv: I16 = @SQLSetConnectAttr[I16](NullablePointer[ODBCHandleDbc tag](h), _SQLAttrApplicationName(), s.cstring(), s.size().i32())
     match rv
     | 0 => return SQLSuccess
-    | -1 => return recover val SQLError.create_pdbc(h) end
+    | -1 => return SQLError
     | -2 => return SQLInvalidHandle
     else
       recover val PonyDriverError("ODBCFFI.set_application_name() got invalid return code: " + rv.string()) end
@@ -103,8 +103,8 @@ primitive \nodoc\ ODBCDbcFFI
     var rv: I16 = @SQLConnect(NullablePointer[ODBCHandleDbc tag](h), dsn.cstring(), dsn.size().i16(), "".cstring(), 0, "".cstring(), 0)
     match rv
     | 0 => return SQLSuccess
-    | 1 => return recover val SQLSuccessWithInfo.create_pdbc(h) end
-    | -1 => return recover val SQLError.create_pdbc(h) end
+    | 1 => return SQLSuccessWithInfo
+    | -1 => return SQLError
     | -2 => return SQLInvalidHandle
     else
       recover val PonyDriverError("ODBCFFI.connect() got invalid return code: " + rv.string()) end
@@ -115,8 +115,8 @@ primitive \nodoc\ ODBCDbcFFI
     var rvv: I16 = @SQLAllocHandle(2, NullablePointer[ODBCHandleEnv tag](h), addressof rv)
     match rvv
     | 0 => return (SQLSuccess, rv)
-    | 1 => return (recover val SQLSuccessWithInfo.create_pdbc(rv) end, rv)
-    | -1 => return (recover val SQLError.create_pdbc(rv) end, rv)
+    | 1 => return (SQLSuccessWithInfo, rv)
+    | -1 => return (SQLError, rv)
     | -2 => return (SQLInvalidHandle, rv)
     else
       (recover val PonyDriverError("ODBCFFI.sql_alloc_handle() got invalid return code: " + rvv.string()) end, rv)
@@ -126,9 +126,9 @@ primitive \nodoc\ ODBCDbcFFI
     var rv: I16 = @SQLDisconnect(NullablePointer[ODBCHandleDbc tag](h))
     match rv
     | 0 => return SQLSuccess
-    | 1 => return recover val SQLSuccessWithInfo.create_pdbc(h) end
+    | 1 => return SQLSuccessWithInfo
     | 2 => return SQLStillExecuting
-    | -1 => return recover val SQLError.create_pdbc(h) end
+    | -1 => return SQLError
     | -2 => return SQLInvalidHandle
     else
       recover val PonyDriverError("ODBCFFI.disconnect() got invalid return code: " + rv.string()) end
