@@ -53,7 +53,10 @@ class ODBCDbc is SqlState
     """
     Used to create an ODBCStmt object from this ODBCDbc connection.
     """
-    ODBCStmt.create(_henv, dbc)?
+    var sth: ODBCStmt = ODBCStmt.create(_henv, dbc)
+    _err = sth.alloc()
+    _check_valid()?
+    sth
 
   fun sqlstates(): Array[(String val, String val)] val =>
     _from_dbc(dbc)

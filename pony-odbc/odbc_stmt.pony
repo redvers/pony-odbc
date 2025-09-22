@@ -1,4 +1,7 @@
+use "ffi"
 use "debug"
+
+struct \nodoc\ ODBCHandleStmt
 
 class ODBCStmt is SqlState
   """
@@ -127,20 +130,25 @@ class ODBCStmt is SqlState
 
   var _env: ODBCHandleEnv tag
   var _dbh: ODBCHandleDbc tag
-  var _sth: ODBCHandleStmt tag
-  var _err: SQLReturn val
+  var _sth: ODBCHandleStmt tag = ODBCHandleStmt
+  var _err: SQLReturn val = SQLSuccess
   var _parameters: Array[SQLType] = Array[SQLType]
   var _columns:    Array[SQLType] = Array[SQLType]
   var strict: Bool = true
 
   var _call_location: SourceLoc val = __loc
 
-  new \nodoc\ create(env': ODBCHandleEnv tag, dbh': ODBCHandleDbc tag, sl: SourceLoc val = __loc) ? =>
+  new \nodoc\ create(env': ODBCHandleEnv tag, dbh': ODBCHandleDbc tag, sl: SourceLoc val = __loc) =>
     _env = env'
     _dbh = dbh'
     _call_location = sl
-    (_err, _sth) = ODBCStmtFFI.alloc(_dbh)
-    _check_valid()?
+
+  fun ref alloc(): SQLReturn val =>
+    var sthwrapper: StmtWrapper = StmtWrapper
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLAllocHandle_stmt(_dbh, sthwrapper))
+    _sth = sthwrapper.value
+//    (_err, _sth) = ODBCStmtFFI.alloc(_dbh)
+    _err
 
   fun sqlstates(): Array[(String val, String val)] val =>
     _from_stmt(_sth)
@@ -155,7 +163,7 @@ class ODBCStmt is SqlState
     _call_location = sl
     _parameters.clear()
     _columns.clear()
-    _err = ODBCStmtFFI.prepare(_sth, str)
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLPrepare(_sth, str, str.size().i32()))
     _check_valid()?
 
   fun ref bind_parameter(i: SQLType, sl: SourceLoc val = __loc) ? =>
@@ -208,7 +216,7 @@ class ODBCStmt is SqlState
     result in a thrown error.
     """
     _call_location = sl
-    _err = ODBCStmtFFI.execute(_sth)
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLExecute(_sth))
     _check_valid()?
 
   fun ref rowcount(sl: SourceLoc val = __loc): I64 ? =>
@@ -222,7 +230,8 @@ class ODBCStmt is SqlState
     """
     _call_location = sl
     var rv: CBoxedI64 = CBoxedI64
-    _err = ODBCStmtFFI.result_count(_sth, rv)
+    _err = ODBCFFI.resolve(
+      ODBCFFI.pSQLRowCount(_sth, rv))
     _check_valid()?
     rv.value
 
@@ -239,7 +248,9 @@ class ODBCStmt is SqlState
     was the last row in the set.
     """
     _call_location = sl
-    _err = ODBCStmtFFI.fetch_scroll(_sth, d, offset)
+    _err = ODBCFFI.resolve(
+      ODBCFFI.pSQLFetchScroll(_sth, d(), offset))
+//    _err = ODBCStmtFFI.fetch_scroll(_sth, d, offset)
 
     match _err
     | let x: SQLSuccess val => _check_and_expand_column_buffers()?; true
@@ -257,7 +268,7 @@ class ODBCStmt is SqlState
     Whether it should be used is database dependent
     """
     _call_location = sl
-    _err = ODBCStmtFFI.close_cursor(_sth)
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLCloseCursor(_sth))
     _check_valid()?
 
   fun ref _check_and_expand_column_buffers(sl: SourceLoc val = __loc) ? =>
@@ -267,7 +278,10 @@ class ODBCStmt is SqlState
         _err = vc.realloc_column(_sth, vc.get_boxed_array().written_size.value.usize() + 10, colindex.u16() + 1)
         _check_valid()?
 
-        _err = ODBCStmtFFI.get_data(_sth, colindex.u16() + 1, vc.get_boxed_array())
+        var ba: CBoxedArray = vc.get_boxed_array()
+        _err = ODBCFFI.resolve(
+          ODBCFFI.pSQLGetData(_sth, colindex.u16() + 1, 1, ba.ptr, ba.alloc_size.i64(), ba.written_size))
+//        _err = ODBCStmtFFI.get_data(_sth, colindex.u16() + 1, vc.get_boxed_array())
         _check_valid()?
       end
     end
