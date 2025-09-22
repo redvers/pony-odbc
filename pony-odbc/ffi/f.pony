@@ -80,8 +80,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [PointerType size=64]->[PointerType size=64]->[FundamentalType(void) size=0]
 */
-  fun pSQLAllocConnect(pEnvironmentHandle: Pointer[None] tag, pConnectionHandle: Pointer[None] tag): I16 =>
-    @SQLAllocConnect(pEnvironmentHandle, pConnectionHandle)
+  fun pSQLAllocConnect(pEnvironmentHandle: ODBCHandleEnv tag, pConnectionHandle: Pointer[None] tag): I16 =>
+    @SQLAllocConnect(NullablePointer[ODBCHandleEnv tag](pEnvironmentHandle), pConnectionHandle)
 
 
 /*
@@ -92,10 +92,9 @@ The following table lists ODBC functions, grouped by type of task, and includes 
 
   Arguments:
     [PointerType size=64]->[PointerType size=64]->[FundamentalType(void) size=0]
-*/
-  fun pSQLAllocEnv(pEnvironmentHandle: Pointer[None] tag): I16 =>
+  fun pSQLAllocEnv(pEnvironmentHandle: ODBCHandleEnv tag): I16 =>
     @SQLAllocEnv(pEnvironmentHandle)
-
+*/
 
 /*
   Source: /usr/include/iodbc/sql.h:789
@@ -114,8 +113,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
   fun pSQLAllocHandle_dbc(pInputHandle: ODBCHandleEnv tag, pOutputHandle: DbcWrapper): I16 =>
     @SQLAllocHandle(2, NullablePointer[ODBCHandleEnv tag](pInputHandle), addressof pOutputHandle.value)
 
-  fun pSQLAllocHandle_stmt(pInputHandle: ODBCHandleDbc, pOutputHandle: StmtWrapper): I16 =>
-    @SQLAllocHandle(1, NullablePointer[ODBCHandleDbc tag](pInputHandle), addressof pOutputHandle.value)
+  fun pSQLAllocHandle_stmt(pInputHandle: ODBCHandleDbc tag, pOutputHandle: StmtWrapper): I16 =>
+    @SQLAllocHandle(3, NullablePointer[ODBCHandleDbc tag](pInputHandle), addressof pOutputHandle.value)
 
 
 /*
@@ -127,10 +126,9 @@ The following table lists ODBC functions, grouped by type of task, and includes 
   Arguments:
     [PointerType size=64]->[FundamentalType(void) size=0]
     [PointerType size=64]->[PointerType size=64]->[FundamentalType(void) size=0]
-*/
-  fun pSQLAllocStmt(pConnectionHandle: Pointer[None] tag, pStatementHandle: Pointer[None] tag): I16 =>
+  fun pSQLAllocStmt(pConnectionHandle: Pointer[None] tag, pStatementHandle: ODBCHandleStmt tag): I16 =>
     @SQLAllocStmt(pConnectionHandle, pStatementHandle)
-
+*/
 
 /*
   Source: /usr/include/iodbc/sql.h:799
@@ -146,8 +144,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(long int) size=64]
     [PointerType size=64]->[FundamentalType(long int) size=64]
 */
-  fun pSQLBindCol(pStatementHandle: Pointer[None] tag, pColumnNumber: U16, pTargetType: I16, pTargetValue: Pointer[None] tag, pBufferLength: I64, pStrLenorInd: CBoxedI64): I16 =>
-    @SQLBindCol(pStatementHandle, pColumnNumber, pTargetType, pTargetValue, pBufferLength, pStrLenorInd)
+  fun pSQLBindCol_varchar(pStatementHandle: ODBCHandleStmt tag, pColumnNumber: U16, pTargetType: I16, pTargetValue: Pointer[U8] tag, pBufferLength: I64, pStrLenorInd: CBoxedI64): I16 =>
+    @SQLBindCol(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pColumnNumber, pTargetType, pTargetValue, pBufferLength, pStrLenorInd)
 
 
 /*
@@ -165,9 +163,9 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(short int) size=16]
     [PointerType size=64]->[FundamentalType(void) size=0]
     [PointerType size=64]->[FundamentalType(long int) size=64]
+  fun pSQLBindParam_varchar(pStatementHandle: ODBCHandleStmt tag, pParameterNumber: U16, pValueType: I16, pParameterType: I16, pLengthPrecision: U64, pParameterScale: I16, pParameterValue: Pointer[U8] tag, pStrLenorInd: CBoxedI64): I16 =>
+    @SQLBindParam(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pParameterNumber, pValueType, pParameterType, pLengthPrecision, pParameterScale, pParameterValue, pStrLenorInd)
 */
-  fun pSQLBindParam(pStatementHandle: Pointer[None] tag, pParameterNumber: U16, pValueType: I16, pParameterType: I16, pLengthPrecision: U64, pParameterScale: I16, pParameterValue: Pointer[None] tag, pStrLenorInd: CBoxedI64): I16 =>
-    @SQLBindParam(pStatementHandle, pParameterNumber, pValueType, pParameterType, pLengthPrecision, pParameterScale, pParameterValue, pStrLenorInd)
 
 
 /*
@@ -179,8 +177,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
   Arguments:
     [PointerType size=64]->[FundamentalType(void) size=0]
 */
-  fun pSQLCancel(pStatementHandle: Pointer[None] tag): I16 =>
-    @SQLCancel(pStatementHandle)
+  fun pSQLCancel(pStatementHandle: ODBCHandleStmt tag): I16 =>
+    @SQLCancel(NullablePointer[ODBCHandleStmt tag](pStatementHandle))
 
 
 /*
@@ -192,8 +190,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
   Arguments:
     [PointerType size=64]->[FundamentalType(void) size=0]
 */
-  fun pSQLCloseCursor(pStatementHandle: Pointer[None] tag): I16 =>
-    @SQLCloseCursor(pStatementHandle)
+  fun pSQLCloseCursor(pStatementHandle: ODBCHandleStmt tag): I16 =>
+    @SQLCloseCursor(NullablePointer[ODBCHandleStmt tag](pStatementHandle))
 
 
 /*
@@ -211,8 +209,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(short int) size=16]
     [PointerType size=64]->[FundamentalType(long int) size=64]
 */
-  fun pSQLColAttribute(pStatementHandle: Pointer[None] tag, pColumnNumber: U16, pFieldIdentifier: U16, pCharacterAttribute: Pointer[None] tag, pBufferLength: I16, pStringLength: CBoxedI16, pNumericAttribute: CBoxedI64): I16 =>
-    @SQLColAttribute(pStatementHandle, pColumnNumber, pFieldIdentifier, pCharacterAttribute, pBufferLength, pStringLength, pNumericAttribute)
+  fun pSQLColAttribute(pStatementHandle: ODBCHandleStmt tag, pColumnNumber: U16, pFieldIdentifier: U16, pCharacterAttribute: Pointer[None] tag, pBufferLength: I16, pStringLength: CBoxedI16, pNumericAttribute: CBoxedI64): I16 =>
+    @SQLColAttribute(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pColumnNumber, pFieldIdentifier, pCharacterAttribute, pBufferLength, pStringLength, pNumericAttribute)
 
 
 /*
@@ -232,8 +230,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(unsigned char) size=8]
     [FundamentalType(short int) size=16]
 */
-  fun pSQLColumns(pStatementHandle: Pointer[None] tag, pCatalogName: String, pNameLength1: I16, pSchemaName: String, pNameLength2: I16, pTableName: String, pNameLength3: I16, pColumnName: String, pNameLength4: I16): I16 =>
-    @SQLColumns(pStatementHandle, pCatalogName.cstring(), pNameLength1, pSchemaName.cstring(), pNameLength2, pTableName.cstring(), pNameLength3, pColumnName.cstring(), pNameLength4)
+  fun pSQLColumns(pStatementHandle: ODBCHandleStmt tag, pCatalogName: String, pNameLength1: I16, pSchemaName: String, pNameLength2: I16, pTableName: String, pNameLength3: I16, pColumnName: String, pNameLength4: I16): I16 =>
+    @SQLColumns(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pCatalogName.cstring(), pNameLength1, pSchemaName.cstring(), pNameLength2, pTableName.cstring(), pNameLength3, pColumnName.cstring(), pNameLength4)
 
 
 /*
@@ -251,8 +249,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(unsigned char) size=8]
     [FundamentalType(short int) size=16]
 */
-  fun pSQLConnect(pConnectionHandle: Pointer[None] tag, pServerName: String, pNameLength1: I16, pUserName: String, pNameLength2: I16, pAuthentication: String, pNameLength3: I16): I16 =>
-    @SQLConnect(pConnectionHandle, pServerName.cstring(), pNameLength1, pUserName.cstring(), pNameLength2, pAuthentication.cstring(), pNameLength3)
+  fun pSQLConnect(pConnectionHandle: ODBCHandleDbc tag, pServerName: String, pNameLength1: I16, pUserName: String, pNameLength2: I16, pAuthentication: String, pNameLength3: I16): I16 =>
+    @SQLConnect(NullablePointer[ODBCHandleDbc tag](pConnectionHandle), pServerName.cstring(), pNameLength1, pUserName.cstring(), pNameLength2, pAuthentication.cstring(), pNameLength3)
 
 
 /*
@@ -285,8 +283,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(short int) size=16]
     [PointerType size=64]->[FundamentalType(short int) size=16]
 */
-  fun pSQLDataSources(pEnvironmentHandle: Pointer[None] tag, pDirection: U16, pServerName: String, pBufferLength1: I16, pNameLength1: CBoxedI16, pDescription: String, pBufferLength2: I16, pNameLength2: CBoxedI16): I16 =>
-    @SQLDataSources(pEnvironmentHandle, pDirection, pServerName.cstring(), pBufferLength1, pNameLength1, pDescription.cstring(), pBufferLength2, pNameLength2)
+  fun pSQLDataSources(pEnvironmentHandle: ODBCHandleEnv tag, pDirection: U16, pServerName: String, pBufferLength1: I16, pNameLength1: CBoxedI16, pDescription: String, pBufferLength2: I16, pNameLength2: CBoxedI16): I16 =>
+    @SQLDataSources(NullablePointer[ODBCHandleEnv tag](pEnvironmentHandle), pDirection, pServerName.cstring(), pBufferLength1, pNameLength1, pDescription.cstring(), pBufferLength2, pNameLength2)
 
 
 /*
@@ -306,8 +304,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(short int) size=16]
     [PointerType size=64]->[FundamentalType(short int) size=16]
 */
-  fun pSQLDescribeCol(pStatementHandle: Pointer[None] tag, pColumnNumber: U16, pColumnName: String, pBufferLength: I16, pNameLength: CBoxedI16, pDataType: CBoxedI16, pColumnSize: CBoxedU64, pDecimalDigits: CBoxedI16, pNullable: CBoxedI16): I16 =>
-    @SQLDescribeCol(pStatementHandle, pColumnNumber, pColumnName.cstring(), pBufferLength, pNameLength, pDataType, pColumnSize, pDecimalDigits, pNullable)
+  fun pSQLDescribeCol(pStatementHandle: ODBCHandleStmt tag, pColumnNumber: U16, pColumnName: String, pBufferLength: I16, pNameLength: CBoxedI16, pDataType: CBoxedI16, pColumnSize: CBoxedU64, pDecimalDigits: CBoxedI16, pNullable: CBoxedI16): I16 =>
+    @SQLDescribeCol(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pColumnNumber, pColumnName.cstring(), pBufferLength, pNameLength, pDataType, pColumnSize, pDecimalDigits, pNullable)
 
 
 /*
@@ -319,8 +317,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
   Arguments:
     [PointerType size=64]->[FundamentalType(void) size=0]
 */
-  fun pSQLDisconnect(pConnectionHandle: Pointer[None] tag): I16 =>
-    @SQLDisconnect(pConnectionHandle)
+  fun pSQLDisconnect(pConnectionHandle: ODBCHandleDbc tag): I16 =>
+    @SQLDisconnect(NullablePointer[ODBCHandleDbc tag](pConnectionHandle))
 
 
 /*
@@ -334,8 +332,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(short int) size=16]
 */
-  fun pSQLEndTran(pHandleType: I16, pHandle: Pointer[None] tag, pCompletionType: I16): I16 =>
-    @SQLEndTran(pHandleType, pHandle, pCompletionType)
+  fun pSQLEndTran_dbc(pHandleType: I16, pHandle: ODBCHandleDbc tag, pCompletionType: I16): I16 =>
+    @SQLEndTran(pHandleType, NullablePointer[ODBCHandleDbc tag](pHandle), pCompletionType)
 
 
 /*
@@ -354,8 +352,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(short int) size=16]
     [PointerType size=64]->[FundamentalType(short int) size=16]
 */
-  fun pSQLError(pEnvironmentHandle: Pointer[None] tag, pConnectionHandle: Pointer[None] tag, pStatementHandle: Pointer[None] tag, pSqlstate: String, pNativeError: CBoxedI32, pMessageText: String, pBufferLength: I16, pTextLength: CBoxedI16): I16 =>
-    @SQLError(pEnvironmentHandle, pConnectionHandle, pStatementHandle, pSqlstate.cstring(), pNativeError, pMessageText.cstring(), pBufferLength, pTextLength)
+  fun pSQLError(pEnvironmentHandle: ODBCHandleEnv tag, pConnectionHandle: Pointer[None] tag, pStatementHandle: ODBCHandleStmt tag, pSqlstate: String, pNativeError: CBoxedI32, pMessageText: String, pBufferLength: I16, pTextLength: CBoxedI16): I16 =>
+    @SQLError(NullablePointer[ODBCHandleEnv tag](pEnvironmentHandle), pConnectionHandle, NullablePointer[ODBCHandleStmt tag](pStatementHandle), pSqlstate.cstring(), pNativeError, pMessageText.cstring(), pBufferLength, pTextLength)
 
 
 /*
@@ -369,8 +367,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(unsigned char) size=8]
     [FundamentalType(int) size=32]
 */
-  fun pSQLExecDirect(pStatementHandle: Pointer[None] tag, pStatementText: String, pTextLength: I32): I16 =>
-    @SQLExecDirect(pStatementHandle, pStatementText.cstring(), pTextLength)
+  fun pSQLExecDirect(pStatementHandle: ODBCHandleStmt tag, pStatementText: String, pTextLength: I32): I16 =>
+    @SQLExecDirect(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pStatementText.cstring(), pTextLength)
 
 
 /*
@@ -382,8 +380,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
   Arguments:
     [PointerType size=64]->[FundamentalType(void) size=0]
 */
-  fun pSQLExecute(pStatementHandle: Pointer[None] tag): I16 =>
-    @SQLExecute(pStatementHandle)
+  fun pSQLExecute(pStatementHandle: ODBCHandleStmt tag): I16 =>
+    @SQLExecute(NullablePointer[ODBCHandleStmt tag](pStatementHandle))
 
 
 /*
@@ -395,8 +393,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
   Arguments:
     [PointerType size=64]->[FundamentalType(void) size=0]
 */
-  fun pSQLFetch(pStatementHandle: Pointer[None] tag): I16 =>
-    @SQLFetch(pStatementHandle)
+  fun pSQLFetch(pStatementHandle: ODBCHandleStmt tag): I16 =>
+    @SQLFetch(NullablePointer[ODBCHandleStmt tag](pStatementHandle))
 
 
 /*
@@ -410,8 +408,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(short int) size=16]
     [FundamentalType(long int) size=64]
 */
-  fun pSQLFetchScroll(pStatementHandle: Pointer[None] tag, pFetchOrientation: I16, pFetchOffset: I64): I16 =>
-    @SQLFetchScroll(pStatementHandle, pFetchOrientation, pFetchOffset)
+  fun pSQLFetchScroll(pStatementHandle: ODBCHandleStmt tag, pFetchOrientation: I16, pFetchOffset: I64): I16 =>
+    @SQLFetchScroll(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pFetchOrientation, pFetchOffset)
 
 
 /*
@@ -435,10 +433,9 @@ The following table lists ODBC functions, grouped by type of task, and includes 
 
   Arguments:
     [PointerType size=64]->[FundamentalType(void) size=0]
-*/
-  fun pSQLFreeEnv(pEnvironmentHandle: Pointer[None] tag): I16 =>
+  fun pSQLFreeEnv(pEnvironmentHandle: ODBCHandleEnv tag): I16 =>
     @SQLFreeEnv(pEnvironmentHandle)
-
+*/
 
 /*
   Source: /usr/include/iodbc/sql.h:933
@@ -464,8 +461,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(short unsigned int) size=16]
 */
-  fun pSQLFreeStmt(pStatementHandle: Pointer[None] tag, pOption: U16): I16 =>
-    @SQLFreeStmt(pStatementHandle, pOption)
+  fun pSQLFreeStmt(pStatementHandle: ODBCHandleStmt tag, pOption: U16): I16 =>
+    @SQLFreeStmt(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pOption)
 
 
 /*
@@ -481,8 +478,11 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(int) size=32]
     [PointerType size=64]->[FundamentalType(int) size=32]
 */
-  fun pSQLGetConnectAttr(pConnectionHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pBufferLength: I32, pStringLength: CBoxedI32): I16 =>
-    @SQLGetConnectAttr(pConnectionHandle, pAttribute, pValue, pBufferLength, pStringLength)
+  fun pSQLGetConnectAttr_i32(pConnectionHandle: ODBCHandleDbc tag, pAttribute: I32, pValue: CBoxedI32, pBufferLength: I32, pStringLength: CBoxedI32): I16 =>
+    @SQLGetConnectAttr(NullablePointer[ODBCHandleDbc tag](pConnectionHandle), pAttribute, pValue, pBufferLength, pStringLength)
+
+//  fun pSQLGetConnectAttr(pConnectionHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pBufferLength: I32, pStringLength: CBoxedI32): I16 =>
+//    @SQLGetConnectAttr(pConnectionHandle, pAttribute, pValue, pBufferLength, pStringLength)
 
 
 /*
@@ -512,8 +512,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(short int) size=16]
     [PointerType size=64]->[FundamentalType(short int) size=16]
 */
-  fun pSQLGetCursorName(pStatementHandle: Pointer[None] tag, pCursorName: String, pBufferLength: I16, pNameLength: CBoxedI16): I16 =>
-    @SQLGetCursorName(pStatementHandle, pCursorName.cstring(), pBufferLength, pNameLength)
+  fun pSQLGetCursorName(pStatementHandle: ODBCHandleStmt tag, pCursorName: String, pBufferLength: I16, pNameLength: CBoxedI16): I16 =>
+    @SQLGetCursorName(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pCursorName.cstring(), pBufferLength, pNameLength)
 
 
 /*
@@ -530,8 +530,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(long int) size=64]
     [PointerType size=64]->[FundamentalType(long int) size=64]
 */
-  fun pSQLGetData(pStatementHandle: Pointer[None] tag, pColumnNumber: U16, pTargetType: I16, pTargetValue: Pointer[None] tag, pBufferLength: I64, pStrLenorInd: CBoxedI64): I16 =>
-    @SQLGetData(pStatementHandle, pColumnNumber, pTargetType, pTargetValue, pBufferLength, pStrLenorInd)
+  fun pSQLGetData(pStatementHandle: ODBCHandleStmt tag, pColumnNumber: U16, pTargetType: I16, pTargetValue: Pointer[U8] tag, pBufferLength: I64, pStrLenorInd: CBoxedI64): I16 =>
+    @SQLGetData(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pColumnNumber, pTargetType, pTargetValue, pBufferLength, pStrLenorInd)
 
 
 /*
@@ -627,8 +627,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(int) size=32]
     [PointerType size=64]->[FundamentalType(int) size=32]
 */
-  fun pSQLGetEnvAttr(pEnvironmentHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pBufferLength: I32, pStringLength: CBoxedI32): I16 =>
-    @SQLGetEnvAttr(pEnvironmentHandle, pAttribute, pValue, pBufferLength, pStringLength)
+  fun pSQLGetEnvAttr(pEnvironmentHandle: ODBCHandleEnv tag, pAttribute: I32, pValue: CBoxedI32, pBufferLength: I32, pStringLength: CBoxedI32): I16 =>
+    @SQLGetEnvAttr(NullablePointer[ODBCHandleEnv tag](pEnvironmentHandle), pAttribute, pValue, pBufferLength, pStringLength)
 
 
 /*
@@ -676,8 +676,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(int) size=32]
     [PointerType size=64]->[FundamentalType(int) size=32]
 */
-  fun pSQLGetStmtAttr(pStatementHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pBufferLength: I32, pStringLength: CBoxedI32): I16 =>
-    @SQLGetStmtAttr(pStatementHandle, pAttribute, pValue, pBufferLength, pStringLength)
+  fun pSQLGetStmtAttr(pStatementHandle: ODBCHandleStmt tag, pAttribute: I32, pValue: Pointer[None] tag, pBufferLength: I32, pStringLength: CBoxedI32): I16 =>
+    @SQLGetStmtAttr(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pAttribute, pValue, pBufferLength, pStringLength)
 
 
 /*
@@ -691,8 +691,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(short unsigned int) size=16]
     [PointerType size=64]->[FundamentalType(void) size=0]
 */
-  fun pSQLGetStmtOption(pStatementHandle: Pointer[None] tag, pOption: U16, pValue: Pointer[None] tag): I16 =>
-    @SQLGetStmtOption(pStatementHandle, pOption, pValue)
+  fun pSQLGetStmtOption(pStatementHandle: ODBCHandleStmt tag, pOption: U16, pValue: Pointer[None] tag): I16 =>
+    @SQLGetStmtOption(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pOption, pValue)
 
 
 /*
@@ -705,8 +705,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(short int) size=16]
 */
-  fun pSQLGetTypeInfo(pStatementHandle: Pointer[None] tag, pDataType: I16): I16 =>
-    @SQLGetTypeInfo(pStatementHandle, pDataType)
+  fun pSQLGetTypeInfo(pStatementHandle: ODBCHandleStmt tag, pDataType: I16): I16 =>
+    @SQLGetTypeInfo(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pDataType)
 
 
 /*
@@ -719,8 +719,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [PointerType size=64]->[FundamentalType(short int) size=16]
 */
-  fun pSQLNumResultCols(pStatementHandle: Pointer[None] tag, pColumnCount: CBoxedI16): I16 =>
-    @SQLNumResultCols(pStatementHandle, pColumnCount)
+  fun pSQLNumResultCols(pStatementHandle: ODBCHandleStmt tag, pColumnCount: CBoxedI16): I16 =>
+    @SQLNumResultCols(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pColumnCount)
 
 
 /*
@@ -733,8 +733,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [PointerType size=64]->[PointerType size=64]->[FundamentalType(void) size=0]
 */
-  fun pSQLParamData(pStatementHandle: Pointer[None] tag, pValue: Pointer[None] tag): I16 =>
-    @SQLParamData(pStatementHandle, pValue)
+  fun pSQLParamData(pStatementHandle: ODBCHandleStmt tag, pValue: Pointer[None] tag): I16 =>
+    @SQLParamData(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pValue)
 
 
 /*
@@ -748,8 +748,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(unsigned char) size=8]
     [FundamentalType(int) size=32]
 */
-  fun pSQLPrepare(pStatementHandle: Pointer[None] tag, pStatementText: String, pTextLength: I32): I16 =>
-    @SQLPrepare(pStatementHandle, pStatementText.cstring(), pTextLength)
+  fun pSQLPrepare(pStatementHandle: ODBCHandleStmt tag, pStatementText: String, pTextLength: I32): I16 =>
+    @SQLPrepare(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pStatementText.cstring(), pTextLength)
 
 
 /*
@@ -763,8 +763,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(long int) size=64]
 */
-  fun pSQLPutData(pStatementHandle: Pointer[None] tag, pData: Pointer[None] tag, pStrLenorInd: I64): I16 =>
-    @SQLPutData(pStatementHandle, pData, pStrLenorInd)
+  fun pSQLPutData(pStatementHandle: ODBCHandleStmt tag, pData: Pointer[None] tag, pStrLenorInd: I64): I16 =>
+    @SQLPutData(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pData, pStrLenorInd)
 
 
 /*
@@ -777,8 +777,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [PointerType size=64]->[FundamentalType(long int) size=64]
 */
-  fun pSQLRowCount(pStatementHandle: Pointer[None] tag, pRowCount: CBoxedI64): I16 =>
-    @SQLRowCount(pStatementHandle, pRowCount)
+  fun pSQLRowCount(pStatementHandle: ODBCHandleStmt tag, pRowCount: CBoxedI64): I16 =>
+    @SQLRowCount(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pRowCount)
 
 
 /*
@@ -793,8 +793,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(int) size=32]
 */
-  fun pSQLSetConnectAttr(pConnectionHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pStringLength: I32): I16 =>
-    @SQLSetConnectAttr(pConnectionHandle, pAttribute, pValue, pStringLength)
+  fun pSQLSetConnectAttr_i32(pConnectionHandle: ODBCHandleDbc tag, pAttribute: I32, pValue: I32, pStringLength: I32): I16 =>
+    @SQLSetConnectAttr(NullablePointer[ODBCHandleDbc tag](pConnectionHandle), pAttribute, pValue, pStringLength)
 
 
 /*
@@ -823,8 +823,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(unsigned char) size=8]
     [FundamentalType(short int) size=16]
 */
-  fun pSQLSetCursorName(pStatementHandle: Pointer[None] tag, pCursorName: String, pNameLength: I16): I16 =>
-    @SQLSetCursorName(pStatementHandle, pCursorName.cstring(), pNameLength)
+  fun pSQLSetCursorName(pStatementHandle: ODBCHandleStmt tag, pCursorName: String, pNameLength: I16): I16 =>
+    @SQLSetCursorName(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pCursorName.cstring(), pNameLength)
 
 
 /*
@@ -878,8 +878,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(int) size=32]
 */
-  fun pSQLSetEnvAttr(pEnvironmentHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pStringLength: I32): I16 =>
-    @SQLSetEnvAttr(pEnvironmentHandle, pAttribute, pValue, pStringLength)
+  fun pSQLSetEnvAttr(pEnvironmentHandle: ODBCHandleEnv tag, pAttribute: I32, pValue: I32, pStringLength: I32): I16 =>
+    @SQLSetEnvAttr(NullablePointer[ODBCHandleEnv tag](pEnvironmentHandle), pAttribute, pValue, pStringLength)
 
 
 /*
@@ -894,8 +894,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(int) size=32]
 */
-  fun pSQLSetStmtAttr(pStatementHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pStringLength: I32): I16 =>
-    @SQLSetStmtAttr(pStatementHandle, pAttribute, pValue, pStringLength)
+  fun pSQLSetStmtAttr(pStatementHandle: ODBCHandleStmt tag, pAttribute: I32, pValue: Pointer[None] tag, pStringLength: I32): I16 =>
+    @SQLSetStmtAttr(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pAttribute, pValue, pStringLength)
 
 
 /*
@@ -909,8 +909,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(short unsigned int) size=16]
     [FundamentalType(long unsigned int) size=64]
 */
-  fun pSQLSetStmtOption(pStatementHandle: Pointer[None] tag, pOption: U16, pValue: U64): I16 =>
-    @SQLSetStmtOption(pStatementHandle, pOption, pValue)
+  fun pSQLSetStmtOption(pStatementHandle: ODBCHandleStmt tag, pOption: U16, pValue: U64): I16 =>
+    @SQLSetStmtOption(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pOption, pValue)
 
 
 /*
@@ -931,8 +931,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(short unsigned int) size=16]
     [FundamentalType(short unsigned int) size=16]
 */
-  fun pSQLSpecialColumns(pStatementHandle: Pointer[None] tag, pIdentifierType: U16, pCatalogName: String, pNameLength1: I16, pSchemaName: String, pNameLength2: I16, pTableName: String, pNameLength3: I16, pScope: U16, pNullable: U16): I16 =>
-    @SQLSpecialColumns(pStatementHandle, pIdentifierType, pCatalogName.cstring(), pNameLength1, pSchemaName.cstring(), pNameLength2, pTableName.cstring(), pNameLength3, pScope, pNullable)
+  fun pSQLSpecialColumns(pStatementHandle: ODBCHandleStmt tag, pIdentifierType: U16, pCatalogName: String, pNameLength1: I16, pSchemaName: String, pNameLength2: I16, pTableName: String, pNameLength3: I16, pScope: U16, pNullable: U16): I16 =>
+    @SQLSpecialColumns(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pIdentifierType, pCatalogName.cstring(), pNameLength1, pSchemaName.cstring(), pNameLength2, pTableName.cstring(), pNameLength3, pScope, pNullable)
 
 
 /*
@@ -952,8 +952,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(short unsigned int) size=16]
     [FundamentalType(short unsigned int) size=16]
 */
-  fun pSQLStatistics(pStatementHandle: Pointer[None] tag, pCatalogName: String, pNameLength1: I16, pSchemaName: String, pNameLength2: I16, pTableName: String, pNameLength3: I16, pUnique: U16, pReserved: U16): I16 =>
-    @SQLStatistics(pStatementHandle, pCatalogName.cstring(), pNameLength1, pSchemaName.cstring(), pNameLength2, pTableName.cstring(), pNameLength3, pUnique, pReserved)
+  fun pSQLStatistics(pStatementHandle: ODBCHandleStmt tag, pCatalogName: String, pNameLength1: I16, pSchemaName: String, pNameLength2: I16, pTableName: String, pNameLength3: I16, pUnique: U16, pReserved: U16): I16 =>
+    @SQLStatistics(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pCatalogName.cstring(), pNameLength1, pSchemaName.cstring(), pNameLength2, pTableName.cstring(), pNameLength3, pUnique, pReserved)
 
 
 /*
@@ -973,8 +973,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(unsigned char) size=8]
     [FundamentalType(short int) size=16]
 */
-  fun pSQLTables(pStatementHandle: Pointer[None] tag, pCatalogName: String, pNameLength1: I16, pSchemaName: String, pNameLength2: I16, pTableName: String, pNameLength3: I16, pTableType: String, pNameLength4: I16): I16 =>
-    @SQLTables(pStatementHandle, pCatalogName.cstring(), pNameLength1, pSchemaName.cstring(), pNameLength2, pTableName.cstring(), pNameLength3, pTableType.cstring(), pNameLength4)
+  fun pSQLTables(pStatementHandle: ODBCHandleStmt tag, pCatalogName: String, pNameLength1: I16, pSchemaName: String, pNameLength2: I16, pTableName: String, pNameLength3: I16, pTableType: String, pNameLength4: I16): I16 =>
+    @SQLTables(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pCatalogName.cstring(), pNameLength1, pSchemaName.cstring(), pNameLength2, pTableName.cstring(), pNameLength3, pTableType.cstring(), pNameLength4)
 
 
 /*
@@ -988,8 +988,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(short unsigned int) size=16]
 */
-  fun pSQLTransact(pEnvironmentHandle: Pointer[None] tag, pConnectionHandle: Pointer[None] tag, pCompletionType: U16): I16 =>
-    @SQLTransact(pEnvironmentHandle, pConnectionHandle, pCompletionType)
+  fun pSQLTransact(pEnvironmentHandle: ODBCHandleEnv tag, pConnectionHandle: Pointer[None] tag, pCompletionType: U16): I16 =>
+    @SQLTransact(NullablePointer[ODBCHandleEnv tag](pEnvironmentHandle), pConnectionHandle, pCompletionType)
 
 
 /*
@@ -1008,8 +1008,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [PointerType size=64]->[FundamentalType(long int) size=64]
 */
-  fun pSQLSetParam(pStatementHandle: Pointer[None] tag, pParameterNumber: U16, pValueType: I16, pParameterType: I16, pLengthPrecision: U64, pParameterScale: I16, pParameterValue: Pointer[None] tag, pStrLenorInd: CBoxedI64): I16 =>
-    @SQLSetParam(pStatementHandle, pParameterNumber, pValueType, pParameterType, pLengthPrecision, pParameterScale, pParameterValue, pStrLenorInd)
+  fun pSQLSetParam(pStatementHandle: ODBCHandleStmt tag, pParameterNumber: U16, pValueType: I16, pParameterType: I16, pLengthPrecision: U64, pParameterScale: I16, pParameterValue: Pointer[None] tag, pStrLenorInd: CBoxedI64): I16 =>
+    @SQLSetParam(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pParameterNumber, pValueType, pParameterType, pLengthPrecision, pParameterScale, pParameterValue, pStrLenorInd)
 
 
 /*
@@ -1060,8 +1060,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(short int) size=16]
 */
-  fun pSQLBulkOperations(pStatementHandle: Pointer[None] tag, pOperation: I16): I16 =>
-    @SQLBulkOperations(pStatementHandle, pOperation)
+  fun pSQLBulkOperations(pStatementHandle: ODBCHandleStmt tag, pOperation: I16): I16 =>
+    @SQLBulkOperations(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pOperation)
 
 
 /*
@@ -1356,8 +1356,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(long int) size=64]
     [PointerType size=64]->[FundamentalType(long int) size=64]
 */
-  fun pSQLBindParameter(phstmt: Pointer[None] tag, pipar: U16, pfParamType: I16, pfCType: I16, pfSqlType: I16, pcbColDef: U64, pibScale: I16, prgbValue: Pointer[None] tag, pcbValueMax: I64, ppcbValue: CBoxedI64): I16 =>
-    @SQLBindParameter(phstmt, pipar, pfParamType, pfCType, pfSqlType, pcbColDef, pibScale, prgbValue, pcbValueMax, ppcbValue)
+  fun pSQLBindParameter_varchar(phstmt: ODBCHandleStmt tag, pipar: U16, pfParamType: I16, pfCType: I16, pfSqlType: I16, pcbColDef: U64, pibScale: I16, prgbValue: Pointer[U8] tag, pcbValueMax: I64, ppcbValue: CBoxedI64): I16 =>
+    @SQLBindParameter(NullablePointer[ODBCHandleStmt tag](phstmt), pipar, pfParamType, pfCType, pfSqlType, pcbColDef, pibScale, prgbValue, pcbValueMax, ppcbValue)
 
 
 /*
@@ -1728,8 +1728,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(short int) size=16]
 */
-  fun pSQLGetTypeInfoW(pStatementHandle: Pointer[None] tag, pDataType: I16): I16 =>
-    @SQLGetTypeInfoW(pStatementHandle, pDataType)
+  fun pSQLGetTypeInfoW(pStatementHandle: ODBCHandleStmt tag, pDataType: I16): I16 =>
+    @SQLGetTypeInfoW(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pDataType)
 
 
 /*
@@ -2416,8 +2416,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(short int) size=16]
 */
-  fun pSQLGetTypeInfoA(pStatementHandle: Pointer[None] tag, pDataType: I16): I16 =>
-    @SQLGetTypeInfoA(pStatementHandle, pDataType)
+  fun pSQLGetTypeInfoA(pStatementHandle: ODBCHandleStmt tag, pDataType: I16): I16 =>
+    @SQLGetTypeInfoA(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pDataType)
 
 
 /*

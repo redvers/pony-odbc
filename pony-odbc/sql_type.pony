@@ -1,3 +1,4 @@
+use "ffi"
 use "debug"
 
 trait SQLType
@@ -85,7 +86,24 @@ trait SQLType
     get_err()
 
   fun \nodoc\ ref _bind_parameter(h: ODBCHandleStmt tag, col: U16): Bool =>
-    set_err(ODBCStmtFFI.bind_parameter_varchar(h, col, get_boxed_array()))
+    var ba: CBoxedArray = get_boxed_array()
+    var wrlen: CBoxedI64 = CBoxedI64
+    wrlen.value = ODBCVarcharConsts.sql_nts().i64()
+    set_err(
+      ODBCFFI.resolve(
+        ODBCFFI.pSQLBindParameter_varchar(
+          h,
+          col,
+          1,
+          1,
+          -1,
+          ba.alloc_size.u64(),
+          0,
+          ba.ptr,
+          ba.written_size.value,
+          wrlen)
+      )
+    )
     is_success()
 
   fun \nodoc\ ref is_success(): Bool =>
@@ -110,6 +128,9 @@ trait SQLType
     get_err()
 
   fun \nodoc\ ref _bind_column(h: ODBCHandleStmt tag, col: U16): Bool =>
-    set_err(ODBCStmtFFI.bind_column_varchar(h, col, get_boxed_array()))
+    var ba: CBoxedArray = get_boxed_array()
+    set_err(
+      ODBCFFI.resolve(
+        ODBCFFI.pSQLBindCol_varchar(h, col, 1, ba.ptr, ba.alloc_size.i64(), ba.written_size)))
     is_success()
 

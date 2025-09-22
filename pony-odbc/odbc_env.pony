@@ -1,6 +1,8 @@
 use "debug"
 use "ffi"
 
+struct \nodoc\ ODBCHandleEnv
+
 class ODBCEnv is SqlState
   """
   # ODBCEnv
@@ -21,21 +23,25 @@ class ODBCEnv is SqlState
   """
   let odbcenv: ODBCHandleEnv tag
   var strict: Bool = true
-  var _err: SQLReturn val = SQLSuccess
+  var _err: SQLReturn val
 
   new create() => None
     """
     Creates a new ODBC Environment
     """
     var envwrapper: EnvWrapper = EnvWrapper
-    ODBCFFI.pSQLAllocHandle_env(envwrapper)
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLAllocHandle_env(envwrapper))
     odbcenv = envwrapper.value
+    ODBCFFI.pSQLSetEnvAttr(odbcenv, _SqlAttrODBCVersion(), _SqlODBC3(), _SQLIsInteger())
 
-  fun dbc(): ODBCDbc ? =>
+  fun ref dbc(): ODBCDbc ? =>
     """
     Used to create an ODBCDbc object from this ODBCEnv.
     """
-    ODBCDbc(odbcenv)?
+    var dbh: ODBCDbc = ODBCDbc(odbcenv)
+    _err = dbh.alloc()
+    _check_valid()?
+    dbh
 
   fun sqlstates(): Array[(String val, String val)] val =>
     _from_env(odbcenv)
@@ -44,7 +50,7 @@ class ODBCEnv is SqlState
     """
     Enables ODBC Versiion 3 support (you should do this)
     """
-    _err = ODBCEnvFFI.set_odbc3(odbcenv)
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLSetEnvAttr(odbcenv, _SqlAttrODBCVersion(), _SqlODBC3(), _SQLIsInteger()))
     _check_valid()?
 
   fun \nodoc\ ref _check_valid(): Bool ? =>
@@ -68,9 +74,9 @@ class ODBCEnv is SqlState
     This is a primitive getter function used to retrieve i32 attributes
     from the ODBC Handle. 
     """
-    _err = ODBCEnvFFI.get_env_attr(odbcenv, a, v)
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLGetEnvAttr(odbcenv, a(), v, 0, CBoxedI32))
     _check_valid()?
 
-  fun _final() =>
-    ODBCEnvFFI.free(odbcenv)
+//  fun _final() =>
+//    ODBCEnvFFI.free(odbcenv)
 

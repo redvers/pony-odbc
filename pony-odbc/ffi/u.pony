@@ -70,7 +70,7 @@ use @SQLAllocStmt[I16](pConnectionHandle: Pointer[None] tag, pStatementHandle: P
     [FundamentalType(long int) size=64]
     [PointerType size=64]->[FundamentalType(long int) size=64]
 */
-use @SQLBindCol[I16](pStatementHandle: Pointer[None] tag, pColumnNumber: U16, pTargetType: I16, pTargetValue: Pointer[None] tag, pBufferLength: I64, pStrLenorInd: CBoxedI64 tag)
+use @SQLBindCol[I16](pStatementHandle: Pointer[None] tag, pColumnNumber: U16, pTargetType: I16, pTargetValue: Pointer[U8] tag, pBufferLength: I64, pStrLenorInd: CBoxedI64 tag)
 
 
 
@@ -90,7 +90,7 @@ use @SQLBindCol[I16](pStatementHandle: Pointer[None] tag, pColumnNumber: U16, pT
     [PointerType size=64]->[FundamentalType(void) size=0]
     [PointerType size=64]->[FundamentalType(long int) size=64]
 */
-use @SQLBindParam[I16](pStatementHandle: Pointer[None] tag, pParameterNumber: U16, pValueType: I16, pParameterType: I16, pLengthPrecision: U64, pParameterScale: I16, pParameterValue: Pointer[None] tag, pStrLenorInd: CBoxedI64 tag)
+use @SQLBindParam[I16](pStatementHandle: Pointer[None] tag, pParameterNumber: U16, pValueType: I16, pParameterType: I16, pLengthPrecision: U64, pParameterScale: I16, pParameterValue: Pointer[U8] tag, pStrLenorInd: CBoxedI64 tag)
 
 
 
@@ -405,7 +405,7 @@ use @SQLFreeStmt[I16](pStatementHandle: Pointer[None] tag, pOption: U16)
     [FundamentalType(int) size=32]
     [PointerType size=64]->[FundamentalType(int) size=32]
 */
-use @SQLGetConnectAttr[I16](pConnectionHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pBufferLength: I32, pStringLength: CBoxedI32 tag)
+use @SQLGetConnectAttr[I16](pConnectionHandle: Pointer[None] tag, pAttribute: I32, pValue: CBoxedI32 tag, pBufferLength: I32, pStringLength: CBoxedI32 tag)
 
 
 
@@ -454,7 +454,7 @@ use @SQLGetCursorName[I16](pStatementHandle: Pointer[None] tag, pCursorName: Poi
     [FundamentalType(long int) size=64]
     [PointerType size=64]->[FundamentalType(long int) size=64]
 */
-use @SQLGetData[I16](pStatementHandle: Pointer[None] tag, pColumnNumber: U16, pTargetType: I16, pTargetValue: Pointer[None] tag, pBufferLength: I64, pStrLenorInd: CBoxedI64 tag)
+use @SQLGetData[I16](pStatementHandle: Pointer[None] tag, pColumnNumber: U16, pTargetType: I16, pTargetValue: Pointer[U8] tag, pBufferLength: I64, pStrLenorInd: CBoxedI64 tag)
 
 
 
@@ -551,7 +551,7 @@ use @SQLGetDiagRec[I16](pHandleType: I16, pHandle: Pointer[None] tag, pRecNumber
     [FundamentalType(int) size=32]
     [PointerType size=64]->[FundamentalType(int) size=32]
 */
-use @SQLGetEnvAttr[I16](pEnvironmentHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pBufferLength: I32, pStringLength: CBoxedI32 tag)
+use @SQLGetEnvAttr[I16](pEnvironmentHandle: Pointer[None] tag, pAttribute: I32, pValue: CBoxedI32 tag, pBufferLength: I32, pStringLength: CBoxedI32 tag)
 
 
 
@@ -717,7 +717,7 @@ use @SQLRowCount[I16](pStatementHandle: Pointer[None] tag, pRowCount: CBoxedI64 
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(int) size=32]
 */
-use @SQLSetConnectAttr[I16](pConnectionHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pStringLength: I32)
+use @SQLSetConnectAttr[I16](pConnectionHandle: Pointer[None] tag, pAttribute: I32, pValue: I32, pStringLength: I32)
 
 
 
@@ -802,7 +802,7 @@ use @SQLSetDescRec[I16](pDescriptorHandle: Pointer[None] tag, pRecNumber: I16, p
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(int) size=32]
 */
-use @SQLSetEnvAttr[I16](pEnvironmentHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pStringLength: I32)
+use @SQLSetEnvAttr[I16](pEnvironmentHandle: Pointer[None] tag, pAttribute: I32, pValue: I32, pStringLength: I32)
 
 
 
