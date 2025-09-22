@@ -1,7 +1,9 @@
 use "debug"
 use "collections"
 
-class \nodoc\ SQLError
+primitive \nodoc\ SQLError
+  fun string(): String val => "SQLError"
+  /*
   var _location: SourceLoc val = __loc
   var _records: Array[(I16, SQLDiagFrame)] = Array[(I16, SQLDiagFrame)]
 
@@ -88,3 +90,4 @@ class \nodoc\ SQLError
       rv.push(f.rec_tuple())
     end
     consume rv
+              */

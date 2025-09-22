@@ -128,7 +128,7 @@ class ODBCStmt is SqlState
   var _env: ODBCHandleEnv tag
   var _dbh: ODBCHandleDbc tag
   var _sth: ODBCHandleStmt tag
-  var _err: _SQLReturn val
+  var _err: SQLReturn val
   var _parameters: Array[SQLType] = Array[SQLType]
   var _columns:    Array[SQLType] = Array[SQLType]
   var strict: Bool = true
@@ -273,7 +273,7 @@ class ODBCStmt is SqlState
     end
 
   // Used to do introspection during testing
-  fun \nodoc\ get_err(): _SQLReturn val => _err
+  fun \nodoc\ get_err(): SQLReturn val => _err
 
   fun \nodoc\ ref _check_valid(): Bool ? =>
     if strict then

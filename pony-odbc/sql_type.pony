@@ -30,8 +30,8 @@ trait SQLType
   fun \nodoc\ ref get_boxed_array(): CBoxedArray
   fun \nodoc\ ref set_boxed_array(v: CBoxedArray)
 
-  fun \nodoc\ ref get_err(): _SQLReturn val
-  fun \nodoc\ ref set_err(err: _SQLReturn val)
+  fun \nodoc\ ref get_err(): SQLReturn val
+  fun \nodoc\ ref set_err(err: SQLReturn val)
 
   fun \nodoc\ ref alloc(size: USize): Bool =>
     get_boxed_array().alloc(size)
@@ -78,7 +78,7 @@ trait SQLType
     if (not get_boxed_array().write_array(arr)) then return false end
     true
 
-  fun \nodoc\ ref bind_parameter(h: ODBCHandleStmt tag, col: U16): _SQLReturn val =>
+  fun \nodoc\ ref bind_parameter(h: ODBCHandleStmt tag, col: U16): SQLReturn val =>
     if (not _bind_parameter(h, col)) then
       return get_err()
     end
@@ -95,7 +95,7 @@ trait SQLType
       false
     end
 
-  fun \nodoc\ ref realloc_column(h: ODBCHandleStmt tag, size: USize, col: U16): _SQLReturn val =>
+  fun \nodoc\ ref realloc_column(h: ODBCHandleStmt tag, size: USize, col: U16): SQLReturn val =>
     """
     Reallocates the buffer to be populated by the database when data
     is fetched and rebinds the new buffer to the column.
@@ -103,7 +103,7 @@ trait SQLType
     set_boxed_array(CBoxedArray .> alloc(size))
     bind_column(h, col)
 
-  fun \nodoc\ ref bind_column(h: ODBCHandleStmt tag, col: U16): _SQLReturn val =>
+  fun \nodoc\ ref bind_column(h: ODBCHandleStmt tag, col: U16): SQLReturn val =>
     if (not _bind_column(h, col)) then
       return get_err()
     end

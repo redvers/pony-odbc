@@ -21,7 +21,7 @@ class ODBCEnv is SqlState
   """
   let odbcenv: ODBCHandleEnv tag
   var strict: Bool = true
-  var _err: _SQLReturn val = SQLSuccess
+  var _err: SQLReturn val = SQLSuccess
 
   new create() => None
     """

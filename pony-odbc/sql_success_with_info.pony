@@ -1,7 +1,9 @@
 use "debug"
 use "collections"
 
-class \nodoc\ SQLSuccessWithInfo
+primitive \nodoc\ SQLSuccessWithInfo
+  fun string(): String val => "SQLSuccessWithInfo"
+  /*
   var _locations: SourceLoc val = __loc
   var _records: Array[(I16, SQLDiagFrame)] = Array[(I16, SQLDiagFrame)]
 
@@ -79,4 +81,4 @@ class \nodoc\ SQLSuccessWithInfo
       rv.push(f.rec_tuple())
     end
     consume rv
-
+*/

@@ -2751,3 +2751,15 @@ The following table lists ODBC functions, grouped by type of task, and includes 
   fun pSQLDriversA(phenv: Pointer[None] tag, pfDirection: U16, pszDriverDesc: String, pcbDriverDescMax: I16, ppcbDriverDesc: CBoxedI16, pszDriverAttributes: String, pcbDrvrAttrMax: I16, ppcbDrvrAttr: CBoxedI16): I16 =>
     @SQLDriversA(phenv, pfDirection, pszDriverDesc.cstring(), pcbDriverDescMax, ppcbDriverDesc, pszDriverAttributes.cstring(), pcbDrvrAttrMax, ppcbDrvrAttr)
 
+  fun resolve(rv: I16): SQLReturn val =>
+    match rv
+    | 0 => return SQLSuccess
+    | 1 => return SQLSuccessWithInfo
+    | 2 => return SQLStillExecuting
+    | -1 => return SQLError
+    | -2 => return SQLInvalidHandle
+    | 99 => return SQLNeedData
+    | 100 => return SQLNoData
+    end
+    recover val PonyDriverError("ODBCHandleStmt.result_count() get invalid return code: " + rv.string()) end
+
