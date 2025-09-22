@@ -551,7 +551,7 @@ use @SQLGetDiagRec[I16](pHandleType: I16, pHandle: Pointer[None] tag, pRecNumber
     [FundamentalType(int) size=32]
     [PointerType size=64]->[FundamentalType(int) size=32]
 */
-use @SQLGetEnvAttr[I16](pEnvironmentHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pBufferLength: I32, pStringLength: CBoxedI32 tag)
+use @SQLGetEnvAttr[I16](pEnvironmentHandle: Pointer[None] tag, pAttribute: I32, pValue: CBoxedI32 tag, pBufferLength: I32, pStringLength: CBoxedI32 tag)
 
 
 
@@ -802,7 +802,7 @@ use @SQLSetDescRec[I16](pDescriptorHandle: Pointer[None] tag, pRecNumber: I16, p
     [PointerType size=64]->[FundamentalType(void) size=0]
     [FundamentalType(int) size=32]
 */
-use @SQLSetEnvAttr[I16](pEnvironmentHandle: Pointer[None] tag, pAttribute: I32, pValue: Pointer[None] tag, pStringLength: I32)
+use @SQLSetEnvAttr[I16](pEnvironmentHandle: Pointer[None] tag, pAttribute: I32, pValue: I32, pStringLength: I32)
 
 
 
