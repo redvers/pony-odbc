@@ -219,6 +219,17 @@ class ODBCStmt is SqlState
     _err = ODBCFFI.resolve(ODBCFFI.pSQLExecute(_sth))
     _check_valid()?
 
+  fun ref direct_exec(statement: String val, sl: SourceLoc val = __loc) ? =>
+    """
+    Directly executes the provided statement.
+
+    Any response from the ODBC driver other than a non-warning success will
+    result in a thrown error.
+    """
+    _call_location = sl
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLExecDirect(_sth, statement, statement.size().i32()))
+    _check_valid()?
+
   fun ref rowcount(sl: SourceLoc val = __loc): I64 ? =>
     """
     *Warning*: The ODBC standard does not mandate this function's correctness.
@@ -234,6 +245,47 @@ class ODBCStmt is SqlState
       ODBCFFI.pSQLRowCount(_sth, rv))
     _check_valid()?
     rv.value
+
+  fun ref columns(catalog: String val = "", schema: String val = "", table: String val = "", column: String val = "", sl: SourceLoc = __loc) ? =>
+    _call_location = sl
+    _err = ODBCFFI.resolve(
+      ODBCFFI.pSQLColumns(
+        _sth,
+        if (catalog == "") then Pointer[U8] else catalog.cstring() end,
+        catalog.size().i16(),
+        if (schema == "") then Pointer[U8] else schema.cstring() end,
+        schema.size().i16(),
+        if (table == "") then Pointer[U8] else table.cstring() end,
+        table.size().i16(),
+        if (column == "") then Pointer[U8] else column.cstring() end,
+        column.size().i16()
+        )
+      )
+    _check_valid()?
+
+  fun ref get_data(column: U16, sqltype: SQLType)? =>
+    ODBCFFI.resolve(
+      ODBCFFI.pSQLGetData(
+        _sth,
+        column,
+        ODBCVarcharConsts.sql_c_char(),
+        sqltype.get_boxed_array().ptr,
+        sqltype.get_boxed_array().alloc_size.i64(),
+        sqltype.get_boxed_array().written_size
+      )
+    )
+    _check_valid()?
+
+//        _err = vc.realloc_column(_sth, vc.get_boxed_array().written_size.value.usize() + 10, colindex.u16() + 1)
+
+  fun ref fetch(sl: SourceLoc val = __loc): Bool ? =>
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLFetch(_sth))
+    match _err
+    | let x: SQLSuccess => true
+    | let x: SQLNoData => false
+    else
+      error
+    end
 
   fun ref fetch_scroll(d: SqlFetchOrientation = SqlFetchNext, offset: I64 = 0, sl: SourceLoc val = __loc): Bool ? =>
     """
@@ -268,7 +320,8 @@ class ODBCStmt is SqlState
     Whether it should be used is database dependent
     """
     _call_location = sl
-    _err = ODBCFFI.resolve(ODBCFFI.pSQLCloseCursor(_sth))
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLFreeStmt(_sth, 0))
+//    _err = ODBCFFI.resolve(ODBCFFI.pSQLCloseCursor(_sth))
     _check_valid()?
 
   fun ref _check_and_expand_column_buffers(sl: SourceLoc val = __loc) ? =>
@@ -304,4 +357,6 @@ class ODBCStmt is SqlState
         error
       end
     end
+
+  fun get_sth(): ODBCHandleStmt tag => _sth
 
