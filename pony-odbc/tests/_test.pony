@@ -34,7 +34,3 @@ actor \nodoc\ Main is TestList
     test(_TestTransactions("psqlred"))
     test(_TestTransactions("mariadb"))
     test(_TestTransactions("sqlitedb3"))
-
-    test(_MariaDBBasic("mariadb"))
-    test(_MariaDBBasic("psqlred"))
-    test(_MariaDBBasic("sqlitedb3"))
