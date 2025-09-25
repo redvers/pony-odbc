@@ -57,7 +57,7 @@ class \nodoc\ iso _MariaDBBasic is UnitTest
     sth.get_data(1, myint)?
     sth.get_data(2, varchar)?
     h.assert_eq[I32](1, myint.read()?)
-    h.assert_eq[String val]("Row no 1", varchar.read())
+    h.assert_eq[String val]("Row no 1", varchar.read()?)
 
     myint.reset()
     varchar.reset()
@@ -66,7 +66,7 @@ class \nodoc\ iso _MariaDBBasic is UnitTest
     sth.get_data(1, myint)?
     sth.get_data(2, varchar)?
     h.assert_eq[I32](2, myint.read()?)
-    h.assert_eq[String val]("Row no 2", varchar.read())
+    h.assert_eq[String val]("Row no 2", varchar.read()?)
 
     sth.finish()?
 
@@ -104,11 +104,11 @@ class \nodoc\ iso _MariaDBBasic is UnitTest
     sth.direct_exec("CREATE TEMPORARY TABLE t_max_select (a INT, b VARCHAR(30))")?
 
     sth.prepare("INSERT INTO t_max_select VALUES (?,?)")?
-    sth.bind_parameter(myint)?                             // Whataboutnull
+    sth.bind_parameter(myint)?
     sth.bind_parameter(varchar)?
 
     for f in Range(0, 1000) do
-      myint.write(f.i32())
+      myint.null()  // This is a NULL - Yay!
       varchar.write("MySQL" + f.string())
       try
         sth.execute()?
@@ -133,34 +133,44 @@ class \nodoc\ iso _MariaDBBasic is UnitTest
 
     var nRowCount: SQLInteger = SQLInteger
     var nInData: SQLInteger = SQLInteger .> write(1)
-    var nOutData: SQLInteger = SQLInteger .> write(0)
-    var szOutData: SQLVarchar = SQLVarchar(31)
+    var c: SQLVarchar = SQLVarchar(31)
+    var d: SQLVarchar = SQLVarchar(31)
 
-    sth.direct_exec("CREATE TEMPORARY TABLE t_myodbc (a INT, b VARCHAR(30))")?
+    sth.direct_exec("CREATE TEMPORARY TABLE t_myodbc (a INT, b VARCHAR(30), c VARCHAR(10), d VARCHAR(10))")?
 
     sth.finish()?
 
-    sth.direct_exec("INSERT INTO t_myodbc VALUES (10, 'direct')")?
-    sth.prepare("INSERT INTO t_myodbc VALUES (?, 'param')")?
+    sth.direct_exec("INSERT INTO t_myodbc VALUES (10, 'direct', NULL, NULL)")?
+    sth.prepare("INSERT INTO t_myodbc (a,b,c) VALUES (?, 'param', ?)")?
 
     sth.bind_parameter(nInData)?
+    sth.bind_parameter(c)?
 
     for f in Range[I32](20, 100, 10) do
       nInData.write(f)
+      c.null()
       sth.execute()?
     end
     sth.finish()?
 
     sth.direct_exec("SELECT * FROM t_myodbc")?
 
-    sth.bind_column(nOutData)?
-    sth.bind_column(szOutData)?
+    var aa: SQLInteger = SQLInteger .> write(0)
+    var bb: SQLVarchar = SQLVarchar(31)
+    var cc: SQLVarchar = SQLVarchar(11)
+    var dd: SQLVarchar = SQLVarchar(11)
+    sth.bind_column(aa)?
+    sth.bind_column(bb)?
+    sth.bind_column(cc)?
+    sth.bind_column(dd)?
 
     nInData.write(10)
 
     while (sth.fetch()?) do
-      h.assert_eq[I32](nOutData.read()?, nInData.read()?)
+      h.assert_eq[I32](aa.read()?, aa.read()?)
       nInData.write(nInData.read()? + 10)
+      h.assert_true(cc.is_null())
+      h.assert_true(dd.is_null())
     end
 
     if (dsn != "sqlitedb3") then
