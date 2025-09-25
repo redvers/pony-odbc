@@ -16,3 +16,11 @@ Differences in versions required the following changes:
 This interface is 95% auto-generated and designed to follow the ODBC API
 directly.
 
+## Add support for SQLDirectExec, SQLColumns, SQLGetData, SQLFetch, SQLFreeStmt
+
+* SQLDirectExec is mapped to ODBCStmt.direct\_exec()?
+* SQLColumns is mapped to ODBCStmt.columns()?
+* SQLGetData is mapped to ODBCStmt.get\_data()?
+* SQLFetch is mapped to ODBCStmt.fetch()?
+* SQLFreeStmt is mapped to ODBCStmt.finish()?
+
