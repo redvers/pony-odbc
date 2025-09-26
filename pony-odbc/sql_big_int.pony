@@ -38,4 +38,8 @@ class SQLBigInteger is SQLType
     that specific ODBC driver, this is something that must be
     verified.
     """
-    _v.string().i64()?
+    if (get_boxed_array().is_null()) then
+      error
+    else
+      _v.string().i64()?
+    end

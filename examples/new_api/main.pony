@@ -48,7 +48,7 @@ actor Main
 
         while (stm.fetch_scroll()?) do
           var i: I32 = outint.read()?
-          var s: String val = outstr.read()
+          var s: String val = outstr.read()?
           env.out.print("Integer: " + i.string() + ", s: " + s)
         end
       else

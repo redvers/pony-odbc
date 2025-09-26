@@ -151,7 +151,7 @@ class \nodoc\ iso _TestTypeTests is UnitTest
           h.assert_eq[I64](cntr.i64(), poutb._3.read()?)
           h.assert_eq[F32]((cntr.f32()+0.5), poutb._4.read()?)
           h.assert_eq[F64]((cntr.f64()+0.5), poutb._5.read()?)
-          h.assert_eq[String](cntr.string(), poutb._6.read())
+          h.assert_eq[String](cntr.string(), poutb._6.read()?)
           cntr = cntr + 1
         end
         stm.finish()?

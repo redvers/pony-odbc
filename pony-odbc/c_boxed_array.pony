@@ -7,14 +7,14 @@ use @explicit_bzero[None](ptr: Pointer[U8] tag, size: USize)
 
 
 primitive \nodoc\ ODBCVarcharConsts
-  fun sql_nts():         I16 => -3
+  fun sql_nts():         I64 => -3
   fun sql_param_input(): I16 => 1
   fun sql_c_char():      I16 => 1
   fun sql_varchar():     I16 => 12
+  fun sql_null_data():   I64 => -1
 
 class \nodoc\ CBoxedArray
   var ptr: Pointer[U8] = Pointer[U8]
-  var is_null: Bool = true
   var alloc_size: USize = 0
   var written_size: CBoxedI64 = CBoxedI64
 
@@ -25,6 +25,16 @@ class \nodoc\ CBoxedArray
     written_size.value = size.i64()
     @explicit_bzero(ptr, size)
     true
+
+  fun ref null() =>
+    written_size.value = ODBCVarcharConsts.sql_null_data()
+
+  fun ref is_null(): Bool =>
+    if (written_size.value == ODBCVarcharConsts.sql_null_data()) then
+      true
+    else
+      false
+    end
 
   fun ref reset(): Bool =>
     if (ptr.is_null()) then return false end

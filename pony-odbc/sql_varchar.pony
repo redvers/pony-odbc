@@ -31,10 +31,14 @@ class SQLVarchar is SQLType
     _write(str)
 
 
-  fun ref read(): String iso^ =>
+  fun ref read(): String iso^ ? =>
     """
     Read the value of the buffer into a String iso^. This is an iso^
     copy of the data so the buffer can remain in place and reused
     without rebinding.
     """
-    _v.string()
+    if (get_boxed_array().is_null()) then
+      error
+    else
+      _v.string()
+    end

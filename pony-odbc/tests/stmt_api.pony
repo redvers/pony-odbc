@@ -211,7 +211,7 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
         var cntr: I32 = 298
         while stm.fetch_scroll(SqlFetchNext)? do
           h.assert_eq[I32](cntr, poutb._1.read()?)
-          h.assert_eq[String]("A Number: " + cntr.string(), poutb._2.read())
+          h.assert_eq[String]("A Number: " + cntr.string(), poutb._2.read()?)
           cntr = cntr + 1
         end
         stm.finish()?

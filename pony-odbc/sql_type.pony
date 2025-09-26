@@ -37,6 +37,9 @@ trait SQLType
   fun \nodoc\ ref alloc(size: USize): Bool =>
     get_boxed_array().alloc(size)
 
+  fun \nodoc\ ref null() =>
+    get_boxed_array().null()
+
   fun \nodoc\ ref reset(): Bool =>
     """
     Zeros the buffer and resets the field that defines the length of
@@ -87,8 +90,6 @@ trait SQLType
 
   fun \nodoc\ ref _bind_parameter(h: ODBCHandleStmt tag, col: U16): Bool =>
     var ba: CBoxedArray = get_boxed_array()
-    var wrlen: CBoxedI64 = CBoxedI64
-    wrlen.value = ODBCVarcharConsts.sql_nts().i64()
     set_err(
       ODBCFFI.resolve(
         ODBCFFI.pSQLBindParameter_varchar(
@@ -100,8 +101,8 @@ trait SQLType
           ba.alloc_size.u64(),
           0,
           ba.ptr,
-          ba.written_size.value,
-          wrlen)
+          ba.alloc_size.i64(),
+          ba.written_size)
       )
     )
     is_success()
@@ -134,3 +135,5 @@ trait SQLType
         ODBCFFI.pSQLBindCol_varchar(h, col, 1, ba.ptr, ba.alloc_size.i64(), ba.written_size)))
     is_success()
 
+  fun \nodoc\ ref is_null(): Bool =>
+    get_boxed_array().is_null()
