@@ -24,3 +24,12 @@ directly.
 * SQLFetch is mapped to ODBCStmt.fetch()?
 * SQLFreeStmt is mapped to ODBCStmt.finish()?
 
+## Added NULL support to all types.
+
+Before this point there was no support for SQL NULL. In order to write a NULL
+you call `YourSqlType.null()`.
+
+You can test your result for NULL by calling `YourSqlType.is_null()`.
+
+If you call `YourSqlType.read()?` and the result is NULL, it will error.
+
