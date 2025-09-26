@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. This projec
 
 - Adds native FFI interface ([PR #33](https://github.com/redvers/pony-odbc/pull/33))
 - Adds support for SQLDirectExec, SQLColumns, SQLGetData, SQLFetch, SQLFreeStmt ([PR #38](https://github.com/redvers/pony-odbc/pull/38))
+- Add SQL NULL support for SQL Datatypes ([PR #39](https://github.com/redvers/pony-odbc/pull/39))
 
 ### Changed
 
