@@ -658,8 +658,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [FundamentalType(short int) size=16]
     [PointerType size=64]->[FundamentalType(short int) size=16]
 */
-  fun pSQLGetInfo(pConnectionHandle: Pointer[None] tag, pInfoType: U16, pInfoValue: Pointer[None] tag, pBufferLength: I16, pStringLength: CBoxedI16): I16 =>
-    @SQLGetInfo(pConnectionHandle, pInfoType, pInfoValue, pBufferLength, pStringLength)
+  fun pSQLGetInfo(pConnectionHandle: ODBCHandleDbc tag, pInfoType: U16, pInfoValue: Pointer[U8] tag, pBufferLength: I16, pStringLength: CBoxedI16): I16 =>
+    @SQLGetInfo(NullablePointer[ODBCHandleDbc tag](pConnectionHandle), pInfoType, pInfoValue, pBufferLength, pStringLength)
 
 
 /*
