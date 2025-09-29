@@ -33,3 +33,9 @@ You can test your result for NULL by calling `YourSqlType.is_null()`.
 
 If you call `YourSqlType.read()?` and the result is NULL, it will error.
 
+## Defaults for simple API calls to Bool ?
+
+Changes the default return values for the API calls to Bool ?. Typically they all either return true or error, but in some cases like fetch(), they indicate something else like "no more data in the result dataset".
+
+Adds ODBCDbc.get\_info() to query data types.
+
