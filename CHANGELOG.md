@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. This projec
 ### Fixed
 
 - Misc bugfixes for differences in mariadb behaviour across versions: ([PR #32](https://github.com/redvers/pony-odbc/pull/32))
+- Defaults simple API to Bool ? everywhere ([PR #40](https://github.com/redvers/pony-odbc/pull/40))
 
 ### Added
 
