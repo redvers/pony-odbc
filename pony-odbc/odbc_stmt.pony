@@ -153,7 +153,7 @@ class ODBCStmt is SqlState
   fun sqlstates(): Array[(String val, String val)] val =>
     _from_stmt(_sth)
 
-  fun ref prepare(str: String val, sl: SourceLoc val = __loc) ? =>
+  fun ref prepare(str: String val, sl: SourceLoc val = __loc): Bool ? =>
     """
     Used to 'prepare' a SQL statement.
 
@@ -166,7 +166,7 @@ class ODBCStmt is SqlState
     _err = ODBCFFI.resolve(ODBCFFI.pSQLPrepare(_sth, str, str.size().i32()))
     _check_valid()?
 
-  fun ref bind_parameter(i: SQLType, sl: SourceLoc val = __loc) ? =>
+  fun ref bind_parameter(i: SQLType, sl: SourceLoc val = __loc): Bool ? =>
     """
     Used to bind a parameter to a prepared query.
 
@@ -185,7 +185,7 @@ class ODBCStmt is SqlState
     _err = i.get_err()
     _check_valid()?
 
-  fun ref bind_column(i: SQLType, sl: SourceLoc val = __loc) ? =>
+  fun ref bind_column(i: SQLType, sl: SourceLoc val = __loc): Bool ? =>
     """
     Used to bind a column in a result-set for the prepared query.
 
@@ -207,7 +207,7 @@ class ODBCStmt is SqlState
     _err = i.get_err()
     _check_valid()?
 
-  fun ref execute(sl: SourceLoc val = __loc) ? =>
+  fun ref execute(sl: SourceLoc val = __loc): Bool ? =>
     """
     Before executing your prepared command you should populate your
     parameters with the necessary data.
@@ -219,7 +219,7 @@ class ODBCStmt is SqlState
     _err = ODBCFFI.resolve(ODBCFFI.pSQLExecute(_sth))
     _check_valid()?
 
-  fun ref direct_exec(statement: String val, sl: SourceLoc val = __loc) ? =>
+  fun ref direct_exec(statement: String val, sl: SourceLoc val = __loc): Bool ? =>
     """
     Directly executes the provided statement.
 
@@ -246,7 +246,26 @@ class ODBCStmt is SqlState
     _check_valid()?
     rv.value
 
-  fun ref columns(catalog: String val = "", schema: String val = "", table: String val = "", column: String val = "", sl: SourceLoc = __loc) ? =>
+  fun ref num_result_cols(rv: CBoxedI16, sl: SourceLoc val = __loc): Bool ? =>
+    """
+    *Warning*: The ODBC standard does not mandate this function's correctness.
+
+    Any response from the ODBC driver other than a non-warning success will
+    result in a thrown error.
+    """
+    _call_location = sl
+    _err = ODBCFFI.resolve(
+      ODBCFFI.pSQLNumResultCols(_sth, rv))
+    _check_valid()?
+
+  fun ref get_type_info(sqltype: I16 = 0 ,sl: SourceLoc = __loc): Bool ? => // SQL_ALL_TYPES
+    _call_location = sl
+    _err = ODBCFFI.resolve(
+      ODBCFFI.pSQLGetTypeInfo(_sth, sqltype)
+    )
+    _check_valid()?
+
+  fun ref columns(catalog: String val = "", schema: String val = "", table: String val = "", column: String val = "", sl: SourceLoc = __loc): Bool ? =>
     _call_location = sl
     _err = ODBCFFI.resolve(
       ODBCFFI.pSQLColumns(
@@ -263,7 +282,7 @@ class ODBCStmt is SqlState
       )
     _check_valid()?
 
-  fun ref get_data(column: U16, sqltype: SQLType)? =>
+  fun ref get_data(column: U16, sqltype: SQLType): Bool ? =>
     ODBCFFI.resolve(
       ODBCFFI.pSQLGetData(
         _sth,
@@ -313,7 +332,7 @@ class ODBCStmt is SqlState
     end
 
 
-  fun ref finish(sl: SourceLoc val = __loc) ? =>
+  fun ref finish(sl: SourceLoc val = __loc): Bool ? =>
     """
     Closes the cursor on a result-set.
 

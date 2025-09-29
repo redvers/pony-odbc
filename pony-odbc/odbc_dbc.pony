@@ -61,7 +61,7 @@ class ODBCDbc is SqlState
   fun sqlstates(): Array[(String val, String val)] val =>
     _from_dbc(dbc)
 
-  fun ref get_autocommit(): Bool ? =>
+  fun ref get_autocommit(sl: SourceLoc = __loc): Bool ? =>
     var value: CBoxedI32 = CBoxedI32
     _err = ODBCFFI.resolve(ODBCFFI.pSQLGetConnectAttr_i32(dbc, _SqlAttrAutoCommit(), value, 4, CBoxedI32))
     _check_valid()?
@@ -69,7 +69,7 @@ class ODBCDbc is SqlState
     if (value.value == _SqlAutoCommitOff()) then return false end
     error
 
-  fun ref set_autocommit(setting: Bool) ? =>
+  fun ref set_autocommit(setting: Bool, sl: SourceLoc = __loc): Bool ? =>
     if (setting) then
       _err = ODBCFFI.resolve(
         ODBCFFI.pSQLSetConnectAttr_i32(dbc, _SqlAttrAutoCommit(), _SqlAutoCommitOn(), 9))
@@ -93,6 +93,20 @@ class ODBCDbc is SqlState
     """
     _call_location = sl
     _err = ODBCFFI.resolve(ODBCFFI.pSQLEndTran_dbc(2, dbc, 1))
+    _check_valid()?
+
+  fun ref get_info(infotype: U16, buf: SQLType, sl: SourceLoc = __loc): Bool ? =>
+    """
+    SQLGetInfo returns general information about the driver and data source associated with a connection.
+    """
+    _call_location = sl
+    _err = ODBCFFI.resolve(
+      ODBCFFI.pSQLGetInfo(dbc,
+                         infotype,
+                         buf.get_boxed_array().ptr,
+                         buf.get_boxed_array().alloc_size.i16(),
+                         CBoxedI16)
+    )
     _check_valid()?
 
   fun ref connect(dsn: String val, sl: SourceLoc val = __loc): Bool ? =>

@@ -38,3 +38,11 @@ actor \nodoc\ Main is TestList
     test(_MariaDBBasic("mariadb"))
     test(_MariaDBBasic("psqlred"))
     test(_MariaDBBasic("sqlitedb3"))
+
+    test(_MariaDBInfo("mariadb"))
+    test(_MariaDBInfo("psqlred"))
+    test(_MariaDBInfo("sqlitedb3"))
+
+    test(_MariaDBTran("mariadb"))
+    test(_MariaDBTran("psqlred"))
+    test(_MariaDBTran("sqlitedb3"))

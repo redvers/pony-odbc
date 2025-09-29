@@ -69,7 +69,7 @@ class ODBCEnv is SqlState
       end
     end
 
-  fun \nodoc\ ref get_attr(a: _SqlEnvAttr, v: CBoxedI32) ? =>
+  fun \nodoc\ ref get_attr(a: _SqlEnvAttr, v: CBoxedI32): Bool ? =>
     """
     This is a primitive getter function used to retrieve i32 attributes
     from the ODBC Handle. 
