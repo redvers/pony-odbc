@@ -2,7 +2,7 @@ use "debug"
 
 class SQLReal is SQLType
   """
-  The internal class which represents an Integer (F32)
+  The internal class which represents a Float (F64)
   """
   var _v: CBoxedArray = CBoxedArray
   var _err: SQLReturn val = SQLSuccess

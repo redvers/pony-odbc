@@ -12,7 +12,6 @@ class \nodoc\ iso _TestTypeTests is UnitTest
   fun apply(h: TestHelper) =>
     var env: ODBCEnv = ODBCEnv
     try
-      env.set_odbc3()?
       var dbc: ODBCDbc = env.dbc()?
 
       h.assert_true(dbc.connect(dsn)?)

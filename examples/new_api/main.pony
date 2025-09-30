@@ -9,7 +9,6 @@ actor Main
 
     var henv: ODBCEnv = ODBCEnv
     try
-      henv.set_odbc3()?
       var dbc: ODBCDbc = henv.dbc()?
       dbc.connect("psqlred")?
       try
@@ -27,14 +26,15 @@ actor Main
           .> bind_parameter(inint)?
           .> bind_parameter(instr)?
 
-        // Insert two rows
+        // Insert three rows
         inint.write(1); if (instr.write("First Row"))  then stm.execute()? end
         inint.write(2); if (instr.write("Second Row")) then stm.execute()? end
+        inint.write(3); instr.null(); stm.execute()?
         try
-          inint.write(2); if (instr.write("Not Unique")) then stm.execute()? end
+          inint.write(3); if (instr.write("Not Unique")) then stm.execute()? end
         end
         try
-          inint.write(3); if (instr.write("TooLong: " + ("x"*100))) then stm.execute()? end
+          inint.write(4); if (instr.write("TooLong: " + ("x"*100))) then stm.execute()? end
         end
 
         // Create output columns:
@@ -48,7 +48,12 @@ actor Main
 
         while (stm.fetch_scroll()?) do
           var i: I32 = outint.read()?
-          var s: String val = outstr.read()?
+          var s: String val =
+            if (outstr.is_null()) then
+              "A SQL NULL value"
+            else
+              outstr.read()?
+            end
           env.out.print("Integer: " + i.string() + ", s: " + s)
         end
       else

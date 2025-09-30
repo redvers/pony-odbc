@@ -147,10 +147,12 @@ class ODBCStmt is SqlState
     var sthwrapper: StmtWrapper = StmtWrapper
     _err = ODBCFFI.resolve(ODBCFFI.pSQLAllocHandle_stmt(_dbh, sthwrapper))
     _sth = sthwrapper.value
-//    (_err, _sth) = ODBCStmtFFI.alloc(_dbh)
     _err
 
   fun sqlstates(): Array[(String val, String val)] val =>
+    """
+    Returns an array of SQL States.
+    """
     _from_stmt(_sth)
 
   fun ref prepare(str: String val, sl: SourceLoc val = __loc): Bool ? =>
@@ -259,6 +261,13 @@ class ODBCStmt is SqlState
     _check_valid()?
 
   fun ref get_type_info(sqltype: I16 = 0 ,sl: SourceLoc = __loc): Bool ? => // SQL_ALL_TYPES
+    """
+    Calls the ODBC API SQLGetTypeInfo. If you don't provide a type ID
+    it will default to SQL_ALL_TYPES.
+
+    After executing this you will need to bind columns and use fetch
+    to fetch the data.
+    """
     _call_location = sl
     _err = ODBCFFI.resolve(
       ODBCFFI.pSQLGetTypeInfo(_sth, sqltype)
@@ -266,6 +275,9 @@ class ODBCStmt is SqlState
     _check_valid()?
 
   fun ref columns(catalog: String val = "", schema: String val = "", table: String val = "", column: String val = "", sl: SourceLoc = __loc): Bool ? =>
+    """
+    See the ODBC API documentation for SQLColumns for a full description.
+    """
     _call_location = sl
     _err = ODBCFFI.resolve(
       ODBCFFI.pSQLColumns(
@@ -283,6 +295,14 @@ class ODBCStmt is SqlState
     _check_valid()?
 
   fun ref get_data(column: U16, sqltype: SQLType): Bool ? =>
+    """
+    See SQLGetData for more information.
+
+    This is used if you decide to read data directly as opposed to
+    binding columns and populating buffers automatically. The main
+    reason to choose this approach is for huge columns or if you
+    need more direct control.
+    """
     ODBCFFI.resolve(
       ODBCFFI.pSQLGetData(
         _sth,
@@ -295,9 +315,13 @@ class ODBCStmt is SqlState
     )
     _check_valid()?
 
-//        _err = vc.realloc_column(_sth, vc.get_boxed_array().written_size.value.usize() + 10, colindex.u16() + 1)
-
   fun ref fetch(sl: SourceLoc val = __loc): Bool ? =>
+    """
+    Fetches a row of data from the result set.
+
+    This function returns `true` is there are more rows, `false` if this
+    was the last row in the set.
+    """
     _err = ODBCFFI.resolve(ODBCFFI.pSQLFetch(_sth))
     match _err
     | let x: SQLSuccess => true
@@ -321,7 +345,6 @@ class ODBCStmt is SqlState
     _call_location = sl
     _err = ODBCFFI.resolve(
       ODBCFFI.pSQLFetchScroll(_sth, d(), offset))
-//    _err = ODBCStmtFFI.fetch_scroll(_sth, d, offset)
 
     match _err
     | let x: SQLSuccess val => _check_and_expand_column_buffers()?; true
@@ -334,16 +357,13 @@ class ODBCStmt is SqlState
 
   fun ref finish(sl: SourceLoc val = __loc): Bool ? =>
     """
-    Closes the cursor on a result-set.
-
-    Whether it should be used is database dependent
+    Closes the result-set using SQLFreeStmt.
     """
     _call_location = sl
     _err = ODBCFFI.resolve(ODBCFFI.pSQLFreeStmt(_sth, 0))
-//    _err = ODBCFFI.resolve(ODBCFFI.pSQLCloseCursor(_sth))
     _check_valid()?
 
-  fun ref _check_and_expand_column_buffers(sl: SourceLoc val = __loc) ? =>
+  fun \nodoc\ ref _check_and_expand_column_buffers(sl: SourceLoc val = __loc) ? =>
     _call_location = sl
     for (colindex, vc) in _columns.pairs() do
       if (vc.get_boxed_array().written_size.value.usize() > vc.get_boxed_array().alloc_size) then
@@ -353,7 +373,6 @@ class ODBCStmt is SqlState
         var ba: CBoxedArray = vc.get_boxed_array()
         _err = ODBCFFI.resolve(
           ODBCFFI.pSQLGetData(_sth, colindex.u16() + 1, 1, ba.ptr, ba.alloc_size.i64(), ba.written_size))
-//        _err = ODBCStmtFFI.get_data(_sth, colindex.u16() + 1, vc.get_boxed_array())
         _check_valid()?
       end
     end
@@ -379,3 +398,5 @@ class ODBCStmt is SqlState
 
   fun get_sth(): ODBCHandleStmt tag => _sth
 
+  fun _final() =>
+    ODBCFFI.pSQLFreeHandle_stmt(_sth)

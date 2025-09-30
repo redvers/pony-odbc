@@ -18,7 +18,6 @@ class ODBCEnv is SqlState
 
   ```pony
   var oenv: ODBCEnv = ODBCEnv
-    .> set_odbc3()
   ```
   """
   let odbcenv: ODBCHandleEnv tag
@@ -44,14 +43,10 @@ class ODBCEnv is SqlState
     dbh
 
   fun sqlstates(): Array[(String val, String val)] val =>
+    """
+    Returns an array of SQL States
+    """
     _from_env(odbcenv)
-
-  fun ref set_odbc3(): Bool ? =>
-    """
-    Enables ODBC Versiion 3 support (you should do this)
-    """
-    _err = ODBCFFI.resolve(ODBCFFI.pSQLSetEnvAttr(odbcenv, _SqlAttrODBCVersion(), _SqlODBC3(), _SQLIsInteger()))
-    _check_valid()?
 
   fun \nodoc\ ref _check_valid(): Bool ? =>
     if strict then
@@ -69,14 +64,14 @@ class ODBCEnv is SqlState
       end
     end
 
-  fun \nodoc\ ref get_attr(a: _SqlEnvAttr, v: CBoxedI32): Bool ? =>
+  fun \nodoc\ ref get_attr_i32(a: _SqlEnvAttr, v: CBoxedI32): Bool ? =>
     """
     This is a primitive getter function used to retrieve i32 attributes
     from the ODBC Handle. 
     """
-    _err = ODBCFFI.resolve(ODBCFFI.pSQLGetEnvAttr(odbcenv, a(), v, 0, CBoxedI32))
+    _err = ODBCFFI.resolve(ODBCFFI.pSQLGetEnvAttr_i32(odbcenv, a(), v, 0, CBoxedI32))
     _check_valid()?
 
-//  fun _final() =>
-//    ODBCEnvFFI.free(odbcenv)
+  fun _final() =>
+    ODBCFFI.pSQLFreeHandle_env(odbcenv)
 

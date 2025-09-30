@@ -9,7 +9,6 @@ class \nodoc\ iso _TestConnects is UnitTest
   fun apply(h: TestHelper) ? =>
     var env: ODBCEnv = ODBCEnv
     try
-      env.set_odbc3()?
       var dbc: ODBCDbc = env.dbc()?
       // Unknown ODBC Identifier
       must_error(h, dbc, "IDontExist", "IM002")

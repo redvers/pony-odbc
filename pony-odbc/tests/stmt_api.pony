@@ -13,7 +13,6 @@ class \nodoc\ iso _TestStmtAPI is UnitTest
   fun apply(h: TestHelper) =>
     var env: ODBCEnv = ODBCEnv
     try
-      env.set_odbc3()?
       var dbc: ODBCDbc = env.dbc()?
 
       // This should fail
