@@ -12,18 +12,16 @@ class ODBCDbc is SqlState
   ## Usage
 
   ```pony
-  var env: ODBCEnv = ODBCEnv .> set_odbc3()
+  var env: ODBCEnv = ODBCEnv
   var dbc: ODBCDbc = env.dbc()?
 
   // Disable autocommit, set application name, and connect to database
   try
     dbc
     .> set_autocommit(false)?         // Disable Autocommit
-    .> set_application_name("myapp")? // Set application name
     .> connect("mydsn")?              // Connect to DSN "mydsn"
   else
-    Debug.out("We failed, here's our errors:")
-    Debug.out(dbc.errtext)
+    Debug.out("We failed.")
   end
   ```
 
@@ -59,9 +57,15 @@ class ODBCDbc is SqlState
     sth
 
   fun sqlstates(): Array[(String val, String val)] val =>
+    """
+    Returns an array of SQL States
+    """
     _from_dbc(dbc)
 
   fun ref get_autocommit(sl: SourceLoc = __loc): Bool ? =>
+    """
+    Returns whether autocommit is enabled or disabled.
+    """
     var value: CBoxedI32 = CBoxedI32
     _err = ODBCFFI.resolve(ODBCFFI.pSQLGetConnectAttr_i32(dbc, _SqlAttrAutoCommit(), value, 4, CBoxedI32))
     _check_valid()?
@@ -70,6 +74,10 @@ class ODBCDbc is SqlState
     error
 
   fun ref set_autocommit(setting: Bool, sl: SourceLoc = __loc): Bool ? =>
+    """
+    Enables or disables autocommit. Many RDBMSs require that this be configured
+    before you initiate the actual connection with connect()?
+    """
     if (setting) then
       _err = ODBCFFI.resolve(
         ODBCFFI.pSQLSetConnectAttr_i32(dbc, _SqlAttrAutoCommit(), _SqlAutoCommitOn(), 9))
@@ -95,13 +103,14 @@ class ODBCDbc is SqlState
     _err = ODBCFFI.resolve(ODBCFFI.pSQLEndTran_dbc(2, dbc, 1))
     _check_valid()?
 
-  fun ref get_info(infotype: U16, buf: SQLType, sl: SourceLoc = __loc): Bool ? =>
+  fun ref get_info_varchar(infotype: U16, buf: SQLType, sl: SourceLoc = __loc): Bool ? =>
     """
-    SQLGetInfo returns general information about the driver and data source associated with a connection.
+    SQLGetInfo returns general information about the driver and data
+    source associated with a connection.
     """
     _call_location = sl
     _err = ODBCFFI.resolve(
-      ODBCFFI.pSQLGetInfo(dbc,
+      ODBCFFI.pSQLGetInfo_varchar(dbc,
                          infotype,
                          buf.get_boxed_array().ptr,
                          buf.get_boxed_array().alloc_size.i16(),
@@ -111,8 +120,7 @@ class ODBCDbc is SqlState
 
   fun ref connect(dsn: String val, sl: SourceLoc val = __loc): Bool ? =>
     """
-    Initiates the database connection to the PostgreSQL database
-    defined by the DSN.
+    Initiates the database connection to the database as defined by the DSN.
     """
     _call_location = sl
     _err = ODBCFFI.resolve(ODBCFFI.pSQLConnect(dbc, dsn, dsn.size().i16(), "", 0, "", 0))
@@ -135,13 +143,15 @@ class ODBCDbc is SqlState
     end
 
   fun ref disconnect(): Bool ? =>
+    """
+    Disconnects the database connection from the database.
+    """
     _err = ODBCFFI.resolve(ODBCFFI.pSQLDisconnect(dbc))
-//    _err = ODBCDbcFFI.disconnect(dbc)
     _check_valid()?
 
 
- // fun _final() =>
- //   ODBCDbcFFI.free(dbc)
+  fun _final() =>
+    ODBCFFI.pSQLFreeHandle_dbc(dbc)
 
   // Present only for introspection during tests
   fun \nodoc\ get_err(): SQLReturn val => _err
