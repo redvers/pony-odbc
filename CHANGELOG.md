@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a CHANGELOG](http://keepachangelog.com/).
 
-## [unreleased] - unreleased
+## [0.3.0] - 2025-09-30
 
 ### Fixed
 
@@ -14,9 +14,6 @@ All notable changes to this project will be documented in this file. This projec
 - Adds native FFI interface ([PR #33](https://github.com/redvers/pony-odbc/pull/33))
 - Adds support for SQLDirectExec, SQLColumns, SQLGetData, SQLFetch, SQLFreeStmt ([PR #38](https://github.com/redvers/pony-odbc/pull/38))
 - Add SQL NULL support for SQL Datatypes ([PR #39](https://github.com/redvers/pony-odbc/pull/39))
-
-### Changed
-
 
 ## [0.2.0] - 2025-09-21
 
