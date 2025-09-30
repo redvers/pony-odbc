@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.1.1
       - name: Generate documentation
-        uses: docker://ponylang/library-documentation-action-v2:release
+        uses: docker://ghcr.io/redvers/library-documentation-action-v2:latest
         with:
           site_url: "https://redvers.github.io/pony-odbc/"
           library_name: "pony-odbc"

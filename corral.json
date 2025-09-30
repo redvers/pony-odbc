@@ -1,6 +1,7 @@
 {
   "packages": [
-    "pony-odbc"
+    "pony-odbc",
+    "pony-odbc/ffi"
   ],
   "deps": [],
   "info": {
