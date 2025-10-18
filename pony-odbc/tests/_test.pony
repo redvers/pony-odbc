@@ -12,6 +12,7 @@ actor \nodoc\ Main is TestList
     PonyTest(env, this)
 
   fun tag tests(test: PonyTest) =>
+    test(_TestNulls)
     test(_TestEnvironment)
     test(_TestConnects)
 

@@ -22,7 +22,8 @@ class \nodoc\ CBoxedArray
     if (not ptr.is_null()) then return false end
     ptr = @pony_alloc(@pony_ctx(), size)
     alloc_size = size
-    written_size.value = size.i64()
+//    written_size.value = size.i64()
+    written_size.value = ODBCVarcharConsts.sql_null_data()
     @explicit_bzero(ptr, size)
     true
 
@@ -39,7 +40,7 @@ class \nodoc\ CBoxedArray
   fun ref reset(): Bool =>
     if (ptr.is_null()) then return false end
     @explicit_bzero(ptr, alloc_size)
-    written_size.value = alloc_size.i64()
+    written_size.value = ODBCVarcharConsts.sql_null_data()
     true
 
   fun string(): String iso^ =>
