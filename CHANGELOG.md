@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 
+- Changes Default value for new SQLType to SQLNull ([PR #43](https://github.com/redvers/pony-odbc/pull/43))
 
 ### Added
 
