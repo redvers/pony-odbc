@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 
+- Fixed ODBCStmt reuse bug ([PR #45](https://github.com/redvers/pony-odbc/pull/45))
 
 ### Added
 
