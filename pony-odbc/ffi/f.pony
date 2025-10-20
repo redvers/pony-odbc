@@ -976,8 +976,8 @@ The following table lists ODBC functions, grouped by type of task, and includes 
     [PointerType size=64]->[FundamentalType(unsigned char) size=8]
     [FundamentalType(short int) size=16]
 */
-  fun pSQLTables(pStatementHandle: ODBCHandleStmt tag, pCatalogName: String, pNameLength1: I16, pSchemaName: String, pNameLength2: I16, pTableName: String, pNameLength3: I16, pTableType: String, pNameLength4: I16): I16 =>
-    @SQLTables(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pCatalogName.cstring(), pNameLength1, pSchemaName.cstring(), pNameLength2, pTableName.cstring(), pNameLength3, pTableType.cstring(), pNameLength4)
+  fun pSQLTables(pStatementHandle: ODBCHandleStmt tag, pCatalogName: Pointer[U8] tag, pNameLength1: I16, pSchemaName: Pointer[U8] tag, pNameLength2: I16, pTableName: Pointer[U8] tag, pNameLength3: I16, pTableType: Pointer[U8] tag, pNameLength4: I16): I16 =>
+    @SQLTables(NullablePointer[ODBCHandleStmt tag](pStatementHandle), pCatalogName, pNameLength1, pSchemaName, pNameLength2, pTableName, pNameLength3, pTableType, pNameLength4)
 
 
 /*
