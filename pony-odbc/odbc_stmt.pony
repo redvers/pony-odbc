@@ -283,13 +283,33 @@ class ODBCStmt is SqlState
       ODBCFFI.pSQLColumns(
         _sth,
         if (catalog == "") then Pointer[U8] else catalog.cstring() end,
-        catalog.size().i16(),
+        -3,
         if (schema == "") then Pointer[U8] else schema.cstring() end,
-        schema.size().i16(),
+        -3,
         if (table == "") then Pointer[U8] else table.cstring() end,
-        table.size().i16(),
+        -3,
         if (column == "") then Pointer[U8] else column.cstring() end,
-        column.size().i16()
+        -3
+        )
+      )
+    _check_valid()?
+
+  fun ref tables(catalog: String val = "", schema: String val = "", table: String val = "", tabletype: String val = "", sl: SourceLoc = __loc): Bool ? =>
+    """
+    See the ODBC API documentation for SQLTables for a full description.
+    """
+    _call_location = sl
+    _err = ODBCFFI.resolve(
+      ODBCFFI.pSQLTables(
+        _sth,
+        if (catalog == "") then Pointer[U8] else catalog.cstring() end,
+        -3,
+        if (schema == "") then Pointer[U8] else schema.cstring() end,
+        -3,
+        if (table == "") then Pointer[U8] else table.cstring() end,
+        -3,
+        if (tabletype == "") then Pointer[U8] else tabletype.cstring() end,
+        -3
         )
       )
     _check_valid()?
