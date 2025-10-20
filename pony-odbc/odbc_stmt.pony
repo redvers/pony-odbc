@@ -380,6 +380,8 @@ class ODBCStmt is SqlState
     Closes the result-set using SQLFreeStmt.
     """
     _call_location = sl
+    _parameters.clear()
+    _columns.clear()
     _err = ODBCFFI.resolve(ODBCFFI.pSQLFreeStmt(_sth, 0))
     _check_valid()?
 
