@@ -2,3 +2,9 @@
 
 Using this function, we can query the database to list tables, namespaces, etc…
 
+## Fixed ODBCStmt reuse bug
+
+When we created a new query on an existing STMT handle the ODBC driver would clear all the parameter and column buffers, but not the local cache.
+
+This change clears the private \_parameters and \_columns when .finish()? is executed.
+
