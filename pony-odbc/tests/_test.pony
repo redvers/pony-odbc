@@ -47,3 +47,24 @@ actor \nodoc\ Main is TestList
     test(_MariaDBTran("mariadb"))
     test(_MariaDBTran("psqlred"))
     test(_MariaDBTran("sqlitedb3"))
+
+    // New comprehensive test suite
+    test(_TestBoundaryValues("psqlred"))
+    test(_TestBoundaryValues("mariadb"))
+    test(_TestBoundaryValues("sqlitedb3"))
+
+    test(_TestEdgeCases("psqlred"))
+    test(_TestEdgeCases("mariadb"))
+    test(_TestEdgeCases("sqlitedb3"))
+
+    test(_TestMultipleConnections("psqlred"))
+    test(_TestMultipleConnections("mariadb"))
+    test(_TestMultipleConnections("sqlitedb3"))
+
+    test(_TestMetadataQueries("psqlred"))
+    test(_TestMetadataQueries("mariadb"))
+    test(_TestMetadataQueries("sqlitedb3"))
+
+    test(_TestErrorRecovery("psqlred"))
+    test(_TestErrorRecovery("mariadb"))
+    test(_TestErrorRecovery("sqlitedb3"))
