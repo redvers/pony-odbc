@@ -38,8 +38,4 @@ class SQLSmallInteger is SQLType
     that specific ODBC driver, this is something that must be
     verified.
     """
-    if (get_boxed_array().is_null()) then
-      error
-    else
-      _v.string().i16()?
-    end
+    _v.string()?.i16()?

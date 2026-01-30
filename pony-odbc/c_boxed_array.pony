@@ -14,6 +14,15 @@ primitive \nodoc\ ODBCVarcharConsts
   fun sql_null_data():   I64 => -1
 
 class \nodoc\ CBoxedArray
+  """
+  Internal buffer wrapper for ODBC data exchange.
+
+  The `written_size` field serves dual purpose:
+  - Positive values: actual byte count of data in buffer
+  - -1 (SQL_NULL_DATA): indicates SQL NULL value
+
+  Always check `is_null()` before reading buffer contents.
+  """
   var ptr: Pointer[U8] = Pointer[U8]
   var alloc_size: USize = 0
   var written_size: CBoxedI64 = CBoxedI64
@@ -43,10 +52,19 @@ class \nodoc\ CBoxedArray
     written_size.value = ODBCVarcharConsts.sql_null_data()
     true
 
-  fun string(): String iso^ =>
-    String.copy_cstring(ptr).clone()
+  fun ref string(): String iso^ ? =>
+    if is_null() then error end
+    let size = written_size.value.usize()
+    String.from_cpointer(ptr, size, size).clone()
 
   fun ref write(str: String val): Bool =>
+    """
+    Write string to buffer. Returns false if:
+    - Buffer not allocated (ptr is null)
+    - String exceeds buffer size (would truncate)
+
+    Caller MUST check return value to avoid silent data loss.
+    """
     if (ptr.is_null()) then return false end
     if (str.size() > alloc_size) then
       return false
@@ -66,9 +84,10 @@ class \nodoc\ CBoxedArray
     written_size.value = arr.size().i64()
     true
 
-  fun array(): Array[U8] iso^ =>
+  fun ref array(): Array[U8] iso^ ? =>
+    if is_null() then error end
     let written_s: USize = written_size.value.usize()
-    let rv: Array[U8] iso = recover iso Array[U8](written_s) end
-    @memcpy(rv.cpointer(), ptr, written_size.value.usize())
+    let rv: Array[U8] iso = recover iso Array[U8].init(0, written_s) end
+    @memcpy(rv.cpointer(), ptr, written_s)
     consume rv
 

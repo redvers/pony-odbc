@@ -388,7 +388,8 @@ class ODBCStmt is SqlState
   fun \nodoc\ ref _check_and_expand_column_buffers(sl: SourceLoc val = __loc) ? =>
     _call_location = sl
     for (colindex, vc) in _columns.pairs() do
-      if (vc.get_boxed_array().written_size.value.usize() > vc.get_boxed_array().alloc_size) then
+      let ws = vc.get_boxed_array().written_size.value
+      if (ws > 0) and (ws.usize() > vc.get_boxed_array().alloc_size) then
         _err = vc.realloc_column(_sth, vc.get_boxed_array().written_size.value.usize() + 10, colindex.u16() + 1)
         _check_valid()?
 

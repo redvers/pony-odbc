@@ -47,17 +47,17 @@ trait SQLType
     """
     get_boxed_array().reset()
 
-  fun \nodoc\ ref string(): String iso^ =>
+  fun \nodoc\ ref string(): String iso^ ? =>
     """
     Returns the written contents of the buffer as a string
     """
-    get_boxed_array().string()
+    get_boxed_array().string()?
 
-  fun \nodoc\ ref array(): Array[U8] iso^ =>
+  fun \nodoc\ ref array(): Array[U8] iso^ ? =>
     """
     Returns the written contents of the buffer as an array.
     """
-    get_boxed_array().array()
+    get_boxed_array().array()?
 
   fun \nodoc\ ref _write(str: String val): Bool =>
     """
@@ -67,9 +67,7 @@ trait SQLType
     (We can't reallocate, just in case this buffer is already bound
     to a query already)
     """
-    if (not get_boxed_array().write(str)) then return false end
-    if (str != get_boxed_array().string()) then return false end
-    true
+    get_boxed_array().write(str)
 
   fun \nodoc\ ref _write_array(arr: Array[U8] val): Bool =>
     """

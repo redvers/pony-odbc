@@ -37,8 +37,4 @@ class SQLVarchar is SQLType
     copy of the data so the buffer can remain in place and reused
     without rebinding.
     """
-    if (get_boxed_array().is_null()) then
-      error
-    else
-      _v.string()
-    end
+    _v.string()?
