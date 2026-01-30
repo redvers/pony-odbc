@@ -109,13 +109,15 @@ class ODBCDbc is SqlState
     source associated with a connection.
     """
     _call_location = sl
+    var string_length: CBoxedI16 = CBoxedI16
     _err = ODBCFFI.resolve(
       ODBCFFI.pSQLGetInfo_varchar(dbc,
                          infotype,
                          buf.get_boxed_array().ptr,
                          buf.get_boxed_array().alloc_size.i16(),
-                         CBoxedI16)
+                         string_length)
     )
+    buf.get_boxed_array().written_size.value = string_length.value.i64()
     _check_valid()?
 
   fun ref connect(dsn: String val, sl: SourceLoc val = __loc): Bool ? =>

@@ -42,10 +42,10 @@ class \nodoc\ iso _MariaDBInfo is UnitTest
   fun sql_get_type_info(h: TestHelper, dbh: ODBCDbc) ? =>
     var buf: SQLVarchar = SQLVarchar(512)
     dbh.get_info_varchar(6, buf)?  // SQL_DRIVER_NAME
-    var nm: String = buf.string()
+    var nm: String = buf.string()?
     buf.reset()
     dbh.get_info_varchar(77, buf)? // SQL_DRIVER_ODBC_VER
-    var vr: String = buf.string()
+    var vr: String = buf.string()?
     Debug.out("[" + dsn + "]: " + nm + " → " + vr)
 
     // Need to distinguish for actual integers vs stringified integers.

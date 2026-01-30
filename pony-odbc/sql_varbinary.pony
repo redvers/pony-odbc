@@ -33,12 +33,8 @@ class SQLVarbinary is SQLType
 
   fun ref read(): Array[U8] iso^ ? =>
     """
-    Read the value of the buffer into a String iso^. This is an iso^
+    Read the value of the buffer into an Array[U8] iso^. This is an iso^
     copy of the data so the buffer can remain in place and reused
     without rebinding.
     """
-    if (get_boxed_array().is_null()) then
-      error
-    else
-      _v.array()
-    end
+    _v.array()?
