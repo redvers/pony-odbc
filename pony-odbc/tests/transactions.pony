@@ -1,5 +1,4 @@
 use "debug"
-use "lib:odbc"
 use "pony_test"
 use ".."
 use "collections"

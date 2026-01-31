@@ -183,7 +183,12 @@ class \nodoc\ iso _TestBoundaryValues is UnitTest
     """Test REAL extreme values (F64)"""
     try
       var stm: ODBCStmt = dbc.stmt()?
-      stm.direct_exec("CREATE TEMPORARY TABLE test_real (val REAL)")?
+      if (dsn == "psqlred") then
+        // Postgres REAL is 32 bit, so to test it we need to override
+        stm.direct_exec("CREATE TEMPORARY TABLE test_real (val FLOAT)")?
+      else
+        stm.direct_exec("CREATE TEMPORARY TABLE test_real (val REAL)")?
+      end
 
       var input: SQLReal = SQLReal
       var output: SQLReal = SQLReal
