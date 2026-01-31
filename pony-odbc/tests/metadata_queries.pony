@@ -111,8 +111,11 @@ class \nodoc\ iso _TestMetadataQueries is UnitTest
     try
       var stm_setup: ODBCStmt = dbc.stmt()?
 
-      // Create a table with known columns
-      stm_setup.direct_exec("CREATE TEMPORARY TABLE test_metadata_cols (
+      // Use a regular table instead of temporary
+      // Drop if exists first (ignore error)
+      try stm_setup.direct_exec("DROP TABLE test_metadata_cols")? end
+
+      stm_setup.direct_exec("CREATE TABLE test_metadata_cols (
         id INTEGER,
         name VARCHAR(100),
         value FLOAT,
@@ -153,7 +156,15 @@ class \nodoc\ iso _TestMetadataQueries is UnitTest
       h.assert_true(column_names.size() >= 4)
 
       stm.finish()?
+
+      // Clean up
+      stm_setup.direct_exec("DROP TABLE test_metadata_cols")?
     else
+      // Try to clean up even on failure
+      try
+        var cleanup: ODBCStmt = dbc.stmt()?
+        cleanup.direct_exec("DROP TABLE test_metadata_cols")?
+      end
       h.fail("test_columns_query failed")
     end
 

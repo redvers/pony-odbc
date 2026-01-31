@@ -7,9 +7,11 @@ class SQLVarchar is SQLType
   var _v: CBoxedArray = CBoxedArray
   var _err: SQLReturn val = SQLSuccess
 
-  new create(size: USize) => _v.alloc(size)
+  new create(size: USize) => _v.alloc(size + 1)
     """
     Creates a SQLVarchar to be used as an input or output buffer.
+    Allocates size + 1 bytes to accommodate the null terminator
+    required by some ODBC drivers (e.g., PostgreSQL, SQLite).
     """
 
   fun \nodoc\ ref get_boxed_array(): CBoxedArray => _v
