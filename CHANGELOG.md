@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file. This projec
 
 - Fixed ODBCStmt reuse bug ([PR #45](https://github.com/redvers/pony-odbc/pull/45))
 - Fix buffer handling bugs and improve robustness ([PR #47](https://github.com/redvers/pony-odbc/pull/47))
+- Fixed bugfixes centered around memory management ([PR #48](https://github.com/redvers/pony-odbc/pull/48))
 
 ### Added
 
