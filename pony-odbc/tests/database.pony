@@ -4,7 +4,7 @@ use "pony_test"
 
 class \nodoc\ iso _TestDatabase is UnitTest
   var dsn: String val
-  fun name(): String val => "_TestDatabase(" + dsn + ")"
+  fun name(): String val => dsn + "/_TestDatabase"
 
   new create(dsn': String val) => dsn = dsn'
 

@@ -13,7 +13,7 @@ class \nodoc\ iso _TestMultipleConnections is UnitTest
   - Interleaved operations don't interfere
   """
   var dsn: String val
-  fun name(): String val => "_TestMultipleConnections(" + dsn + ")"
+  fun name(): String val => dsn + "/_TestMultipleConnections"
 
   new create(dsn': String val) => dsn = dsn'
 
