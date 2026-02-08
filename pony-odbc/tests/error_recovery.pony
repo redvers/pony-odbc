@@ -12,7 +12,7 @@ class \nodoc\ iso _TestErrorRecovery is UnitTest
   - Executing statements after errors
   """
   var dsn: String val
-  fun name(): String val => "_TestErrorRecovery(" + dsn + ")"
+  fun name(): String val => dsn + "/_TestErrorRecovery"
 
   new create(dsn': String val) => dsn = dsn'
 

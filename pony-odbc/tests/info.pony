@@ -12,7 +12,7 @@ class \nodoc\ iso _MariaDBInfo is UnitTest
   new create(dsn': String val) =>
     dsn = dsn'
 
-  fun name(): String val => "_MariaDBInfo(" + dsn + ")"
+  fun name(): String val => dsn + "/_MariaDBInfo"
 
   fun apply(h: TestHelper) ? =>
     var env: ODBCEnv = ODBCEnv

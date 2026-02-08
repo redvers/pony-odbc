@@ -297,12 +297,17 @@ corral run -- ponyc -o build/debug pony-odbc/tests -b pony-odbc
 # Run all tests
 ./build/debug/pony-odbc
 
-# Run specific test
-./build/debug/pony-odbc --only=_TestBoundaryValues
-./build/debug/pony-odbc --only=_TestEdgeCases
-./build/debug/pony-odbc --only=_TestMultipleConnections
-./build/debug/pony-odbc --only=_TestMetadataQueries
-./build/debug/pony-odbc --only=_TestErrorRecovery
+# Run tests for a single database
+make test ODBC_DSN=mariadb
+make test ODBC_DSN=psqlred
+make test ODBC_DSN=sqlitedb3
+
+# Run specific test for a specific database
+./build/debug/pony-odbc --only=psqlred/_TestBoundaryValues
+./build/debug/pony-odbc --only=mariadb/_TestEdgeCases
+./build/debug/pony-odbc --only=psqlred/_TestMultipleConnections
+./build/debug/pony-odbc --only=mariadb/_TestMetadataQueries
+./build/debug/pony-odbc --only=psqlred/_TestErrorRecovery
 ```
 
 ## Test Count

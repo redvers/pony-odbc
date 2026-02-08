@@ -12,7 +12,7 @@ class \nodoc\ iso _TestMetadataQueries is UnitTest
   - SQLNumResultCols (result set column count)
   """
   var dsn: String val
-  fun name(): String val => "_TestMetadataQueries(" + dsn + ")"
+  fun name(): String val => dsn + "/_TestMetadataQueries"
 
   new create(dsn': String val) => dsn = dsn'
 

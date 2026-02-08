@@ -13,7 +13,7 @@ class \nodoc\ iso _TestEdgeCases is UnitTest
   - Multiple sequential operations
   """
   var dsn: String val
-  fun name(): String val => "_TestEdgeCases(" + dsn + ")"
+  fun name(): String val => dsn + "/_TestEdgeCases"
 
   new create(dsn': String val) => dsn = dsn'
 

@@ -1,6 +1,7 @@
 config ?= debug
 static ?= false
 linker ?=
+ODBC_DSN ?=
 
 PACKAGE := pony-odbc
 GET_DEPENDENCIES_WITH := corral fetch
@@ -56,7 +57,11 @@ ci: unit-tests examples stress-tests
 test: unit-tests
 
 unit-tests: $(tests_binary)
+ifdef ODBC_DSN
+	$^ --only=$(ODBC_DSN)/
+else
 	$^
+endif
 
 $(tests_binary): $(GEN_FILES) $(SOURCE_FILES) | $(BUILD_DIR) dependencies
 	$(PONYC) -o $(BUILD_DIR) $(SRC_DIR)/tests -b pony-odbc

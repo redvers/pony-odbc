@@ -8,7 +8,7 @@ class \nodoc\ iso _TestConnect is UnitTest
   new create(dsn': String val) =>
     dsn = dsn'
 
-  fun name(): String val => "_TestConnect(" + dsn + ")"
+  fun name(): String val => dsn + "/_TestConnect"
 
   fun apply(h: TestHelper)  =>
     var env: ODBCEnv = ODBCEnv

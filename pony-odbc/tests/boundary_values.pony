@@ -9,7 +9,7 @@ class \nodoc\ iso _TestBoundaryValues is UnitTest
   Validates min/max values for INTEGER, BIGINT, SMALLINT, FLOAT, and REAL.
   """
   var dsn: String val
-  fun name(): String val => "_TestBoundaryValues(" + dsn + ")"
+  fun name(): String val => dsn + "/_TestBoundaryValues"
 
   new create(dsn': String val) => dsn = dsn'
 

@@ -5,7 +5,7 @@ use "collections"
 
 class \nodoc\ iso _TestTypeTests is UnitTest
   var dsn: String val
-  fun name(): String val => "_TestTypeTests(" + dsn + ")"
+  fun name(): String val => dsn + "/_TestTypeTests"
 
   new create(dsn': String val) => dsn = dsn'
 

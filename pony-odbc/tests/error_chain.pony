@@ -9,7 +9,7 @@ class iso _TestErrorChain is UnitTest
   new iso create(dsn: String val) =>
     _dsn = dsn
 
-  fun name(): String => "ErrorChain(" + _dsn + ")"
+  fun name(): String => _dsn + "/_TestErrorChain"
 
   fun apply(h: TestHelper) =>
     h.long_test(30_000_000_000)
