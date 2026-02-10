@@ -69,14 +69,16 @@ class \nodoc\ iso _TestMetadataQueries is UnitTest
     try
       var stm_setup: ODBCStmt = dbc.stmt()?
 
-      // Create some temporary tables to query
-      stm_setup.direct_exec("CREATE TEMPORARY TABLE test_metadata_table1 (id INTEGER)")?
-      stm_setup.direct_exec("CREATE TEMPORARY TABLE test_metadata_table2 (id INTEGER)")?
+      // Use a permanent table so it is reliably visible via SQLTables.
+      // Temporary tables are not guaranteed to appear in ODBC catalog
+      // metadata across all drivers.
+      try stm_setup.direct_exec("DROP TABLE test_metadata_table1")? end
+      stm_setup.direct_exec("CREATE TABLE test_metadata_table1 (id INTEGER)")?
 
       var stm: ODBCStmt = dbc.stmt()?
 
-      // Query all tables (empty strings = wildcard)
-      stm.tables("", "", "", "")?
+      // Query for our specific table by name
+      stm.tables("", "", "test_metadata_table1", "")?
 
       var table_catalog: SQLVarchar = SQLVarchar(128)
       var table_schema: SQLVarchar = SQLVarchar(128)
@@ -98,11 +100,19 @@ class \nodoc\ iso _TestMetadataQueries is UnitTest
         end
       end
 
-      // Should find at least our temporary tables
+      // Should find our table
       h.assert_true(found_count > 0)
 
       stm.finish()?
+
+      // Clean up
+      stm_setup.direct_exec("DROP TABLE test_metadata_table1")?
     else
+      // Try to clean up even on failure
+      try
+        var cleanup: ODBCStmt = dbc.stmt()?
+        cleanup.direct_exec("DROP TABLE test_metadata_table1")?
+      end
       h.fail("test_tables_query failed")
     end
 
