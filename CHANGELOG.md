@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file. This projec
 ### Added
 
 - Add ODBCStmt.tables()? function ([PR #44](https://github.com/redvers/pony-odbc/pull/44))
+- Added Property tests ([PR #61](https://github.com/redvers/pony-odbc/pull/61))
 
 ### Changed
 
