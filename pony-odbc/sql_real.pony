@@ -1,5 +1,3 @@
-use "debug"
-
 class SQLReal is SQLType
   """
   The internal class which represents a Float (F64)
@@ -30,7 +28,7 @@ class SQLReal is SQLType
   fun ref read(): F64 ? =>
     """
     Read the value of the buffer and convert it into an F64.
-    
+
     This function is partial just in case the string version
     that comes from the database is not within the F64 range.
 

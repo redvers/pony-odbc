@@ -1,6 +1,7 @@
 use "debug"
 use "lib:odbc"
 use "pony_test"
+use "pony_check"
 use ".."
 use "collections"
 
@@ -74,3 +75,15 @@ actor \nodoc\ Main is TestList
 //    test(_TestErrorChain("psqlred"))
     test(_TestErrorChain("mariadb"))
     test(_TestErrorChain("sqlitedb3"))
+
+    // Property-based tests (no DB connection required)
+    test(_PropertySQLTypeRoundtrip)
+    test(_PropertySQLTypeNulls)
+    test(_PropertyCBoxedArray)
+    test(_PropertyErrorChain)
+    test(_PropertyErrorFrame)
+
+    // Property-based DB roundtrip tests
+    test(_PropertyDBRoundtrip("psqlred"))
+    test(_PropertyDBRoundtrip("mariadb"))
+    test(_PropertyDBRoundtrip("sqlitedb3"))
