@@ -68,7 +68,7 @@ actor \nodoc\ Main is TestList
 //    test(_TestMetadataQueries("sqlitedb3"))
 
     test(_TestErrorRecovery("psqlred"))
-//    test(_TestErrorRecovery("mariadb"))
+    test(_TestErrorRecovery("mariadb"))
     test(_TestErrorRecovery("sqlitedb3"))
 
 // PostgreSQL has different error handling behavior that requires transaction cleanup

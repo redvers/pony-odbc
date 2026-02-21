@@ -4,19 +4,26 @@ use ".."
 primitive PropertyGenerators
   fun finite_f32(): Generator[F32] val =>
     """
-    Generate F32 values from I16 range for exact binary representation
-    and guaranteed fit in SQLFloat's 20-byte buffer when stringified.
+    Generate arbitrary finite F32 values via bit reinterpretation.
+    Filters out NaN and Inf.
     """
     recover val
-      Generators.i16().map[F32]({(i: I16): F32^ => i.f32()})
+      Generators.u32().map[F32]({(bits: U32): F32 => F32.from_bits(bits)})
+        .filter({(f: F32): (F32, Bool) => (f, f.finite())})
+        .map[F32]({(f: F32): F32 =>
+          try f.string().f32()? else F32(0) end
+        })
     end
 
   fun finite_f64(): Generator[F64] val =>
     """
-    Generate F64 values from a constrained I32 range for exact roundtrip
-    through F64.string(). Values are limited to 6 significant digits
-    so that the default %g format preserves them exactly.
+    Generate arbitrary finite F64 values via bit reinterpretation.
+    Filters out NaN and Inf.
     """
     recover val
-      Generators.i32(-999999, 999999).map[F64]({(i: I32): F64^ => i.f64()})
+      Generators.u64().map[F64]({(bits: U64): F64 => F64.from_bits(bits)})
+        .filter({(f: F64): (F64, Bool) => (f, f.finite())})
+        .map[F64]({(f: F64): F64 =>
+          try f.string().f64()? else F64(0) end
+        })
     end

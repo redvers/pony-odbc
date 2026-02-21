@@ -1,5 +1,3 @@
-use "debug"
-
 class SQLFloat is SQLType
   """
   The internal class which represents a Float (F32)
@@ -7,7 +5,7 @@ class SQLFloat is SQLType
   var _v: CBoxedArray = CBoxedArray
   var _err: SQLReturn val = SQLSuccess
 
-  new create() => _v.alloc(20)
+  new create() => _v.alloc(100)
 
   fun \nodoc\ ref get_boxed_array(): CBoxedArray => _v
   fun \nodoc\ ref set_boxed_array(v': CBoxedArray) => _v = v'
