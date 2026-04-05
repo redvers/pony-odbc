@@ -1,3 +1,7 @@
+"""
+Tests for pony-odbc.
+"""
+
 use "debug"
 use "lib:odbc"
 use "pony_test"
