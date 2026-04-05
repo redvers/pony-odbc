@@ -25,7 +25,7 @@ jobs:
       - name: Generate documentation
         uses: docker://ponylang/library-documentation-action-v2:release
         with:
-          site_url: "https://redvers.github.io/pony-odbc/"
+          site_url: "https://odbc.contact.red/"
           library_name: "pony-odbc"
           docs_build_dir: "build/pony-odbc-docs"
       - name: Setup Pages
