@@ -8,6 +8,7 @@ GET_DEPENDENCIES_WITH := corral fetch
 CLEAN_DEPENDENCIES_WITH := corral clean
 PONYC ?= ponyc
 COMPILE_WITH := corral run -- $(PONYC)
+BUILD_DOCS_WITH := corral run -- pony-doc
 
 BUILD_DIR ?= build/$(config)
 SRC_DIR ?= $(PACKAGE)
@@ -86,7 +87,8 @@ realclean:
 
 $(docs_dir): $(SOURCE_FILES) dependencies
 	rm -rf $(docs_dir)
-	$(PONYC) --docs-public --pass=docs --output build $(SRC_DIR)
+	$(GET_DEPENDENCIES_WITH)
+	$(BUILD_DOCS_WITH) --output build $(SRC_DIR)
 	cp -r docs-theme/assets/* $(docs_dir)/docs/assets/
 
 docs: $(docs_dir)
