@@ -28,6 +28,10 @@ jobs:
           site_url: "https://odbc.contact.red/"
           library_name: "pony-odbc"
           docs_build_dir: "build/pony-odbc-docs"
+      - name: Apply custom theme
+        run: cp -r docs-theme/assets/* build/pony-odbc-docs/docs/assets/
+      - name: Rebuild site with custom theme
+        run: cd build/pony-odbc-docs && mkdocs build
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

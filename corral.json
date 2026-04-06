@@ -5,9 +5,9 @@
   "deps": [],
   "info": {
     "description": "Pony API for ODBC",
-    "homepage": "https://github.com/redvers/pony-odbc",
+    "homepage": "https://odbc.contact.red/",
     "license": "",
-    "documentation_url": "https://redvers.github.io/pony-odbc",
+    "documentation_url": "https://odbc-tutorial.contact.red/",
     "version": "0.3.1",
     "name": "pony-odbc"
   }

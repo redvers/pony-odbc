@@ -87,6 +87,7 @@ realclean:
 $(docs_dir): $(SOURCE_FILES) dependencies
 	rm -rf $(docs_dir)
 	$(PONYC) --docs-public --pass=docs --output build $(SRC_DIR)
+	cp -r docs-theme/assets/* $(docs_dir)/docs/assets/
 
 docs: $(docs_dir)
 
