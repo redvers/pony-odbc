@@ -1,5 +1,10 @@
 # pony-odbc
 
+## ** This project is DEPRECATED.  Please reference the rewrite [here](https://github.com/contact-red/odbc) **
+## ** This project is DEPRECATED.  Please reference the rewrite [here](https://github.com/contact-red/odbc) **
+## ** This project is DEPRECATED.  Please reference the rewrite [here](https://github.com/contact-red/odbc) **
+## ** This project is DEPRECATED.  Please reference the rewrite [here](https://github.com/contact-red/odbc) **
+
 Pony wrappers and simple API for iODBC or unixODBC.
 
 ## Status
